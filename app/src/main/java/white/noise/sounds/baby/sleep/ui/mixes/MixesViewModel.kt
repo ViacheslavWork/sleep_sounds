@@ -11,8 +11,8 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
     private val _mixes = MutableLiveData<List<Mix>>()
     val mixes: LiveData<List<Mix>> = _mixes
 
-    private val _categories = MutableLiveData<List<SelectableMixCategory>>()
-    val categories: LiveData<List<SelectableMixCategory>> = _categories
+    private val _categories = MutableLiveData<List<MixCategory>>()
+    val categories: LiveData<List<MixCategory>> = _categories
 
     private val _currentCategory = MutableLiveData<MixCategory>(MixCategory.AllSounds)
     val currentCategory: LiveData<MixCategory> = _currentCategory
@@ -26,7 +26,7 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun loadAllCategories() {
-        _categories.postValue(MixCategory.values().toList().map { SelectableMixCategory(it) })
+        _categories.postValue(MixCategory.values().toList())
     }
 
     private fun loadAllMixes() {
@@ -40,20 +40,27 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
     fun handleEvent(event: MixesEvent) {
         when (event) {
             is MixesEvent.OnCategoryClick -> {
-                _currentCategory.value = event.mixCategory.category
-                markSelectedCategory(category = event.mixCategory.category)
+
+
+
+/*
+                _currentCategory.value = categories.value?.get(event.position)?.category
+//                markSelectedCategory(category = event.mixCategory.category)
                 if (event.mixCategory.category != MixCategory.AllSounds) {
-                    loadMixes(category = event.mixCategory.category)
+//                    loadMixes(category = event.mixCategory.category)
+                    loadMixes(category = categories.value?.get(event.position)?.category!!)
                 } else loadAllMixes()
+//                loadMixes(category = categories.value?.get(event.position)?.category!!)
+*/
             }
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
         }
     }
 
-    private fun markSelectedCategory(category: MixCategory) {
+   /* private fun markSelectedCategory(category: MixCategory) {
         _categories.value = _categories.value?.onEach {
             it.isSelected = it.category == category
         }
-    }
+    }*/
 
 }

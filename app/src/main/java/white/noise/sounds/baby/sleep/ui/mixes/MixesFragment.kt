@@ -1,23 +1,30 @@
 package white.noise.sounds.baby.sleep.ui.mixes
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentMixesBinding
-import white.noise.sounds.baby.sleep.ui.mixes.adapters.CategoryAdapter
+import white.noise.sounds.baby.sleep.databinding.ItemMixCategoryBinding
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
+import white.noise.sounds.baby.sleep.ui.mixes.adapters.ViewPagerAdapter
+
 
 class MixesFragment : Fragment() {
-    private val mixesViewModel: MixesViewModel by viewModel()
+    private val mixesViewModel: MixesViewModel by sharedViewModel()
     private var _binding: FragmentMixesBinding? = null
-    private lateinit var categoryAdapter: CategoryAdapter
+
+    //    private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var mixesAdapter: MixesAdapter
 
     // This property is only valid between onCreateView and
@@ -30,41 +37,47 @@ class MixesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMixesBinding.inflate(inflater, container, false)
+        setUpViewPager()
         return binding.root
     }
 
+    private fun setUpViewPager() {
+        mixesViewModel.categories.observe(viewLifecycleOwner) {
+            val viewPager: ViewPager2 = binding.mixVp
+            viewPager.adapter = ViewPagerAdapter(this, categories = it)
+
+            binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    tab?.view?.findViewById<Button>(R.id.category_btn)
+                        ?.setBackgroundColor(resources.getColor(R.color.blue40))
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    tab?.view?.findViewById<Button>(R.id.category_btn)
+                        ?.setBackgroundColor(Color.TRANSPARENT)
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
+
+            })
+
+            TabLayoutMediator(binding.tabLayout, viewPager) { tab, position ->
+                tab.text = it[position].toString()
+                val itemMixCategoryBinding =
+                    ItemMixCategoryBinding.inflate(LayoutInflater.from(context))
+                itemMixCategoryBinding.categoryBtn.text = it[position].title
+                itemMixCategoryBinding.categoryBtn.setOnClickListener { tab.select() }
+                tab.customView = itemMixCategoryBinding.root
+            }.attach()
+        }
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpCategoryRecyclerView()
-        setUpCategoryAdapter()
-
-        setUpMixesRecyclerView()
-        setUpMixesAdapter()
-
         setUpListeners()
-
-        observeCategories()
-        observeMixes()
-        observeAdaptersEvents()
     }
 
-    private fun observeAdaptersEvents() {
-        /* mixesViewModel.currentCategory.observe(viewLifecycleOwner) {
-
-         }
-         mixesViewModel.currentMix.observe(viewLifecycleOwner) {
-
-         }*/
-        categoryAdapter.event.observe(viewLifecycleOwner) {
-            mixesViewModel.handleEvent(it)
-            binding.mixCategoryRv.smoothScrollToPosition(it.position)
-
-        }
-        mixesAdapter.event.observe(viewLifecycleOwner) {
-            findNavController().navigate(MixesFragmentDirections.actionNavigationMixesToPlayerFragment())
-            mixesViewModel.handleEvent(it)
-        }
-
-    }
 
     private fun setUpListeners() {
         binding.crownMixToolbarIv.setOnClickListener {
@@ -72,45 +85,6 @@ class MixesFragment : Fragment() {
                 MixesFragmentDirections.actionNavigationMixesToUnlockForFreeFragment()
             )
         }
-    }
-
-    private fun observeMixes() {
-        mixesViewModel.mixes.observe(viewLifecycleOwner) {
-            mixesAdapter.submitList(it.toMutableList())
-        }
-    }
-
-    private fun observeCategories() {
-        mixesViewModel.categories.observe(viewLifecycleOwner) {
-            categoryAdapter.submitList(
-                it.map { selectableMixCategory -> selectableMixCategory.copy() })
-
-        }
-    }
-
-    private fun setUpCategoryRecyclerView() {
-        binding.mixCategoryRv.layoutManager =
-            CenterLayoutManager(context = requireContext()).apply {
-                orientation = RecyclerView.HORIZONTAL
-            }
-    }
-
-    private fun setUpCategoryAdapter() {
-        categoryAdapter = CategoryAdapter()
-        categoryAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        binding.mixCategoryRv.adapter = categoryAdapter
-    }
-
-    private fun setUpMixesRecyclerView() {
-        binding.mixRv.layoutManager = GridLayoutManager(context, 2)
-    }
-
-    private fun setUpMixesAdapter() {
-        mixesAdapter = MixesAdapter()
-        mixesAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        binding.mixRv.adapter = mixesAdapter
     }
 
     override fun onDestroyView() {

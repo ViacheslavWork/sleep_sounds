@@ -1,13 +1,17 @@
 package white.noise.sounds.baby.sleep.model
 
-import android.graphics.Bitmap
-
 data class Mix(
     val title: String,
     val sounds: MutableList<Sound> = mutableListOf(),
     var picturePath: String,
     val category: MixCategory?
 )
-enum class MixCategory {
-    AllSounds, Sleep,Rain, Relax, Others
+
+enum class MixCategory(val title: String) {
+    AllSounds("All Sounds"),
+    Sleep("Sleep"),
+    Rain("Rain"),
+    Relax("Relax"),
+    Others("Others")
 }
+

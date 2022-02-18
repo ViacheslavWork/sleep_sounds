@@ -9,6 +9,13 @@ data class Sound(
     val category: SoundCategory
 )
 
-enum class SoundCategory {
-    Rain, Nature, Animal, Transport, CityAndInstrument, WhiteNoise, Meditation, Other
+enum class SoundCategory(val title: String) {
+    Rain("Rain"),
+    Nature("Nature"),
+    Animal("Animal"),
+    Transport("Transport"),
+    CityAndInstrument("City And Instrument"),
+    WhiteNoise("White Noise"),
+    Meditation("Meditation"),
+    Other("Other")
 }
