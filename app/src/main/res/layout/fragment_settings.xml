@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_liner_bg"
+    tools:context=".ui.settings.SettingsFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/settings_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/crown_settings_toolbar_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_toolbar_horisontal"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_crown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settings_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings"
+                android:textAppearance="@style/titleTextAppearance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_tool_bar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/go_premium_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:text="@string/go_premium"
+                android:textAppearance="@style/bigTextAppearance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/laugh_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:layout_marginStart="30dp"
+                android:src="@drawable/laugh"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/go_premium_tv" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/unlock_all_sounds"
+                android:textAppearance="@style/text1"
+                app:layout_constraintBottom_toBottomOf="@+id/laugh_iv"
+                app:layout_constraintEnd_toStartOf="@+id/imageView3"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/laugh_iv"
+                app:layout_constraintTop_toTopOf="@+id/laugh_iv" />
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="30dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_smile"
+                app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                app:layout_constraintEnd_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:textAppearance="@style/text1"
+                android:text="@string/remove_ads"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/content_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="10dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/content_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="10dp" />
+
+            <Button
+                android:id="@+id/button"
+                style="Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="45dp"
+                android:padding="16dp"
+                android:text="@string/start_free_trial"
+                android:textAppearance="@style/ButtonTextAppearance"
+                android:textSize="20sp"
+                android:background="@drawable/gradient_liner_bg5"
+                app:backgroundTint="@null"
+                app:layout_constraintEnd_toStartOf="@+id/content_end"
+                app:layout_constraintStart_toStartOf="@+id/content_start"
+                app:layout_constraintTop_toBottomOf="@+id/laugh_iv" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="40dp"
+                android:background="@color/light_gray"
+                app:layout_constraintEnd_toStartOf="@id/content_end"
+                app:layout_constraintStart_toEndOf="@id/content_start"
+                app:layout_constraintTop_toBottomOf="@id/button" />
+
+            <TextView
+                android:id="@+id/bed_time_reminder_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:text="@string/bedtime_reminder"
+                android:textAppearance="@style/settingsItemTextAppearance"
+                app:layout_constraintEnd_toStartOf="@+id/switch1"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/content_start"
+                app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBaseline_toBaselineOf="@id/bed_time_reminder_tv"
+                app:layout_constraintEnd_toStartOf="@+id/content_end"
+                app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:background="@color/light_gray"
+                app:layout_constraintEnd_toStartOf="@id/content_end"
+                app:layout_constraintStart_toEndOf="@id/content_start"
+                app:layout_constraintTop_toBottomOf="@id/bed_time_reminder_tv" />
+
+            <TextView
+                android:id="@+id/feedback_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:text="@string/feedback"
+                android:textAppearance="@style/settingsItemTextAppearance"
+                app:layout_constraintEnd_toStartOf="@+id/content_end"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/content_start"
+                app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+            <View
+                android:id="@+id/line3"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:background="@color/light_gray"
+                app:layout_constraintEnd_toStartOf="@id/content_end"
+                app:layout_constraintStart_toEndOf="@id/content_start"
+                app:layout_constraintTop_toBottomOf="@id/feedback_tv" />
+
+            <TextView
+                android:id="@+id/privacy_policy_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:text="@string/privacy_policy"
+                android:textAppearance="@style/settingsItemTextAppearance"
+                app:layout_constraintEnd_toStartOf="@+id/content_end"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/content_start"
+                app:layout_constraintTop_toBottomOf="@+id/line3" />
+
+            <View
+                android:id="@+id/line4"
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="@dimen/margin_settings_item"
+                android:background="@color/light_gray"
+                app:layout_constraintEnd_toStartOf="@id/content_end"
+                app:layout_constraintStart_toEndOf="@id/content_start"
+                app:layout_constraintTop_toBottomOf="@id/privacy_policy_tv" />
+
+            <TextView
+                android:id="@+id/version_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/version"
+                android:textAppearance="@style/settingsItemTextAppearance"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/line4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/content_end"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="30dp"
+    app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.SmallComponent"
+    android:background="@drawable/gradient_liner_bg2"
+    >
+
+    <ImageView
+        android:id="@+id/close_unlock_free_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_icon_cross"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/unlock_free_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock_for_free"
+        android:textAppearance="@style/H2"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/close_unlock_free_btn" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/unlock_free_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mix_placeholder"
+        android:layout_margin="20dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.WhiteNoise.LargeComponent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unlock_free_title_tv" />
+
+    <TextView
+        android:id="@+id/unlock_free_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock_free_text"
+        android:layout_marginVertical="20dp"
+        android:textAppearance="@style/P1"
+        android:textColor="@color/white"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unlock_free_iv" />
+
+    <Button
+        android:id="@+id/watch_video_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/watch_video"
+        android:textColor="@color/white"
+        app:iconTint = "@color/white"
+        android:layout_marginVertical="20dp"
+        android:paddingVertical="10dp"
+        app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.LargeComponent"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp"
+        android:textAppearance="@style/H2"
+        style="@style/Widget.MaterialComponents.Button"
+        android:backgroundTint="@color/black40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unlock_free_content_tv" />
+    <Button
+        android:id="@+id/unlock_all_sounds_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unlock_all"
+        app:icon="@drawable/ic_crown"
+        app:iconTint="@color/yellow"
+        android:layout_marginTop="15dp"
+
+        android:paddingVertical="10dp"
+        app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.LargeComponent"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp"
+        android:textAppearance="@style/H2"
+        style="@style/Widget.MaterialComponents.Button"
+        android:backgroundTint="@color/black40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/watch_video_btn" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:src="@drawable/ic_crown"
+        app:layout_constraintEnd_toEndOf="@+id/unlock_free_iv"
+        app:layout_constraintTop_toTopOf="@+id/unlock_free_iv" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

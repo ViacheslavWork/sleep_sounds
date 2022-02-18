@@ -1,0 +1,18 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="title_text_size">20sp</dimen>
+    <dimen name="mix_item_text_size">20sp</dimen>
+    <dimen name="settings_item_text_size">20sp</dimen>
+    <dimen name="button_text_size">20sp</dimen>
+    <dimen name="big_text_size">36dp</dimen>
+    <dimen name="button_mix_text_size">16sp</dimen>
+    <dimen name="margin_mix_button">10dp</dimen>
+    <dimen name="margin_item_mix">10dp</dimen>
+    <dimen name="margin_toolbar_horisontal">10dp</dimen>
+    <dimen name="margin_settings_item">25dp</dimen>
+    <dimen name="size_go_premium_cv">70dp</dimen>
+
+
+</resources>

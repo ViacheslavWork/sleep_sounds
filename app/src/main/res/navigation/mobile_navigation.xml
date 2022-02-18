@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_mixes">
+
+    <fragment
+        android:id="@+id/navigation_mixes"
+        android:name="white.noise.sounds.baby.sleep.ui.mixes.MixesFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_mixes">
+        <action
+            android:id="@+id/action_navigation_mixes_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_navigation_mixes_to_unlockForFreeFragment"
+            app:destination="@id/unlockForFreeFragment" />
+        <action
+            android:id="@+id/action_navigation_mixes_to_sleepTimerFragment"
+            app:destination="@id/sleepTimerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_sounds"
+        android:name="white.noise.sounds.baby.sleep.ui.sounds.SoundsFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_sounds">
+        <action
+            android:id="@+id/action_navigation_sounds_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
+        <action
+            android:id="@+id/action_navigation_sounds_to_setTimerFragment"
+            app:destination="@id/setTimerFragment" />
+        <action
+            android:id="@+id/action_navigation_sounds_to_customMixDialog"
+            app:destination="@id/customMixDialog" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="white.noise.sounds.baby.sleep.ui.settings.SettingsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_navigation_settings_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
+        <action
+            android:id="@+id/action_navigation_settings_to_bedtimeReminderFragment"
+            app:destination="@id/bedtimeReminderFragment" />
+        <action
+            android:id="@+id/action_navigation_settings_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
+        <action
+            android:id="@+id/action_navigation_settings_to_ratingDialog"
+            app:destination="@id/ratingDialog" />
+    </fragment>
+    <fragment
+        android:id="@+id/goPremiumFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.GoPremiumFragment"
+        android:label="GoPremiumFragment"
+        tools:layout="@layout/fragment_go_premium" />
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.PlayerFragment"
+        android:label="PlayerFragment"
+        tools:layout="@layout/fragment_player">
+        <action
+            android:id="@+id/action_playerFragment_to_additionalSoundsFragment"
+            app:destination="@id/additionalSoundsFragment" />
+        <action
+            android:id="@+id/action_playerFragment_to_sleepTimerFragment"
+            app:destination="@id/sleepTimerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bedtimeReminderFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.BedtimeReminderFragment"
+        android:label="BedtimeReminderFragment"
+        tools:layout="@layout/fragment_bedtime_reminder" />
+    <fragment
+        android:id="@+id/additionalSoundsFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.AdditionalSoundsFragment"
+        android:label="AdditionalSoundsFragment"
+        tools:layout="@layout/fragment_additional_sounds">
+        <action
+            android:id="@+id/action_additionalSoundsFragment_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/unlockForFreeFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog"
+        android:label="UnlockForFreeFragment"
+        tools:layout="@layout/dialog_unlock_for_free" />
+    <fragment
+        android:id="@+id/setTimerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.SetTimerFragment"
+        android:label="SetTimerFragment"
+        tools:layout="@layout/fragment_set_timer" />
+    <fragment
+        android:id="@+id/saveCustomFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.SaveCustomFragment"
+        android:label="SaveCustomFragment"
+        tools:layout="@layout/fragment_set_timer" />
+    <dialog
+        android:id="@+id/customMixDialog"
+        android:name="white.noise.sounds.baby.sleep.ui.dialogs.CustomMixDialog"
+        android:label="CustomMixDialog"
+        tools:layout="@layout/dialog_custom_mix">
+        <action
+            android:id="@+id/action_customMixDialog_to_saveCustomFragment"
+            app:destination="@id/saveCustomFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.PrivacyPolicyFragment"
+        android:label="PrivacyPolicyFragment"
+        tools:layout="@layout/fragment_privacy_policy" />
+    <fragment
+        android:id="@+id/ratingDialog"
+        android:name="white.noise.sounds.baby.sleep.ui.dialogs.RatingDialog"
+        android:label="RatingDialog"
+        tools:layout="@layout/dialog_rating" />
+    <fragment
+        android:id="@+id/greetingFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.GreetingFragment"
+        android:label="GreetingFragment"
+        tools:layout="@layout/fragment_greeting">
+        <action
+            android:id="@+id/action_greetingFragment_to_navigation_mixes"
+            app:destination="@id/navigation_mixes" />
+    </fragment>
+    <fragment
+        android:id="@+id/sleepTimerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.SleepTimerFragment"
+        android:label="SleepTimerFragment"
+        tools:layout="@layout/fragment_sleep_timer" />
+</navigation>

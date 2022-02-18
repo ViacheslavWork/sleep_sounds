@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    //text appearance
+
+    <style name="titleTextAppearance">
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="bigTextAppearance">
+        <item name="android:textSize">@dimen/big_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="mixButtonTextAppearance">
+        <item name="android:textSize">@dimen/button_mix_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="ButtonTextAppearance">
+        <item name="android:textSize">@dimen/button_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="mixItemTextAppearance">
+        <item name="android:textSize">@dimen/mix_item_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="settingsItemTextAppearance">
+        <item name="android:textSize">@dimen/settings_item_text_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="simpleTextAppearance">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    //shape appearance
+
+    <style name="mixButtonShape">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="Widget.Theme.WhiteNoise.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+    </style>
+
+
+</resources>
