@@ -1,10 +1,8 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -61,7 +59,7 @@ class SectionHolder(private val binding: SectionRowBinding) :
     private lateinit var adapter: SoundAdapter
 
     fun onBind(section: Section) {
-        binding.sectionNameTv.text = section.sectionName.toString()
+        binding.sectionNameTv.text = section.soundCategory.title
         binding.sectionRv.layoutManager = GridLayoutManager(binding.root.context, 3)
         adapter = SoundAdapter()
         binding.sectionRv.adapter = adapter
@@ -127,7 +125,7 @@ private class SoundDiffCallback : DiffUtil.ItemCallback<Sound>() {
 
 private class SectionDiffCallback : DiffUtil.ItemCallback<Section>() {
     override fun areItemsTheSame(oldItem: Section, newItem: Section): Boolean =
-        (oldItem.sectionName == newItem.sectionName)
+        (oldItem.soundCategory == newItem.soundCategory)
 
     override fun areContentsTheSame(oldItem: Section, newItem: Section): Boolean =
         (oldItem == newItem)
