@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentPagerBinding
 import white.noise.sounds.baby.sleep.model.MixCategory
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
@@ -58,6 +61,7 @@ class PagerFragment : Fragment() {
     private fun observeAdaptersEvents() {
         mixesAdapter.event.observe(viewLifecycleOwner) {
             findNavController().navigate(MixesFragmentDirections.actionNavigationMixesToPlayerFragment())
+//            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
             mixesViewModel.handleEvent(it)
         }
     }

@@ -17,10 +17,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:fontFamily">@font/open_sans_regular</item>
     </style>
-
-    <style name="ThemeOverlay.WhiteNoise.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    <!-- Set parent theme as app theme -->
+    <style name="FullScreenDialogTheme" parent="Theme.WhiteNoise">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
     <style name="ShapeAppearance.WhiteNoise.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">

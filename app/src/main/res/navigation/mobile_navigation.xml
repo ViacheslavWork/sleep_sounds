@@ -79,7 +79,7 @@
         tools:layout="@layout/fragment_bedtime_reminder" />
     <fragment
         android:id="@+id/additionalSoundsFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.AdditionalSoundsFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.mix_sounds.AdditionalSoundsFragment"
         android:label="AdditionalSoundsFragment"
         tools:layout="@layout/fragment_additional_sounds">
         <action
@@ -90,7 +90,11 @@
         android:id="@+id/unlockForFreeFragment"
         android:name="white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog"
         android:label="UnlockForFreeFragment"
-        tools:layout="@layout/dialog_unlock_for_free" />
+        tools:layout="@layout/dialog_unlock_for_free" >
+        <action
+            android:id="@+id/action_unlockForFreeFragment_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
+    </dialog>
     <fragment
         android:id="@+id/setTimerFragment"
         android:name="white.noise.sounds.baby.sleep.ui.SetTimerFragment"

@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
+    android:paddingHorizontal="10dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
@@ -42,16 +44,17 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/selected_sounds_rv"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginHorizontal="60dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_sounds"
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar"
-        app:constraint_referenced_ids=""
         />
 
     <TextView
@@ -60,16 +63,16 @@
         android:layout_height="wrap_content"
         android:text="@string/you_can_add_more_sound"
         android:textAppearance="@style/text6"
+        android:layout_marginTop="40dp"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/flow" />
+        app:layout_constraintTop_toBottomOf="@id/selected_sounds_rv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sounds_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

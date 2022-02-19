@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.navigation.fragment.findNavController
 import white.noise.sounds.baby.sleep.databinding.DialogUnlockForFreeBinding
 
 
@@ -24,9 +26,27 @@ class UnlockForFreeDialog : DialogFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUpListeners()
+    }
+
+    private fun setUpListeners() {
+        binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
+        binding.watchVideoBtn.setOnClickListener { showToast("Open video") }
+        binding.unlockAllSoundsBtn.setOnClickListener {
+            findNavController().navigate(
+                UnlockForFreeDialogDirections.actionUnlockForFreeFragmentToGoPremiumFragment()
+            )
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
 }
