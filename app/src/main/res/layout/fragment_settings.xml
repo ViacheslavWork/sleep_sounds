@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings"
-                android:textAppearance="@style/titleTextAppearance"
+                android:textAppearance="@style/H2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="30dp"
                 android:text="@string/go_premium"
-                android:textAppearance="@style/bigTextAppearance"
+                android:textAppearance="@style/H1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -123,18 +123,14 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="10dp" />
 
-            <Button
-                android:id="@+id/button"
-                style="Widget.MaterialComponents.Button.OutlinedButton"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/start_trial_btn"
+                style="@style/BlueBtnStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="45dp"
                 android:padding="16dp"
                 android:text="@string/start_free_trial"
-                android:textAppearance="@style/ButtonTextAppearance"
-                android:textSize="20sp"
-                android:background="@drawable/gradient_liner_bg5"
-                app:backgroundTint="@null"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
                 app:layout_constraintTop_toBottomOf="@+id/laugh_iv" />
@@ -147,24 +143,28 @@
                 android:background="@color/light_gray"
                 app:layout_constraintEnd_toStartOf="@id/content_end"
                 app:layout_constraintStart_toEndOf="@id/content_start"
-                app:layout_constraintTop_toBottomOf="@id/button" />
+                app:layout_constraintTop_toBottomOf="@id/start_trial_btn" />
 
             <TextView
                 android:id="@+id/bed_time_reminder_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_settings_item"
                 android:text="@string/bedtime_reminder"
-                android:textAppearance="@style/settingsItemTextAppearance"
-                app:layout_constraintEnd_toStartOf="@+id/switch1"
+                android:textAppearance="@style/H2"
+                app:layout_constraintEnd_toStartOf="@+id/bed_time_reminder_switch"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
                 app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch1"
+                android:id="@+id/bed_time_reminder_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:thumbTint="@color/white"
+                android:text=""
+                android:textAppearance="@style/P1"
+                android:textColor="@color/white"
                 app:layout_constraintBaseline_toBaselineOf="@id/bed_time_reminder_tv"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintTop_toBottomOf="@+id/line1" />
@@ -181,11 +181,11 @@
 
             <TextView
                 android:id="@+id/feedback_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_settings_item"
                 android:text="@string/feedback"
-                android:textAppearance="@style/settingsItemTextAppearance"
+                android:textAppearance="@style/H2"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
@@ -203,11 +203,11 @@
 
             <TextView
                 android:id="@+id/privacy_policy_tv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_settings_item"
                 android:text="@string/privacy_policy"
-                android:textAppearance="@style/settingsItemTextAppearance"
+                android:textAppearance="@style/H2"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
@@ -230,7 +230,7 @@
                 android:layout_marginTop="100dp"
                 android:layout_marginBottom="30dp"
                 android:text="@string/version"
-                android:textAppearance="@style/settingsItemTextAppearance"
+                android:textAppearance="@style/P1"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/line4"
                 app:layout_constraintBottom_toBottomOf="parent"

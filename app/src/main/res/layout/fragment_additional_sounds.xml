@@ -45,7 +45,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/selected_sounds_rv"
+        android:id="@+id/additional_sounds_rv"
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_marginTop="20dp"
@@ -67,7 +67,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selected_sounds_rv" />
+        app:layout_constraintTop_toBottomOf="@id/additional_sounds_rv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sounds_rv"

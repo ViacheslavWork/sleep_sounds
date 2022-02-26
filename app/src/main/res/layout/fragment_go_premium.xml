@@ -133,32 +133,28 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="10dp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/year_btn"
-                style="@style/Widget.MaterialComponents.Button.Icon"
+                style="@style/BlueBtnStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="45dp"
-                android:background="@drawable/gradient_liner_bg5"
                 android:padding="16dp"
                 android:text="@string/_7_day_free_trial"
                 android:textAppearance="@style/text3"
-                app:backgroundTint="@null"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
                 app:layout_constraintTop_toBottomOf="@+id/laugh_iv" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/month_btn"
-                style="@style/Widget.MaterialComponents.Button.Icon"
+                style="@style/DarkBtnStyle"
+                android:paddingVertical="20dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="25dp"
-                android:background="@drawable/gradient_liner_bg4"
-                android:padding="16dp"
                 android:text="@string/month"
                 android:textAppearance="@style/text3"
-                app:backgroundTint="@null"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintStart_toStartOf="@+id/content_start"
                 app:layout_constraintTop_toBottomOf="@+id/year_btn" />

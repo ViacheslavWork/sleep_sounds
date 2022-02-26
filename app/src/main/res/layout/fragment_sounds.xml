@@ -47,30 +47,36 @@
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/item_sounds" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/player_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="view,timer_ib,timer_tv,play_iv
+        ,selected_ib,selected_tv, small_round_iv, num_sounds_tv" />
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="-20dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
         android:background="@color/blue40"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/play_iv"
-        android:clickable="true"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/timer_iv"
+        android:id="@+id/timer_ib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="35dp"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_icon_timer"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
         app:layout_constraintEnd_toStartOf="@+id/play_iv"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view" />
 
     <TextView
         android:id="@+id/timer_tv"
@@ -79,29 +85,31 @@
         android:layout_marginBottom="16dp"
         android:text="@string/timer"
         android:textAppearance="@style/text7"
-        app:layout_constraintEnd_toEndOf="@id/timer_iv"
-        app:layout_constraintStart_toStartOf="@id/timer_iv"
-        app:layout_constraintTop_toBottomOf="@id/timer_iv" />
+        app:layout_constraintEnd_toEndOf="@id/timer_ib"
+        app:layout_constraintStart_toStartOf="@id/timer_ib"
+        app:layout_constraintTop_toBottomOf="@id/timer_ib" />
 
     <ImageButton
         android:id="@+id/play_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_play"
-        app:layout_constraintBottom_toBottomOf="@+id/timer_iv"
-        app:layout_constraintEnd_toStartOf="@+id/selected_iv"
+        app:layout_constraintBottom_toBottomOf="@+id/sounds_rv"
+        app:layout_constraintEnd_toStartOf="@+id/selected_ib"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/timer_iv"
-        app:layout_constraintTop_toTopOf="@+id/timer_iv" />
+        app:layout_constraintStart_toEndOf="@+id/timer_ib"
+        app:layout_constraintTop_toTopOf="@id/view" />
 
     <ImageButton
-        android:id="@+id/selected_iv"
+        android:id="@+id/selected_ib"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_icon_selected"
+        app:tint="@color/btn_enable_disable_color"
         app:layout_constraintBottom_toBottomOf="@+id/play_iv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -113,8 +121,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="10dp"
-        app:layout_constraintStart_toEndOf="@id/selected_iv"
-        app:layout_constraintBottom_toTopOf="@id/selected_iv"
+        app:layout_constraintBottom_toTopOf="@id/selected_ib"
+        app:layout_constraintStart_toEndOf="@id/selected_ib"
         app:srcCompat="@drawable/ic_ellipse_small" />
 
     <TextView
@@ -137,9 +145,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/selected"
+        android:textColor="@color/btn_enable_disable_color"
         android:textAppearance="@style/text7"
-        app:layout_constraintEnd_toEndOf="@id/selected_iv"
-        app:layout_constraintStart_toStartOf="@id/selected_iv"
-        app:layout_constraintTop_toBottomOf="@id/selected_iv" />
+        app:layout_constraintEnd_toEndOf="@id/selected_ib"
+        app:layout_constraintStart_toStartOf="@id/selected_ib"
+        app:layout_constraintTop_toBottomOf="@id/selected_ib" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

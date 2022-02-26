@@ -18,6 +18,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/oh_no_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        android:gravity="center"
+        android:text="@string/oh_no"
+        android:textAppearance="@style/text2"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/smile_iv" />
+
+    <TextView
         android:id="@+id/rating_content_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +42,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/smile_iv" />
+        app:layout_constraintTop_toBottomOf="@+id/oh_no_tv" />
 
     <ImageView
         android:id="@+id/star_1_iv"
@@ -116,24 +130,18 @@
         app:layout_constraintEnd_toEndOf="@id/star_5_iv"
         app:layout_constraintTop_toBottomOf="@id/star_5_iv" />
 
-    <Button
-        android:id="@+id/year_btn"
-        style="@style/Widget.MaterialComponents.Button"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/estimate_btn"
+        style="@style/BlueBtnStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="30dp"
-        app:backgroundTint="@null"
-        android:background="@drawable/gradient_liner_bg5_btn"
-        android:padding="16dp"
+        android:enabled="false"
+        android:paddingVertical="16dp"
         android:text="@string/estimate"
-        android:textAppearance="@style/H2"
-        app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.SmallComponent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/advice_tv" />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

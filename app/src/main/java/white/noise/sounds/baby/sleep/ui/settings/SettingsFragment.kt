@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import white.noise.sounds.baby.sleep.databinding.FragmentSettingsBinding
 
@@ -23,16 +21,50 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val notificationsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
-
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        return root
+        /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(
+                resources, R.drawable.gradient_liner_bg, null
+            )*/
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.button.setOnClickListener { findNavController().navigate(SettingsFragmentDirections.actionNavigationSettingsToGoPremiumFragment())}
+
+        binding.startTrialBtn.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionNavigationSettingsToGoPremiumFragment()
+            )
+        }
+        binding.bedTimeReminderTv.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionNavigationSettingsToBedtimeReminderFragment()
+            )
+        }
+        binding.feedbackTv.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionNavigationSettingsToRatingDialog()
+            )
+        }
+        binding.privacyPolicyTv.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionNavigationSettingsToPrivacyPolicyFragment()
+            )
+        }
+        binding.bedTimeReminderSwitch
+            .setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    binding.bedTimeReminderSwitch.text = "00:00"
+                } else {
+                    binding.bedTimeReminderSwitch.text = ""
+                }
+            }
+
+        binding.crownSettingsToolbarIv.setOnClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections.actionNavigationSettingsToGoPremiumFragment()
+            )
+        }
     }
 
     override fun onDestroyView() {

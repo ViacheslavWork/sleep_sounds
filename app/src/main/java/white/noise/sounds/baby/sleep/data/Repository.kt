@@ -45,6 +45,10 @@ class Repository(
         return mixProvider.getMixes().filter { it.category == category }
     }
 
+    fun saveMix(mix: Mix) {
+        TODO()
+    }
+
     private fun showLog(message: String) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, message)

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
@@ -64,27 +63,31 @@
         android:background="@drawable/edit_text_style"
         android:padding="7dp"
         android:textAppearance="@style/H2"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/content_end"
         app:layout_constraintStart_toStartOf="@+id/content_start"
         app:layout_constraintTop_toBottomOf="@+id/enter_name_tv" />
 
     <Button
-        android:id="@+id/save_custom_btn"
+        android:id="@+id/upload_image_btn"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/black40"
+        android:enabled="false"
         android:paddingVertical="10dp"
-        android:text="@string/save_custom"
+        android:text="@string/upload_image"
         android:textAppearance="@style/H2"
+        android:textColor="@color/btn_enable_disable_color"
         app:icon="@drawable/ic_upload_image"
         app:iconGravity="textStart"
+        app:iconTint="@color/btn_enable_disable_color"
         app:layout_constraintEnd_toEndOf="@id/content_end"
         app:layout_constraintStart_toStartOf="@id/content_start"
         app:layout_constraintTop_toBottomOf="@id/custom_name_et"
         app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.LargeComponent"
-        app:strokeColor="@color/white"
+        app:strokeColor="@color/btn_enable_disable_color"
         app:strokeWidth="1dp" />
 
 
@@ -103,7 +106,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/content_start"
-        app:layout_constraintTop_toBottomOf="@+id/save_custom_btn"
+        app:layout_constraintTop_toBottomOf="@+id/upload_image_btn"
         app:layout_constraintVertical_bias="1"
         app:tint="@color/white" />
 
@@ -114,16 +117,17 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@android:color/transparent"
-        android:src="@drawable/ic_icon_check"
-        app:backgroundTint="@color/white"
+        android:enabled="false"
+        app:backgroundTint="@color/btn_enable_disable_color"
         app:borderWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/content_end"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/close_btn"
-        app:layout_constraintTop_toBottomOf="@+id/save_custom_btn"
+        app:layout_constraintTop_toBottomOf="@+id/upload_image_btn"
         app:layout_constraintVertical_bias="1"
-        app:tint="@color/white" />
+        app:srcCompat="@drawable/ic_icon_check"
+        app:tint="@color/btn_enable_disable_color" />
 
     <ImageView
         android:id="@+id/photo_iv"
@@ -132,7 +136,7 @@
         android:layout_marginTop="30dp"
         android:src="@drawable/mix_placeholder"
         app:layout_constraintStart_toStartOf="@+id/content_start"
-        app:layout_constraintTop_toBottomOf="@+id/save_custom_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/upload_image_btn" />
 
     <ImageView
         android:id="@+id/photo_remove_iv"

@@ -1,60 +1,135 @@
 package white.noise.sounds.baby.sleep.ui.dialogs
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.DialogFragment
 import white.noise.sounds.baby.sleep.R
+import white.noise.sounds.baby.sleep.databinding.DialogRatingBinding
+import white.noise.sounds.baby.sleep.utils.ToastHelper
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class RatingDialog : DialogFragment() {
+    private var _binding: DialogRatingBinding? = null
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RatingDialog.newInstance] factory method to
- * create an instance of this fragment.
- */
-class RatingDialog : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.dialog_rating, container, false)
+    ): View {
+        _binding = DialogRatingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RatingDialog.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RatingDialog().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUpListeners()
+    }
+
+    private fun setUpListeners() {
+        binding.estimateBtn.setOnClickListener { ToastHelper.showToast(context,"Estimate") }
+
+        binding.star1Iv.setOnClickListener {
+            binding.smileIv.setImageDrawable(ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_smile_1,
+                null
+            ))
+            setStarsColors(0)
+            setNotGoodRating()
+        }
+        binding.star2Iv.setOnClickListener {
+            binding.smileIv.setImageDrawable(ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_smile_2,
+                null
+            ))
+            setNotGoodRating()
+            setStarsColors(1)
+        }
+        binding.star3Iv.setOnClickListener {
+            binding.smileIv.setImageDrawable(ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_smile_3,
+                null
+            ))
+            setNotGoodRating()
+            setStarsColors(2)
+        }
+        binding.star4Iv.setOnClickListener {
+            binding.smileIv.setImageDrawable(ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_smile_4,
+                null
+            ))
+            setNotGoodRating()
+            setStarsColors(3)
+        }
+        binding.star5Iv.setOnClickListener {
+            binding.smileIv.setImageDrawable(ResourcesCompat.getDrawable(
+                resources,
+                R.drawable.ic_smile_5,
+                null
+            ))
+            setGoodRating()
+            setStarsColors(4)
+        }
+
+    }
+
+    private fun setGoodRating() {
+        binding.estimateBtn.isEnabled = true
+        binding.ohNoTv.visibility = View.VISIBLE
+        binding.ohNoTv.text = getString(R.string.we_like_you)
+        binding.ratingContentTv.text = getString(R.string.thanks_for_feedback)
+        binding.estimateBtn.text = getString(R.string.estimate_on_google_play)
+    }
+
+    private fun setNotGoodRating() {
+        binding.estimateBtn.isEnabled = true
+        binding.ohNoTv.visibility = View.VISIBLE
+        binding.ratingContentTv.text = getString(R.string.tell_us_what_we_can_improve)
+        binding.estimateBtn.text = getString(R.string.estimate)
+    }
+
+    private fun setStarsColors(index: Int) {
+        for (i in 0..index) {
+            getStars()[i].setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_star_yellow,
+                    null
+                )
+            )
+        }
+        for (i in index + 1 until getStars().size) {
+            getStars()[i].setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_star,
+                    null
+                )
+            )
+        }
+    }
+
+    private fun getStars(): List<ImageView> {
+        return mutableListOf<ImageView>()
+            .apply {
+                add(binding.star1Iv)
+                add(binding.star2Iv)
+                add(binding.star3Iv)
+                add(binding.star4Iv)
+                add(binding.star5Iv)
+            }.toList()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

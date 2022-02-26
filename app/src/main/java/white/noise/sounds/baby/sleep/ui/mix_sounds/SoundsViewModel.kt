@@ -22,6 +22,9 @@ class AdditionalSoundsViewModel(private val repository: Repository) : ViewModel(
     private val _selectedSounds = MutableLiveData<List<Sound>>(listOf())
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
 
+    private val _playerSounds = MutableLiveData<List<Sound>>(listOf())
+    val playerSounds: LiveData<List<Sound>> = _playerSounds
+
     init {
         loadAllSounds()
     }
@@ -32,20 +35,24 @@ class AdditionalSoundsViewModel(private val repository: Repository) : ViewModel(
 
     fun handleEvent(event: SoundsEvent) {
         when (event) {
-            is SoundsEvent.OnSoundClick -> _selectedSounds.postValue(
-                selectedSounds.value
-                    ?.toMutableList()
-                    ?.apply {add(event.sound)}
-                    ?.toSet()
-                    ?.toList()
-                    ?.take(2)
-            )
-            is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> _selectedSounds.postValue(
-                selectedSounds.value
-                    ?.toMutableList()
-                    ?.apply {remove(event.sound)}
-                    ?.toList()
-            )
+            is SoundsEvent.OnSoundClick -> {
+                _selectedSounds.value =
+                    selectedSounds.value
+                        ?.toMutableList()
+                        ?.apply { add(event.sound) }
+                        ?.toSet()
+                        ?.toList()
+                        ?.take(8)
+                _playerSounds.postValue(selectedSounds.value?.take(5))
+            }
+            is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> {
+                _selectedSounds.value =
+                    selectedSounds.value
+                        ?.toMutableList()
+                        ?.apply { remove(event.sound) }
+                        ?.toList()
+                _playerSounds.postValue(selectedSounds.value?.take(5))
+            }
             is SoundsEvent.AdditionalSoundsEvent.OnSeekBarChanged -> showLog(event.progress.toString())
         }
     }

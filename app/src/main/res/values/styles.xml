@@ -1,40 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    //text appearance
-
-    <style name="titleTextAppearance">
-        <item name="android:textSize">@dimen/title_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="bigTextAppearance">
-        <item name="android:textSize">@dimen/big_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="mixButtonTextAppearance">
-        <item name="android:textSize">@dimen/button_mix_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="ButtonTextAppearance">
-        <item name="android:textSize">@dimen/button_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="mixItemTextAppearance">
-        <item name="android:textSize">@dimen/mix_item_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="settingsItemTextAppearance">
-        <item name="android:textSize">@dimen/settings_item_text_size</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="simpleTextAppearance">
-        <item name="android:textColor">@color/white</item>
-    </style>
 
     //shape appearance
 
@@ -47,6 +12,23 @@
         <item name="android:background">@color/black_overlay</item>
         <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
+
+    <style name="BlueBtnStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/selector_blue_btn</item>
+        <item name="android:textAppearance">@style/H2</item>
+        <item name="android:textColor">@color/btn_enable_disable_color</item>
+    </style>
+    <style name="DarkBtnStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/selector_dark_btn</item>
+        <item name="android:textAppearance">@style/H2</item>
+        <item name="android:textColor">@color/btn_enable_disable_color</item>
+    </style>
+    <style name="WeekBtnStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/selector_week_btn</item>
+        <item name="android:textAppearance">@style/P1</item>
+        <item name="android:textColor">@color/btn_enable_disable_color</item>
+    </style>
+
 
 
 </resources>

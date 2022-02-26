@@ -54,15 +54,22 @@
         <action
             android:id="@+id/action_navigation_settings_to_ratingDialog"
             app:destination="@id/ratingDialog" />
+        <action
+            android:id="@+id/action_navigation_settings_to_unlockForFreeFragment"
+            app:destination="@id/unlockForFreeFragment" />
     </fragment>
     <fragment
         android:id="@+id/goPremiumFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.GoPremiumFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.go_premium.GoPremiumFragment"
         android:label="GoPremiumFragment"
-        tools:layout="@layout/fragment_go_premium" />
+        tools:layout="@layout/fragment_go_premium" >
+        <action
+            android:id="@+id/action_goPremiumFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/playerFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.PlayerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.player.PlayerFragment"
         android:label="PlayerFragment"
         tools:layout="@layout/fragment_player">
         <action
@@ -71,10 +78,13 @@
         <action
             android:id="@+id/action_playerFragment_to_sleepTimerFragment"
             app:destination="@id/sleepTimerFragment" />
+        <action
+            android:id="@+id/action_playerFragment_to_setTimerFragment"
+            app:destination="@id/setTimerFragment" />
     </fragment>
     <fragment
         android:id="@+id/bedtimeReminderFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.BedtimeReminderFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.settings.BedtimeReminderFragment"
         android:label="BedtimeReminderFragment"
         tools:layout="@layout/fragment_bedtime_reminder" />
     <fragment
@@ -97,17 +107,21 @@
     </dialog>
     <fragment
         android:id="@+id/setTimerFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.SetTimerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.timer.SetTimerFragment"
         android:label="SetTimerFragment"
-        tools:layout="@layout/fragment_set_timer" />
+        tools:layout="@layout/fragment_set_timer" >
+        <action
+            android:id="@+id/action_setTimerFragment_to_timerDialog"
+            app:destination="@id/timerDialog" />
+    </fragment>
     <fragment
         android:id="@+id/saveCustomFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.SaveCustomFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.sounds.save_custom.SaveCustomFragment"
         android:label="SaveCustomFragment"
-        tools:layout="@layout/fragment_set_timer" />
+        tools:layout="@layout/fragment_save_custom" />
     <dialog
         android:id="@+id/customMixDialog"
-        android:name="white.noise.sounds.baby.sleep.ui.dialogs.CustomMixDialog"
+        android:name="white.noise.sounds.baby.sleep.ui.sounds.custom_mix_dialog.CustomMixDialog"
         android:label="CustomMixDialog"
         tools:layout="@layout/dialog_custom_mix">
         <action
@@ -119,7 +133,7 @@
         android:name="white.noise.sounds.baby.sleep.ui.PrivacyPolicyFragment"
         android:label="PrivacyPolicyFragment"
         tools:layout="@layout/fragment_privacy_policy" />
-    <fragment
+    <dialog
         android:id="@+id/ratingDialog"
         android:name="white.noise.sounds.baby.sleep.ui.dialogs.RatingDialog"
         android:label="RatingDialog"
@@ -135,7 +149,17 @@
     </fragment>
     <fragment
         android:id="@+id/sleepTimerFragment"
-        android:name="white.noise.sounds.baby.sleep.ui.SleepTimerFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.timer.SleepTimerFragment"
         android:label="SleepTimerFragment"
         tools:layout="@layout/fragment_sleep_timer" />
+    <dialog
+        android:id="@+id/timerDialog"
+        android:name="white.noise.sounds.baby.sleep.ui.timer.TimerDialog"
+        android:label="TimerDialog"
+        tools:layout="@layout/dialog_timer"/>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="white.noise.sounds.baby.sleep.ui.DetailsFragment"
+        android:label="DetailsFragment"
+        tools:layout="@layout/fragment_details"/>
 </navigation>

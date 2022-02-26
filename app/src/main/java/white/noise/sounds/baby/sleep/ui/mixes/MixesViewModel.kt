@@ -41,8 +41,6 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
         when (event) {
             is MixesEvent.OnCategoryClick -> {
 
-
-
 /*
                 _currentCategory.value = categories.value?.get(event.position)?.category
 //                markSelectedCategory(category = event.mixCategory.category)
@@ -53,7 +51,10 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
 //                loadMixes(category = categories.value?.get(event.position)?.category!!)
 */
             }
+
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
+
+            is MixesEvent.OnMixSave -> repository.saveMix(event.mix)
         }
     }
 

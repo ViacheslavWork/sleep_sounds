@@ -11,24 +11,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentAdditionalSoundsBinding
 import white.noise.sounds.baby.sleep.ui.sounds.SectionAdapter
-import white.noise.sounds.baby.sleep.ui.sounds.SoundAdapter
 
 
 private const val TAG = "AdditionalSoundsFragment"
 
 class AdditionalSoundsFragment : Fragment() {
-    private val soundsViewModel: AdditionalSoundsViewModel by viewModel()
+    private val soundsViewModel: AdditionalSoundsViewModel by sharedViewModel()
 
     private lateinit var sectionRecyclerView: RecyclerView
     private lateinit var sectionAdapter: SectionAdapter
 
     private lateinit var selectedSoundsRecyclerView: RecyclerView
-    private lateinit var selectedSoundsAdapter: SoundAdapter
+    private lateinit var selectedSoundsAdapter: SelectedSoundsAdapter
 
     private var _binding: FragmentAdditionalSoundsBinding? = null
 
@@ -79,13 +78,13 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun setUpSelectedSoundsRecyclerView() {
-        selectedSoundsRecyclerView = binding.selectedSoundsRv
+        selectedSoundsRecyclerView = binding.additionalSoundsRv
         selectedSoundsRecyclerView.layoutManager =
             LinearLayoutManager(context).apply { orientation = RecyclerView.HORIZONTAL }
     }
 
     private fun setUpSelectedSoundsAdapter() {
-        selectedSoundsAdapter = SoundAdapter(
+        selectedSoundsAdapter = SelectedSoundsAdapter(
             MutableLiveData(),
             isClosable = true,
             isSoundChangeable = true,
@@ -105,7 +104,7 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun setUpSectionAdapter() {
-        sectionAdapter = SectionAdapter()
+        sectionAdapter = SectionAdapter(isSelectable = false)
         sectionAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         sectionAdapter.event.observe(viewLifecycleOwner) {

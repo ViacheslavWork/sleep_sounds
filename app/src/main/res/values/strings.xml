@@ -62,8 +62,7 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="unlock_for_free">Unlock for Free</string>
     <string name="unlock_free_text">Watch a short video\n to get this premium mix</string>
@@ -73,11 +72,22 @@
     <string name="save_custom">Save custom</string>
     <string name="system_volume">System Volume</string>
     <string name="enter_the_name_for_custom">Enter the name for custom</string>
-    <string name="text_not_yet_rated">We hope this app is useful for you. If it, does would you please give us a 5 stars and a nice review on Google Play, it really helps!</string>
+    <string name="text_not_yet_rated">We hope this app is useful for you. If it, does\n
+        would you please give us a 5 stars and a nice\n review on Google Play, it really helps!</string>
     <string name="advice_rating_text">This is the best\n you can do for us.</string>
     <string name="estimate">Estimate</string>
     <string name="set_timer">Set Timer</string>
     <string name="off">Off</string>
     <string name="_00_00">00:00</string>
     <string name="selected">Selected</string>
+    <string name="volume_percentage">%d %%</string>
+    <string name="custom">Custom</string>
+    <string name="_10_minutes">10 minutes</string>
+    <string name="oh_no">Oh, no</string>
+    <string name="tell_us_what_we_can_improve">Tell us what we can improve?</string>
+    <string name="we_like_you">We like you too!</string>
+    <string name="thanks_for_feedback">Thanks for the feedback!</string>
+    <string name="estimate_on_google_play">Estimate on Google Play</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="rain_and_piano">Rain and Piano</string>
 </resources>
