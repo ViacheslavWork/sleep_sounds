@@ -5,15 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import white.noise.sounds.baby.sleep.BuildConfig
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSoundsBinding
+import white.noise.sounds.baby.sleep.service.TimerService
 
 class SoundsFragment : Fragment() {
     private val TAG = "SoundsFragment"
@@ -46,10 +46,23 @@ class SoundsFragment : Fragment() {
 
         observeSounds()
         observeSelectedSounds()
+        observeTimer()
+    }
+
+    private fun observeTimer() {
+        TimerService.isTimerRunning.observe(viewLifecycleOwner) {
+            if (it) {
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                    binding.timerTv.text = timerTime.toString()
+                }
+            } else {
+                binding.timerTv.text = getString(R.string.timer)
+            }
+        }
     }
 
     private fun observeSelectedSounds() {
-        soundsViewModel.selectedSounds.observe(viewLifecycleOwner){
+        soundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
             binding.numSoundsTv.text = it.size.toString()
             binding.selectedIb.isEnabled = it.isNotEmpty()
             binding.selectedTv.isEnabled = it.isNotEmpty()

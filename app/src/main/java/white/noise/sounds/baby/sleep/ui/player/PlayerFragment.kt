@@ -17,6 +17,7 @@ import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.ButtonPlayerBinding
 import white.noise.sounds.baby.sleep.databinding.FragmentPlayerBinding
+import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.ui.mix_sounds.AdditionalSoundsViewModel
 
 private const val TAG = "PlayerFragment"
@@ -42,7 +43,22 @@ class PlayerFragment : Fragment() {
         setUpListeners()
 
         observeSounds()
+        observeTimer()
     }
+
+    private fun observeTimer() {
+        TimerService.isTimerRunning.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.timeTv.visibility = View.VISIBLE
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                    binding.timeTv.text = timerTime.toString()
+                }
+            } else {
+                binding.timeTv.visibility = View.GONE
+            }
+        }
+    }
+
 
     private fun setUpListeners() {
         binding.downArrowToolbarIv.setOnClickListener { requireActivity().onBackPressed() }

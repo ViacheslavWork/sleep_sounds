@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentMixesBinding
 import white.noise.sounds.baby.sleep.databinding.ItemMixCategoryBinding
+import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.ViewPagerAdapter
 
@@ -40,6 +41,24 @@ class MixesFragment : Fragment() {
         setUpViewPager()
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setUpListeners()
+        observeTimer()
+    }
+
+    private fun observeTimer() {
+        TimerService.isTimerRunning.observe(viewLifecycleOwner) {
+            if (it) {
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                    binding.playerTimeTv.text = timerTime.toString()
+                }
+            } else {
+                binding.playerTimeTv.text = getString(R.string.timer)
+            }
+        }
+    }
+
 
     private fun setUpViewPager() {
         mixesViewModel.categories.observe(viewLifecycleOwner) {
@@ -72,10 +91,6 @@ class MixesFragment : Fragment() {
             }.attach()
         }
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpListeners()
     }
 
 

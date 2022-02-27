@@ -7,6 +7,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import white.noise.sounds.baby.sleep.di.appModule
 import white.noise.sounds.baby.sleep.di.dataModule
+import white.noise.sounds.baby.sleep.di.serviceModule
 
 class App : Application() {
     override fun onCreate() {
@@ -14,7 +15,7 @@ class App : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)
-            modules(listOf(appModule, dataModule))
+            modules(listOf(appModule, dataModule, serviceModule))
         }
     }
 }

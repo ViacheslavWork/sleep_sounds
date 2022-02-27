@@ -1,16 +1,47 @@
 package white.noise.sounds.baby.sleep.ui.timer
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import white.noise.sounds.baby.sleep.model.Sound
-import java.util.*
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import org.threeten.bp.Duration
+import org.threeten.bp.LocalTime
+import white.noise.sounds.baby.sleep.service.TimerService
+import java.util.concurrent.Flow
 
-class TimerViewModel: ViewModel() {
-    private val _selectedTime = MutableLiveData<Date>()
-    val selectedTime: LiveData<Date> = _selectedTime
+private const val TAG = "TimerViewModel"
 
-    fun setTime(date: Date) {
-        _selectedTime.postValue(date)
+class TimerViewModel() : ViewModel() {
+    private val _selectedTime = MutableLiveData<Times>()
+    val selectedTime: LiveData<Times> = _selectedTime
+
+    lateinit var restOfTime: LocalTime
+    lateinit var job: Job
+
+    init {
+        /*startTimer(LocalTime.of(0, 0, 20))
+        startTimer(LocalTime.of(0, 0, 10))
+        GlobalScope.launch {
+            delay(5000)
+            job.cancel()
+        }*/
     }
+
+    fun setTime(time: Times) {
+        _selectedTime.postValue(time)
+    }
+
+
+
+
 }

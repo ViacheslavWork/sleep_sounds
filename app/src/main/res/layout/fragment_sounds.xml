@@ -72,11 +72,12 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_icon_timer"
-        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
         app:layout_constraintEnd_toStartOf="@+id/play_iv"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view" />
+        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
+        app:layout_constraintTop_toTopOf="@+id/play_iv"
+        />
 
     <TextView
         android:id="@+id/timer_tv"
@@ -110,11 +111,12 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_icon_selected"
         app:tint="@color/btn_enable_disable_color"
-        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/play_iv"
-        app:layout_constraintTop_toTopOf="@+id/play_iv" />
+        app:layout_constraintBottom_toBottomOf="@+id/play_iv"
+        app:layout_constraintTop_toTopOf="@+id/play_iv"
+        />
 
     <ImageView
         android:id="@+id/small_round_iv"
