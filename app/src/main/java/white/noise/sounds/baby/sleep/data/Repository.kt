@@ -1,7 +1,16 @@
 package white.noise.sounds.baby.sleep.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import white.noise.sounds.baby.sleep.BuildConfig
+import white.noise.sounds.baby.sleep.data.database.entity.SoundEntity
+import white.noise.sounds.baby.sleep.data.database.entity.toSound
+import white.noise.sounds.baby.sleep.data.database.sounds.SoundsDao
 import white.noise.sounds.baby.sleep.data.provider.MixesProvider
 import white.noise.sounds.baby.sleep.data.provider.SoundsProvider
 import white.noise.sounds.baby.sleep.model.Mix
@@ -14,14 +23,24 @@ private const val TAG = "Repository"
 
 class Repository(
     private val soundsProvider: SoundsProvider,
-    private val mixProvider: MixesProvider
-
+    private val mixProvider: MixesProvider,
+    private val soundsDao: SoundsDao
 ) {
-    suspend fun getSounds(): List<Sound> {
-//        soundsProvider.getSounds().forEach { showLog(it.toString()) }
-        return soundsProvider.getSounds()
+    lateinit var sounds: List<Sound>
+
+    fun getSounds(): LiveData<List<Sound>> {
+        GlobalScope.launch {
+            soundsDao.deleteAll()
+            soundsDao.insertAll(
+                soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
+        }
+
+        return Transformations.map(soundsDao.getAllLD()) {
+            return@map it.map { soundEntity -> soundEntity.toSound() }
+        }
     }
 
+    //TODO: remove it later
     suspend fun getSoundsInSections(): List<Section> {
         val categoryMap: MutableMap<SoundCategory, Section> = mutableMapOf()
         enumValues<SoundCategory>().forEach {
@@ -33,9 +52,20 @@ class Repository(
         return categoryMap.values.toList()
     }
 
-    suspend fun getSounds(category: SoundCategory): List<Sound> {
-        return soundsProvider.getSounds().filter { it.category == category }
+    fun getSounds(category: SoundCategory): LiveData<List<Sound>> {
+        return Transformations.map(soundsDao.getByCategory(category)) {
+            return@map it.map { soundEntity -> soundEntity.toSound() }
+        }
     }
+
+    suspend fun insertSound(sound: Sound) = withContext(Dispatchers.IO) {
+        soundsDao.insert(soundEntity = SoundEntity.fromSound(sound))
+    }
+
+    suspend fun insertSounds(sounds: List<Sound>) = withContext(Dispatchers.IO) {
+        soundsDao.insertAll(sounds = sounds.map { SoundEntity.fromSound(it) })
+    }
+
 
     fun getMixes(): List<Mix> {
         return mixProvider.getMixes()

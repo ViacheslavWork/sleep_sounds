@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -36,52 +37,7 @@ class SelectedSoundsAdapter(
     }
 
     override fun onBindViewHolder(holder: SelectedSoundsHolder, position: Int) {
-        getItem(position).let { sound -> holder.onBind(sound, isClosable, isSoundChangeable) }
-
-        background?.let { binding.root.background = background }
-
-        binding.removeIv.setOnClickListener {
-//            TODO()
-            /* currentList.removeAt(position)
-             notifyItemRemoved(position)
-             notifyItemRangeChanged(position, currentList.size);
-             val size = currentList.size*/
-            val pos = position
-            removeItem(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(0, currentList.size)
-            event.value =
-                SoundsEvent.AdditionalSoundsEvent.OnRemoveClick(getItem(position), position)
-//            removeItem(position)
-        }
-        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                event.value = SoundsEvent.AdditionalSoundsEvent.OnSeekBarChanged(progress = p1)
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {}
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {}
-        })
-        binding.root.setOnClickListener {
-            event.value = SoundsEvent.OnSoundClick(getItem(position))
-        }
-
-    }
-
-    fun removeItem(position: Int): Sound? {
-        if (position >= itemCount) return null
-        val item = currentList[position]
-        removedItems.add(item)
-        val actualList = currentList - removedItems
-        if (actualList.isEmpty()) removedItems.clear()
-        this.submit(actualList, true)
-        return item
-    }
-
-    private fun submit(list: List<Sound>?, isLocalSubmit: Boolean) {
-        if (!isLocalSubmit) removedItems.clear()
-        super.submitList(list)
+        getItem(position).let { sound -> holder.onBind(sound, event) }
     }
 }
 
@@ -93,10 +49,34 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
             .fallback(R.drawable.ic_sound_placeholder)
     }
 
-    fun onBind(sound: Sound, isClosable: Boolean, isSoundChangeable: Boolean) {
+    fun onBind(sound: Sound, event: MutableLiveData<SoundsEvent>) {
         binding.mixItemTv.text = sound.title
-        if (isClosable) binding.removeIv.visibility = View.VISIBLE
-        if (isSoundChangeable) binding.seekBar.visibility = View.VISIBLE
+        binding.removeIv.visibility = View.VISIBLE
+        binding.seekBar.visibility = View.VISIBLE
+
+        binding.seekBar.progress = sound.volume
+        binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                event.value = SoundsEvent.OnSeekBarChanged(sound.apply { volume = p1 })
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+        })
+        binding.root.setOnClickListener {
+            event.value = SoundsEvent.OnSoundClick(sound)
+        }
+        binding.removeIv.setOnClickListener {
+            event.value =
+                SoundsEvent.AdditionalSoundsEvent.OnRemoveClick(sound, bindingAdapterPosition)
+        }
+
+        binding.root.background = ResourcesCompat.getDrawable(
+            binding.root.resources,
+            R.drawable.gradient_liner_bg3_rounded_corners,
+            null
+        )
 
         val imageLoader = ImageLoader.Builder(binding.root.context)
             .componentRegistry { add(SvgDecoder(binding.root.context)) }

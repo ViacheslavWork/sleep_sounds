@@ -26,7 +26,7 @@ import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.ui.timer.Times
 import white.noise.sounds.baby.sleep.utils.Constants
 import white.noise.sounds.baby.sleep.utils.Constants.ACTION_PAUSE_SERVICE
-import white.noise.sounds.baby.sleep.utils.Constants.ACTION_START_OR_RESUME_SERVICE
+import white.noise.sounds.baby.sleep.utils.Constants.ACTION_START_TIMER
 import white.noise.sounds.baby.sleep.utils.Constants.ACTION_STOP_SERVICE
 import white.noise.sounds.baby.sleep.utils.Constants.NOTIFICATION_CHANNEL_ID
 import white.noise.sounds.baby.sleep.utils.Constants.NOTIFICATION_CHANNEL_NAME
@@ -34,6 +34,7 @@ import white.noise.sounds.baby.sleep.utils.Constants.NOTIFICATION_ID
 
 private const val TAG = "TimerService"
 
+/*
 class TimerService : LifecycleService() {
     lateinit var currentTimer: Job
     private var isFirstRun = true
@@ -46,14 +47,29 @@ class TimerService : LifecycleService() {
         val timerTime: LiveData<LocalTime> = _timerTime
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        Log.d(TAG, "Create service")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "Create service")
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when (it.action) {
-                ACTION_START_OR_RESUME_SERVICE -> {
-                    Log.i(
+                ACTION_START_TIMER -> {
+                    Log.d(
                         TAG,
                         "Started or resumed service: time - ${it.extras?.get(Constants.EXTRA_TIME)}"
                     )
+                    if (isFirstRun) {
+                        startForegroundService()
+                        isFirstRun = false
+                    }
+
                     if (::currentTimer.isInitialized) {
                         currentTimer.cancel()
                     }
@@ -65,16 +81,12 @@ class TimerService : LifecycleService() {
                     } else {
                         _isTimerRunning.postValue(false)
                     }
-
-                    if (isFirstRun) {
-                        startForegroundService()
-                        isFirstRun = false
-                    }
                 }
                 ACTION_PAUSE_SERVICE -> {
-
+                    Log.d(TAG, "Pause service")
                 }
                 ACTION_STOP_SERVICE -> {
+                    Log.d(TAG, "Stop service")
                     stopService()
                 }
                 else -> Unit
@@ -124,9 +136,11 @@ class TimerService : LifecycleService() {
         this,
         0,
         Intent(this, MainActivity::class.java)
-        /*.also {
+        */
+/*.also {
             it.action = ACTION_SHOW_TRACKING_FRAGMENT
-        }*/, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        }*//*
+, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -160,4 +174,4 @@ class TimerService : LifecycleService() {
         }
     }
 
-}
+}*/

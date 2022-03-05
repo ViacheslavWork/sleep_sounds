@@ -53,7 +53,7 @@ class AdditionalSoundsViewModel(private val repository: Repository) : ViewModel(
                         ?.toList()
                 _playerSounds.postValue(selectedSounds.value?.take(5))
             }
-            is SoundsEvent.AdditionalSoundsEvent.OnSeekBarChanged -> showLog(event.progress.toString())
+            is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
         }
     }
 

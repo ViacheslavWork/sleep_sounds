@@ -16,11 +16,20 @@ import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.LoopingMediaSource
+import com.google.android.exoplayer2.source.MergingMediaSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.ItemSoundsBinding
 import white.noise.sounds.baby.sleep.databinding.SectionRowBinding
 import white.noise.sounds.baby.sleep.model.Sound
+import white.noise.sounds.baby.sleep.service.PlayerService
+
 
 private const val TAG = "SectionAdapter"
 
@@ -85,6 +94,9 @@ class SoundAdapter(
 }
 
 class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    private var player: SimpleExoPlayer? = null
+
     companion object {
         private val imageOption = RequestOptions()
             .placeholder(R.drawable.ic_sound_placeholder)
@@ -102,6 +114,8 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
                     R.drawable.gradient_liner_bg5_rounded_corners,
                     null
                 )
+//                initExoPlayer()
+                Log.i(TAG, "onBind: $sound")
             } else {
                 binding.seekBar.visibility = View.INVISIBLE
                 binding.root.background = ResourcesCompat.getDrawable(
@@ -115,7 +129,7 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 sound.volume = p1
-                event.value = SoundsEvent.AdditionalSoundsEvent.OnSeekBarChanged(progress = p1)
+                event.value = SoundsEvent.OnSeekBarChanged(sound)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {}
@@ -125,8 +139,8 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
 
         binding.root.setOnClickListener {
             sound.isPlaying = !sound.isPlaying
-            bindingAdapter?.notifyItemChanged(bindingAdapterPosition)
             event.value = SoundsEvent.OnSoundClick(sound)
+            bindingAdapter?.notifyItemChanged(bindingAdapterPosition)
         }
 
         /*Glide.with(binding.root.context)
@@ -166,11 +180,42 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         imageLoader.enqueue(request)
     }
 
+    fun initExoPlayer() {
+        val exoPlayer = ExoPlayer.Builder(binding.root.context).build()
+        val mediaItem1 =
+            MediaItem.fromUri(Uri.parse("file:///android_asset/sounds/animal/frog.ogg"))
+        val mediaItem2 =
+            MediaItem.fromUri(Uri.parse("file:///android_asset/sounds/animal/wolf.ogg"))
+        val defaultDataSourceFactory = DefaultDataSourceFactory(
+            binding.root.context,
+            "audio / ogg"
+        ) // userAgent -> audio / mpeg не может быть пустым
+        val mediaSourceFactory = DefaultMediaSourceFactory(defaultDataSourceFactory)
+
+        val mediaSource1 = mediaSourceFactory.createMediaSource(mediaItem1)
+        val mediaSource2 = mediaSourceFactory.createMediaSource(mediaItem2)
+
+        val mergingMediaSource = MergingMediaSource(mediaSource2, mediaSource1)
+        val loopMediaSource1 = LoopingMediaSource(mediaSource1)
+        exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ALL
+        exoPlayer.setMediaSource(mediaSource1)
+        exoPlayer.playWhenReady = true
+        exoPlayer.prepare()
+
+
+        val loopMediaSource2 = LoopingMediaSource(mediaSource2)
+        val exoPlayer2 = ExoPlayer.Builder(binding.root.context).build()
+        exoPlayer2.repeatMode = ExoPlayer.REPEAT_MODE_ALL
+        exoPlayer2.setMediaSource(mediaSource2)
+        exoPlayer2.playWhenReady = true
+        exoPlayer2.prepare()
+    }
+
 }
 
 private class SoundDiffCallback : DiffUtil.ItemCallback<Sound>() {
     override fun areItemsTheSame(oldItem: Sound, newItem: Sound): Boolean {
-        return (oldItem.title == newItem.title)
+        return (oldItem.id == newItem.id)
     }
 
     override fun areContentsTheSame(oldItem: Sound, newItem: Sound): Boolean {

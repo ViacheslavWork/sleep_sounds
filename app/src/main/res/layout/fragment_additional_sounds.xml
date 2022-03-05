@@ -73,7 +73,8 @@
         android:id="@+id/sounds_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/close_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/you_can_add_tv"
@@ -81,5 +82,41 @@
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
         />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/close_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@android:color/transparent"
+        android:src="@drawable/ic_icon_cross"
+        app:backgroundTint="@color/white"
+        app:borderWidth="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/apply_btn"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1"
+        app:tint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/apply_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@android:color/transparent"
+        android:enabled="true"
+        app:backgroundTint="@color/btn_enable_disable_color"
+        app:borderWidth="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/close_btn"
+        app:layout_constraintVertical_bias="1"
+        app:srcCompat="@drawable/ic_icon_check"
+        app:tint="@color/btn_enable_disable_color" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

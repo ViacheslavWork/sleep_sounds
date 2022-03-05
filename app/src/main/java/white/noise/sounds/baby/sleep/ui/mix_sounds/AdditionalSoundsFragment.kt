@@ -54,6 +54,7 @@ class AdditionalSoundsFragment : Fragment() {
 
         observeSounds()
         observeSelection()
+        observeAdditionalSoundsEvents()
     }
 
     private fun setUpListeners() {
@@ -107,10 +108,13 @@ class AdditionalSoundsFragment : Fragment() {
         sectionAdapter = SectionAdapter(isSelectable = false)
         sectionAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        sectionRecyclerView.adapter = sectionAdapter
+    }
+
+    private fun observeAdditionalSoundsEvents() {
         sectionAdapter.event.observe(viewLifecycleOwner) {
             soundsViewModel.handleEvent(it)
         }
-        sectionRecyclerView.adapter = sectionAdapter
     }
 
     override fun onDestroyView() {

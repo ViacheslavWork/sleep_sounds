@@ -23,6 +23,8 @@
         </activity>
         <service android:name=".service.TimerService"
             android:foregroundServiceType="dataSync"/>
+        <service android:name=".service.PlayerService"
+            android:foregroundServiceType="dataSync"/>
     </application>
 
 </manifest>

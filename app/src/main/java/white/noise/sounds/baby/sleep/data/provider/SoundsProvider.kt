@@ -6,7 +6,7 @@ import white.noise.sounds.baby.sleep.utils.AssetManager
 import java.util.*
 
 class SoundsProvider(val assetManager: AssetManager) {
-    suspend fun getSounds(): List<Sound> {
+    fun getSounds(): List<Sound> {
         val sounds = mutableListOf<Sound>()
         val fileNames = assetManager.getFilenamesWithFolder("sounds").toMutableMap()
 

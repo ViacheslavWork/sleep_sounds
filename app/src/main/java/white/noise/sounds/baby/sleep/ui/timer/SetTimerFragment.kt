@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.databinding.FragmentSetTimerBinding
-import white.noise.sounds.baby.sleep.service.TimerService
+import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.utils.Constants
-import white.noise.sounds.baby.sleep.utils.ToastHelper
 
 
 class SetTimerFragment : Fragment() {
@@ -52,7 +51,7 @@ class SetTimerFragment : Fragment() {
     private fun setUpListeners() {
         binding.applyBtn.setOnClickListener {
 //            ToastHelper.showToast(requireContext(), "Apply clicked")
-            sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+            sendCommandToService(Constants.ACTION_START_TIMER)
             requireActivity().onBackPressed()
         }
         binding.closeBtn.setOnClickListener { requireActivity().onBackPressed() }
@@ -60,7 +59,7 @@ class SetTimerFragment : Fragment() {
     }
 
     private fun sendCommandToService(action: String) {
-        Intent(requireContext(), TimerService::class.java).also {
+        Intent(requireContext(), PlayerService::class.java).also {
             it.putExtra(Constants.EXTRA_TIME, timerViewModel.selectedTime.value)
             it.action = action
             requireContext().startService(it)
