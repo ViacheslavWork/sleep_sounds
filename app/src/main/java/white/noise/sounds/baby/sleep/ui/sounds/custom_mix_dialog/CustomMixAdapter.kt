@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +14,10 @@ import coil.request.ImageRequest
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.ItemCustomDialogBinding
 import white.noise.sounds.baby.sleep.model.Sound
+import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 
-class CustomMixAdapter : ListAdapter<Sound, SoundHolder>(SoundDiffCallback()) {
+class CustomMixAdapter(val event: MutableLiveData<SoundsEvent> = MutableLiveData()) :
+    ListAdapter<Sound, SoundHolder>(SoundDiffCallback()) {
     lateinit var binding: ItemCustomDialogBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoundHolder {
         binding =
@@ -24,23 +27,22 @@ class CustomMixAdapter : ListAdapter<Sound, SoundHolder>(SoundDiffCallback()) {
 
 
     override fun onBindViewHolder(holder: SoundHolder, position: Int) {
-        holder.onBind(getItem(position))
+        holder.onBind(getItem(position),event)
     }
 }
 
 class SoundHolder(private val binding: ItemCustomDialogBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun onBind(sound: Sound) {
+    fun onBind(sound: Sound, event: MutableLiveData<SoundsEvent>) {
         binding.volumeSeekBar.progress = sound.volume
         binding.volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 sound.volume = p1
+                event.value = SoundsEvent.OnSeekBarChanged(sound)
             }
-
             override fun onStartTrackingTouch(p0: SeekBar?) {}
 
             override fun onStopTrackingTouch(p0: SeekBar?) {}
-
         })
 
         setIcon(sound)

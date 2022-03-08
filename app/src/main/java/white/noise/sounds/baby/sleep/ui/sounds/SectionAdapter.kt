@@ -60,7 +60,6 @@ class SectionHolder(private val binding: SectionRowBinding, private val isSelect
         binding.sectionRv.adapter = adapter
         adapter.submitList(section.items)
     }
-
 }
 
 class SoundAdapter(
