@@ -1,5 +1,7 @@
 package white.noise.sounds.baby.sleep.ui.settings
 
+import android.app.AlarmManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +11,7 @@ import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentBedtimeReminderBinding
 
@@ -16,6 +19,8 @@ class BedtimeReminderFragment : Fragment() {
 
     private var _binding: FragmentBedtimeReminderBinding? = null
     private val binding get() = _binding!!
+
+    private var alarmTime: LocalTime = LocalTime.of(0, 0)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +47,7 @@ class BedtimeReminderFragment : Fragment() {
             picker.addOnPositiveButtonClickListener {
                 binding.hoursTv.text = String.format("%02d", picker.hour)
                 binding.minutesTv.text = String.format("%02d", picker.minute)
+                alarmTime = LocalTime.of(picker.hour, picker.minute)
             }
         }
         binding.okBtn.setOnClickListener { }
@@ -110,6 +116,32 @@ class BedtimeReminderFragment : Fragment() {
         binding.saturdayBtn.btn.text = resources.getString(R.string.saturday)
         getButtons().map { it.isEnabled = binding.bedtimeReminderSwitch.isChecked }
     }
+
+    private fun setAlarm(time: LocalTime) {
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//        val alarmClockInfo = AlarmManager.AlarmClockInfo(time.)
+    }
+
+    /*   private fun scheduleAlarm() {
+           val alarmId: Int = Random().nextInt(Int.MAX_VALUE)
+           val alarm = Alarm(
+               alarmId,
+               TimePickerUtil.getTimePickerHour(timePicker),
+               TimePickerUtil.getTimePickerMinute(timePicker),
+               title.getText().toString(),
+               true,
+               recurring.isChecked(),
+               mon.isChecked(),
+               tue.isChecked(),
+               wed.isChecked(),
+               thu.isChecked(),
+               fri.isChecked(),
+               sat.isChecked(),
+               sun.isChecked()
+           )
+           createAlarmViewModel.insert(alarm)
+           alarm.schedule(context)
+       }*/
 
     private fun getButtons(): List<Button> {
         return mutableListOf<Button>()

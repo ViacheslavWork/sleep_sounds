@@ -1,11 +1,16 @@
 package white.noise.sounds.baby.sleep.ui.mixes
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
+
+private const val TAG = "MixesViewModel"
 
 class MixesViewModel(private val repository: Repository) : ViewModel() {
     private val _mixes = MutableLiveData<List<Mix>>()
@@ -43,7 +48,10 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
 
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
 
-//            is MixesEvent.OnMixSave -> repository.saveMix(event.mix)
+            is MixesEvent.OnMixSave -> {
+                Log.i(TAG, "handleEvent: ${event.mix}")
+                viewModelScope.launch { repository.saveMix(event.mix) }
+            }
         }
     }
 

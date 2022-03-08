@@ -36,7 +36,7 @@ class GreetingFragment : Fragment() {
             .scaleX(1.3f)
             .scaleY(1.3f)
         lifecycleScope.launch(Dispatchers.Default) {
-            delay(3000)
+//            delay(3000)
             withContext(Dispatchers.Main){
                 findNavController().navigate(GreetingFragmentDirections.actionGreetingFragmentToNavigationMixes())
             }

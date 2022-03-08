@@ -129,33 +129,16 @@
         app:srcCompat="@drawable/ic_icon_check"
         app:tint="@color/btn_enable_disable_color" />
 
-    <ImageView
-        android:id="@+id/photo_iv"
+    <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:src="@drawable/mix_placeholder"
+        app:constraint_referenced_ids="image_layout"
         app:layout_constraintStart_toStartOf="@+id/content_start"
         app:layout_constraintTop_toBottomOf="@+id/upload_image_btn" />
 
-    <ImageView
-        android:id="@+id/photo_remove_iv"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_margin="7dp"
-        android:src="@drawable/ic_icon_cross"
-        app:layout_constraintBottom_toBottomOf="@+id/photo_edit_iv"
-        app:layout_constraintEnd_toEndOf="@+id/photo_iv"
-        app:layout_constraintTop_toTopOf="@+id/photo_edit_iv" />
-
-    <ImageView
-        android:id="@+id/photo_edit_iv"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_margin="7dp"
-        android:src="@drawable/ic_icon_edit"
-        app:layout_constraintStart_toStartOf="@id/photo_iv"
-        app:layout_constraintTop_toTopOf="@+id/photo_iv" />
-
+    <include
+        android:id="@+id/image_layout"
+        layout="@layout/image_custom_mix" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

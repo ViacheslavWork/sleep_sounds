@@ -1,10 +1,12 @@
 package white.noise.sounds.baby.sleep.service
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Binder
 import android.os.Build
@@ -307,6 +309,7 @@ class PlayerService : LifecycleService() {
         }*/
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun getNotificationBuilder() = NotificationCompat.Builder(
         this,
         Constants.NOTIFICATION_CHANNEL_ID
@@ -316,6 +319,7 @@ class PlayerService : LifecycleService() {
         .setSmallIcon(R.drawable.ic_dynamic)
         .setContentTitle("White noise")
         .setContentText("00:00:00")
+        .setColor(R.color.dark_blue)
         .setContentIntent(getMainActivityPendingIntent())
 
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(

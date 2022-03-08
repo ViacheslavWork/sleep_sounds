@@ -3,6 +3,8 @@
     package="white.noise.sounds.baby.sleep">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -21,10 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.TimerService"
-            android:foregroundServiceType="dataSync"/>
         <service android:name=".service.PlayerService"
             android:foregroundServiceType="dataSync"/>
+
+        <receiver android:name=".broadcast.AlarmBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
