@@ -5,18 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentPagerBinding
 import white.noise.sounds.baby.sleep.model.MixCategory
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
+import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 
 const val ARG_CATEGORY = "category"
 private const val TAG = "PagerFragment"
@@ -30,6 +30,7 @@ class PagerFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +61,10 @@ class PagerFragment : Fragment() {
 
     private fun observeAdaptersEvents() {
         mixesAdapter.event.observe(viewLifecycleOwner) {
-            findNavController().navigate(MixesFragmentDirections.actionNavigationMixesToPlayerFragment())
+            findNavController().navigate(
+                R.id.action_navigation_mixes_to_playerFragment,
+                bundleOf(PlayerFragment.mixIdKey to it.mix.id)
+            )
 //            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
             mixesViewModel.handleEvent(it)
         }
@@ -77,6 +81,7 @@ class PagerFragment : Fragment() {
             } else mixesAdapter.submitList(mixes)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

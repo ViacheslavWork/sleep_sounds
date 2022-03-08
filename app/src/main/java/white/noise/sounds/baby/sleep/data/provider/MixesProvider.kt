@@ -2,6 +2,7 @@ package white.noise.sounds.baby.sleep.data.provider
 
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
+import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.utils.AssetManager
 import java.util.*
 
@@ -11,6 +12,7 @@ class MixesProvider(val assetManager: AssetManager, val soundsProvider: SoundsPr
     fun getMixes(): List<Mix> {
         val mixes = mutableListOf<Mix>()
         val fileNames = assetManager.getFilenamesWithFolder("mixes").toMutableMap()
+        val sounds = soundsProvider.getSounds()
 
         getFolders().forEach { fileNames.remove(it) }//remove folders from files
 
@@ -22,15 +24,15 @@ class MixesProvider(val assetManager: AssetManager, val soundsProvider: SoundsPr
             )
             mixes.add(mix)
         }
-        addSoundsToMixes(mixes)
+        addSoundsToMixes(mixes,sounds)
         return mixes.toList()
     }
 
-    private fun addSoundsToMixes(mixes: List<Mix>) {
-        //TODO
+    private fun addSoundsToMixes(mixes: List<Mix>, sounds: List<Sound>) {
         mixes.forEach {
-//            it.sounds.add(soundsProvider.getSounds()[0])
-//            it.sounds.add(soundsProvider.getSounds()[1])
+            it.sounds.add(sounds[0])
+            it.sounds.add(sounds[1])
+            it.sounds.add(sounds[2])
         }
     }
 

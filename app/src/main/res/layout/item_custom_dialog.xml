@@ -25,7 +25,7 @@
 
     <SeekBar
         android:id="@+id/volume_seek_bar"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/cross"

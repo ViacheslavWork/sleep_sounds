@@ -20,6 +20,7 @@ import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.ViewPagerAdapter
 
+private const val TAG = "MixesFragment"
 
 class MixesFragment : Fragment() {
     private val mixesViewModel: MixesViewModel by sharedViewModel()
@@ -31,6 +32,7 @@ class MixesFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +60,6 @@ class MixesFragment : Fragment() {
             }
         }
     }
-
 
     private fun setUpViewPager() {
         mixesViewModel.categories.observe(viewLifecycleOwner) {
@@ -90,9 +91,7 @@ class MixesFragment : Fragment() {
                 tab.customView = itemMixCategoryBinding.root
             }.attach()
         }
-
     }
-
 
     private fun setUpListeners() {
         binding.crownMixToolbarIv.setOnClickListener {
@@ -106,6 +105,7 @@ class MixesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

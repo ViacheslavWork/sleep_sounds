@@ -39,15 +39,14 @@
         app:layout_constraintEnd_toEndOf="@id/content_end"
         app:layout_constraintStart_toStartOf="@id/content_start"
         app:layout_constraintTop_toBottomOf="@id/close_tv"
-        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_custom_dialog"
         tools:itemCount="3"
-        />
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_custom_dialog" />
 
     <Button
         android:id="@+id/save_custom_btn"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/black40"
@@ -65,54 +64,26 @@
         android:id="@+id/system_volume_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
         android:text="@string/system_volume"
         android:textAppearance="@style/text1"
-        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="@id/content_end"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/content_start"
-        app:layout_constraintTop_toBottomOf="@id/save_custom_btn"
-        />
+        app:layout_constraintTop_toBottomOf="@id/save_custom_btn" />
 
-    <ImageView
-        android:id="@+id/icon_volume_iv"
+    <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
         android:layout_marginTop="25dp"
-        android:maxWidth="30dp"
-        android:maxHeight="30dp"
-        android:scaleType="centerCrop"
         android:layout_marginBottom="35dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/system_volume_seek_bar"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:constraint_referenced_ids="system_volume_include"
         app:layout_constraintStart_toStartOf="@id/content_start"
         app:layout_constraintTop_toBottomOf="@id/system_volume_tv"
-        app:srcCompat="@drawable/ic_dynamic" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/content_end"/>
 
-    <SeekBar
-        android:id="@+id/system_volume_seek_bar"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/icon_volume_iv"
-        app:layout_constraintEnd_toStartOf="@+id/cross"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/icon_volume_iv"
-        app:layout_constraintTop_toTopOf="@+id/icon_volume_iv" />
-
-    <ImageView
-        android:id="@+id/cross"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/system_volume_seek_bar"
-        app:layout_constraintEnd_toEndOf="@id/content_end"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/system_volume_seek_bar"
-        app:layout_constraintTop_toTopOf="@+id/system_volume_seek_bar"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/ic_icon_cross" />
-
-
+    <include
+        android:id="@+id/system_volume_include"
+        layout="@layout/item_custom_dialog" />
 </androidx.constraintlayout.widget.ConstraintLayout>

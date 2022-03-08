@@ -74,13 +74,14 @@
         tools:layout="@layout/fragment_player">
         <action
             android:id="@+id/action_playerFragment_to_additionalSoundsFragment"
-            app:destination="@id/additionalSoundsFragment" />
+            app:destination="@id/mixesSoundsFragment" />
         <action
             android:id="@+id/action_playerFragment_to_sleepTimerFragment"
             app:destination="@id/sleepTimerFragment" />
         <action
             android:id="@+id/action_playerFragment_to_setTimerFragment"
             app:destination="@id/setTimerFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/bedtimeReminderFragment"
@@ -88,7 +89,7 @@
         android:label="BedtimeReminderFragment"
         tools:layout="@layout/fragment_bedtime_reminder" />
     <fragment
-        android:id="@+id/additionalSoundsFragment"
+        android:id="@+id/mixesSoundsFragment"
         android:name="white.noise.sounds.baby.sleep.ui.mix_sounds.AdditionalSoundsFragment"
         android:label="AdditionalSoundsFragment"
         tools:layout="@layout/fragment_additional_sounds">

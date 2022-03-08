@@ -2,14 +2,18 @@ package white.noise.sounds.baby.sleep.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import white.noise.sounds.baby.sleep.BuildConfig
+import white.noise.sounds.baby.sleep.data.database.entity.MixEntity
 import white.noise.sounds.baby.sleep.data.database.entity.SoundEntity
+import white.noise.sounds.baby.sleep.data.database.entity.toMix
 import white.noise.sounds.baby.sleep.data.database.entity.toSound
+import white.noise.sounds.baby.sleep.data.database.mixes.MixesDao
 import white.noise.sounds.baby.sleep.data.database.sounds.SoundsDao
 import white.noise.sounds.baby.sleep.data.provider.MixesProvider
 import white.noise.sounds.baby.sleep.data.provider.SoundsProvider
@@ -24,24 +28,42 @@ private const val TAG = "Repository"
 class Repository(
     private val soundsProvider: SoundsProvider,
     private val mixProvider: MixesProvider,
-    private val soundsDao: SoundsDao
+    private val soundsDao: SoundsDao,
+    private val mixesDao: MixesDao
 ) {
     lateinit var sounds: List<Sound>
 
     fun getSounds(): LiveData<List<Sound>> {
-        GlobalScope.launch {
-            soundsDao.deleteAll()
-            soundsDao.insertAll(
-                soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
+        GlobalScope.launch(Dispatchers.IO) {
+            if (soundsDao.getAll().isEmpty()) {
+                soundsDao.deleteAll()
+                soundsDao.insertAll(
+                    soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
+            }
         }
 
         return Transformations.map(soundsDao.getAllLD()) {
             return@map it.map { soundEntity -> soundEntity.toSound() }
         }
+        /* val soundsLD =
+             MutableLiveData<List<Sound>>().apply { postValue(soundsProvider.getSounds()) }
+         return soundsLD*/
     }
 
+  /*  suspend fun getSounds(): List<Sound> = withContext(Dispatchers.IO){
+        GlobalScope.launch(Dispatchers.IO) {
+            if (soundsDao.getAll().isEmpty()) {
+                soundsDao.deleteAll()
+                soundsDao.insertAll(
+                    soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
+            }
+        }
+        return@withContext soundsDao.getAll().map { it.toSound() }
+    }*/
+
+
     //TODO: remove it later
-    suspend fun getSoundsInSections(): List<Section> {
+    fun getSoundsInSections(): List<Section> {
         val categoryMap: MutableMap<SoundCategory, Section> = mutableMapOf()
         enumValues<SoundCategory>().forEach {
             categoryMap[it] = Section(it)
@@ -67,21 +89,41 @@ class Repository(
     }
 
 
-    fun getMixes(): List<Mix> {
-        return mixProvider.getMixes()
+    fun getMixes(): LiveData<List<Mix>> {
+        GlobalScope.launch(Dispatchers.IO) {
+        if (mixesDao.getAll().isEmpty()) {
+            mixesDao.deleteAll()
+            mixesDao.insertAll(
+                    mixProvider.getMixes().map { mix -> MixEntity.fromMix(mix) })
+            }
+        }
+        return Transformations.map(mixesDao.getAllLD()) {
+            return@map it.map { mixEntity -> mixEntity.toMix() }
+        }
+//        return mixProvider.getMixes()
     }
 
     fun getMixes(category: MixCategory): List<Mix> {
         return mixProvider.getMixes().filter { it.category == category }
     }
 
-    fun saveMix(mix: Mix) {
-        TODO()
+    suspend fun saveMix(mix: Mix) = withContext(Dispatchers.IO) {
+        mixesDao.insert(mixEntity = MixEntity.fromMix(mix))
     }
 
     private fun showLog(message: String) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, message)
+        }
+    }
+
+    suspend fun getMix(id: Long): Mix = withContext(Dispatchers.IO) {
+        return@withContext mixesDao.getMix(id).toMix()
+    }
+
+    fun getMixLD(id: Long): LiveData<Mix> {
+        return Transformations.map(mixesDao.getMixLD(id)) {
+            it.toMix()
         }
     }
 }

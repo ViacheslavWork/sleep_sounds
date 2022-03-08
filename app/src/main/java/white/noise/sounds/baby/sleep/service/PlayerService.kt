@@ -27,6 +27,7 @@ import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.MainActivity
 import white.noise.sounds.baby.sleep.R
+import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.ui.timer.Times
 import white.noise.sounds.baby.sleep.utils.Constants
@@ -48,11 +49,20 @@ class PlayerService : LifecycleService() {
         private val _isPlayable = MutableLiveData<Boolean>(false)
         val isPlayable: LiveData<Boolean> = _isPlayable
 
-        private val _currentSoundsLD = MutableLiveData<Set<Sound>?>(setOf())
+        private var _currentSoundsLD = MutableLiveData<Set<Sound>?>(setOf())
         val currentSoundsLD: LiveData<Set<Sound>?> = _currentSoundsLD
 
+        private val _currentMixLD = MutableLiveData<Mix?>(null)
+        val currentMixLD: LiveData<Mix?> = _currentMixLD
+
         val currentSounds = mutableMapOf<Long, Sound>()
+
+        var launcher: String? = ""
+
+        var currentMix: Mix? = null
     }
+
+    private val curSoundsLocal = mutableSetOf<Sound>()
 
     private var isFirstRun = true
 
@@ -103,13 +113,41 @@ class PlayerService : LifecycleService() {
                         isFirstRun = false
                     }
                     val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
+                    _currentMixLD.postValue(it.extras?.get(Constants.EXTRA_MIX) as Mix?)
+                    /*if (it.extras?.getString(Constants.LAUNCHER) != launcher) {
+                        stopAllSounds()
+                        launcher = it.extras?.getString(Constants.LAUNCHER)
+                    }*/
+
+                    launcher = it.extras?.getString(Constants.LAUNCHER)
                     playStopSound(sound)
                 }
-                Constants.ACTION_CHANGE_VOLUME -> {
-                    changeVolume(it.extras?.get(Constants.EXTRA_SOUND) as Sound)
+                Constants.ACTION_PLAY_SOUND -> {
+                    Log.d(TAG, "Play sound")
+                    if (isFirstRun) {
+                        startForegroundService()
+                        isFirstRun = false
+                    }
+                    val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
+                    _currentMixLD.postValue(it.extras?.get(Constants.EXTRA_MIX) as Mix?)
+                    launcher = it.extras?.getString(Constants.LAUNCHER)
+                    playSound(sound)
+                }
+                Constants.ACTION_STOP_SOUND -> {
+                    Log.d(TAG, "Stop sound")
+                    val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
+                    _currentMixLD.postValue(it.extras?.get(Constants.EXTRA_MIX) as Mix?)
+                    launcher = it.extras?.getString(Constants.LAUNCHER)
+                    stopSound(sound)
                 }
                 Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS -> {
                     _isPause.postValue(!isPause.value!!)
+                }
+                Constants.ACTION_STOP_ALL_SOUNDS -> {
+                    stopAllSounds()
+                }
+                Constants.ACTION_CHANGE_VOLUME -> {
+                    changeVolume(it.extras?.get(Constants.EXTRA_SOUND) as Sound)
                 }
                 Constants.ACTION_STOP_SERVICE -> {
                     Log.d(TAG, "Stop service")
@@ -121,7 +159,6 @@ class PlayerService : LifecycleService() {
 
         return super.onStartCommand(intent, flags, startId)
     }
-
 
     override fun onBind(intent: Intent): IBinder {
         super.onBind(intent)
@@ -135,6 +172,15 @@ class PlayerService : LifecycleService() {
         currentPlayers[sound.title]?.volume = sound.volume.toFloat() / 100
     }
 
+    private fun stopAllSounds() {
+        currentPlayers.forEach{stopSound(it.key)}
+        currentPlayers.clear()
+        curSoundsLocal.clear()
+        _currentSoundsLD.postValue(curSoundsLocal)
+        currentSounds.clear()
+        if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
+    }
+
     private fun playStopSound(sound: Sound) {
         if (currentPlayers.keys.contains(sound.title)) {
             stopSound(sound.title)
@@ -145,7 +191,7 @@ class PlayerService : LifecycleService() {
             if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
         } else {
             currentPlayers[sound.title] =
-                playSound(sound).apply { if (isPause.value == true) pause() }
+                playPlayer(sound).apply { if (isPause.value == true) pause() }
 
             addToCurrentSounds(sound)
 
@@ -153,23 +199,49 @@ class PlayerService : LifecycleService() {
         }
     }
 
+    private fun playSound(sound: Sound) {
+        if (!currentPlayers.keys.contains(sound.title)) {
+            currentPlayers[sound.title] =
+                playPlayer(sound).apply { if (isPause.value == true) pause() }
+
+            addToCurrentSounds(sound)
+
+            _isPlayable.postValue(true)
+        }
+    }
+
+    private fun stopSound(sound: Sound) {
+        if (currentPlayers.keys.contains(sound.title)) {
+            stopSound(sound.title)
+            currentPlayers.remove(sound.title)
+
+            removeFromCurrentSounds(sound)
+
+            if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
+        }
+    }
+
     private fun addToCurrentSounds(sound: Sound) {
-        val currentSounds = currentSoundsLD.value?.toMutableSet()
-        currentSounds?.add(sound)
-        _currentSoundsLD.postValue(currentSounds)
+        curSoundsLocal.add(sound)
+        _currentSoundsLD.postValue(curSoundsLocal)
+        currentSounds[sound.id] = sound
     }
 
     private fun removeFromCurrentSounds(sound: Sound) {
-        val currentSounds = currentSoundsLD.value?.toMutableSet()
-        var soundForRemoving: Sound? = null
-        currentSounds?.forEach {
-            if (it.title == sound.title) {
-                soundForRemoving = it
-                return@forEach
+        var numForRemove = -1
+        val list = curSoundsLocal.toMutableList()
+        list.forEachIndexed {index, snd->
+            if (snd.id == sound.id) {
+                numForRemove = index
             }
         }
-        currentSounds?.remove(soundForRemoving)
-        _currentSoundsLD.postValue(currentSounds)
+        if (numForRemove >= 0) {
+            list.removeAt(numForRemove)
+        }
+        curSoundsLocal.clear()
+        curSoundsLocal.addAll(list)
+        _currentSoundsLD.postValue(curSoundsLocal)
+        currentSounds.remove(sound.id)
     }
 
     private fun stopSound(soundTitle: String) {
@@ -179,7 +251,7 @@ class PlayerService : LifecycleService() {
         exoPlayer?.release()
     }
 
-    private fun playSound(sound: Sound): ExoPlayer {
+    private fun playPlayer(sound: Sound): ExoPlayer {
         Log.i(TAG, "playSound: ")
         val mediaItem = MediaItem.fromUri(
             Uri.parse(
@@ -227,9 +299,12 @@ class PlayerService : LifecycleService() {
                 currentPlayers.values.forEach { exoPlayer -> exoPlayer.play() }
             }
         }
-        currentSoundsLD.observe(this) {
+        /*currentSoundsLD.observe(this) {
             it?.forEach { sound -> currentSounds[sound.id] = sound }
-        }
+            currentSounds.forEach{
+                Log.i(TAG, "current sound: ${it.value} ")
+            }
+        }*/
     }
 
     private fun getNotificationBuilder() = NotificationCompat.Builder(

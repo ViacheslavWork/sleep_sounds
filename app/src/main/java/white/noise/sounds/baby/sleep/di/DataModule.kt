@@ -12,7 +12,8 @@ val dataModule = module {
         Repository(
             soundsProvider = get(),
             mixProvider = get(),
-            soundsDao = get()
+            soundsDao = get(),
+            mixesDao = get()
         )
     }
     factory<SoundsProvider> { SoundsProvider(assetManager = get()) }

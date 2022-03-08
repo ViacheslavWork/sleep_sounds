@@ -9,7 +9,7 @@ import white.noise.sounds.baby.sleep.model.MixCategory
 
 class MixesViewModel(private val repository: Repository) : ViewModel() {
     private val _mixes = MutableLiveData<List<Mix>>()
-    val mixes: LiveData<List<Mix>> = _mixes
+    lateinit var mixes: LiveData<List<Mix>>
 
     private val _categories = MutableLiveData<List<MixCategory>>()
     val categories: LiveData<List<MixCategory>> = _categories
@@ -30,7 +30,7 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun loadAllMixes() {
-        _mixes.postValue(repository.getMixes())
+        mixes = repository.getMixes()
     }
 
     private fun loadMixes(category: MixCategory) {
@@ -39,29 +39,12 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
 
     fun handleEvent(event: MixesEvent) {
         when (event) {
-            is MixesEvent.OnCategoryClick -> {
-
-/*
-                _currentCategory.value = categories.value?.get(event.position)?.category
-//                markSelectedCategory(category = event.mixCategory.category)
-                if (event.mixCategory.category != MixCategory.AllSounds) {
-//                    loadMixes(category = event.mixCategory.category)
-                    loadMixes(category = categories.value?.get(event.position)?.category!!)
-                } else loadAllMixes()
-//                loadMixes(category = categories.value?.get(event.position)?.category!!)
-*/
-            }
+            is MixesEvent.OnCategoryClick -> {}
 
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
 
-            is MixesEvent.OnMixSave -> repository.saveMix(event.mix)
+//            is MixesEvent.OnMixSave -> repository.saveMix(event.mix)
         }
     }
-
-   /* private fun markSelectedCategory(category: MixCategory) {
-        _categories.value = _categories.value?.onEach {
-            it.isSelected = it.category == category
-        }
-    }*/
 
 }

@@ -43,10 +43,13 @@
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_icon_check.xml" value="0.1935" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_icon_cross.xml" value="0.145" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_icon_edit.xml" value="0.177" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_icon_selected.xml" value="0.1435" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_launcher_background.xml" value="0.177" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_play.xml" value="0.145" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_play_btn.xml" value="0.1345" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_play_rounded.xml" value="0.1435" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_play_rounded_inactive.xml" value="0.1435" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_remove_ads.xml" value="0.1775" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_settings.xml" value="0.2865" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/ic_sound_placeholder.xml" value="0.205" />
@@ -65,7 +68,10 @@
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/icon-wind.xml" value="0.205" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/icon-wolf.xml" value="0.205" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/icon-zen.xml" value="0.205" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/icon_underwater.xml" value="0.1435" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/selector_blue_btn.xml" value="0.145" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/selector_play_round_btn.xml" value="0.1435" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/selector_week_btn.xml" value="0.1435" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/shape_time.xml" value="0.199" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/sound_item_gradient.xml" value="0.1775" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/drawable/tab.xml" value="0.1345" />
@@ -74,7 +80,7 @@
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/button_play_pause_mix_player.xml" value="1.25" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/button_player.xml" value="0.16" />
-        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/dialog_custom_mix.xml" value="0.5" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/dialog_custom_mix.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/dialog_rating.xml" value="0.22" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/dialog_timer.xml" value="0.30344202898550726" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/dialog_unlock_for_free.xml" value="0.25" />

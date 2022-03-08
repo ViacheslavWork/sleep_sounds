@@ -21,25 +21,21 @@ import white.noise.sounds.baby.sleep.databinding.FragmentSoundsBinding
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.utils.Constants
+import white.noise.sounds.baby.sleep.utils.Constants.EXTRA_SOUND
+import white.noise.sounds.baby.sleep.utils.Constants.LAUNCHER
+import white.noise.sounds.baby.sleep.utils.Constants.SOUNDS_LAUNCHER
 
 class SoundsFragment : Fragment() {
     private val TAG = "SoundsFragment"
     private val soundsViewModel: SoundsViewModel by sharedViewModel()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SectionAdapter
+    private var mIsPause = false
 
-    // Variable for storing instance of our service class
     var playerService: PlayerService? = null
 
     // Boolean to check if our fragment is bound to service or not
     var isServiceBound: Boolean = false
-
-    private var _binding: FragmentSoundsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
-
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, iBinder: IBinder) {
             Log.d(TAG, "ServiceConnection: connected to service.")
@@ -54,6 +50,9 @@ class SoundsFragment : Fragment() {
             isServiceBound = false
         }
     }
+
+    private var _binding: FragmentSoundsBinding? = null
+    private val binding get() = _binding!!
 
 
     override fun onCreateView(
@@ -73,31 +72,148 @@ class SoundsFragment : Fragment() {
         setUpAdapter()
 
         setUpListeners()
+        setUpPlayPauseButton()
 
         observeSounds()
         observeSelectedSounds()
         observeRecyclerEvent()
         observeTimer()
-        observePlayer()
     }
 
-    private fun observePlayer() {
-        PlayerService.isPause.observe(viewLifecycleOwner) { isPause ->
-            if (isPause) {
-                binding.playIb.setImageResource(R.drawable.ic_play_rounded)
-                binding.playIb.tag = R.drawable.ic_play_rounded
+    private fun setUpListeners() {
+        binding.crownSoundsToolbarIv.setOnClickListener {
+            findNavController().navigate(
+                SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
+            )
+        }
+        binding.timerIb.setOnClickListener {
+            findNavController().navigate(SoundsFragmentDirections.actionNavigationSoundsToSetTimerFragment())
+        }
+        binding.selectedIb.setOnClickListener {
+            findNavController().navigate(
+                SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
+            )
+        }
+        binding.playIb.setOnClickListener {
+            if (PlayerService.launcher == SOUNDS_LAUNCHER) {
+                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
             } else {
-                binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
-                binding.playIb.tag = R.drawable.ic_pause_rounded
+                sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
+                soundsViewModel.selectedSounds.value?.forEach {
+                    sendCommandToPlayerService(Constants.ACTION_PLAY_SOUND, it)
+                }
+            }
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        recyclerView = binding.soundsRv
+        recyclerView.layoutManager = LinearLayoutManager(context)
+    }
+
+    private fun setUpAdapter() {
+        adapter = SectionAdapter()
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        recyclerView.adapter = adapter
+    }
+
+    private fun setUpPlayPauseButton() {
+        PlayerService.isPause.observe(viewLifecycleOwner) { isPause ->
+            if (PlayerService.launcher == SOUNDS_LAUNCHER) {
+                if (isPause) {
+                    mIsPause = true
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                } else {
+                    mIsPause = false
+                    binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                    binding.playIb.tag = R.drawable.ic_pause_rounded
+                }
             }
         }
         PlayerService.isPlayable.observe(viewLifecycleOwner) { isPlayable ->
-            if (isPlayable) {
-                binding.playIb.isClickable = true
-            } else {
-                binding.playIb.isClickable = false
-                binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
-                binding.playIb.tag = R.drawable.ic_pause_rounded
+            if (PlayerService.launcher == SOUNDS_LAUNCHER) {
+                if (isPlayable) {
+                    binding.playIb.isClickable = true
+                } else {
+                    binding.playIb.isClickable = false
+                    binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                    binding.playIb.tag = R.drawable.ic_pause_rounded
+                }
+            }
+        }
+        soundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
+            when {
+                PlayerService.launcher == SOUNDS_LAUNCHER -> {
+                    when {
+                        it.isNotEmpty() && mIsPause -> {
+                            binding.playIb.isClickable = true
+                            binding.playIb.isEnabled = true
+                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                            binding.playIb.tag = R.drawable.ic_play_rounded
+                        }
+                        it.isNotEmpty() -> {
+                            binding.playIb.isClickable = true
+                            binding.playIb.isEnabled = true
+                            binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                            binding.playIb.tag = R.drawable.ic_pause_rounded
+                        }
+                        else -> {
+                            binding.playIb.isClickable = false
+                            binding.playIb.isEnabled = false
+                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                            binding.playIb.tag = R.drawable.ic_play_rounded
+                        }
+                    }
+                }
+                it.isNotEmpty() -> {
+                    binding.playIb.isClickable = true
+                    binding.playIb.isEnabled = true
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                }
+                else -> {
+                    binding.playIb.isClickable = false
+                    binding.playIb.isEnabled = false
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                }
+            }
+        }
+    }
+
+
+    //observe
+    private fun observeSounds() {
+        soundsViewModel.sections.observe(viewLifecycleOwner) {
+            adapter.submitList(it.toMutableList())
+        }
+    }
+
+    private fun observePause() {
+        PlayerService.isPause.observe(viewLifecycleOwner) { isPause ->
+            if (PlayerService.launcher == SOUNDS_LAUNCHER) {
+                if (isPause) {
+                    mIsPause = true
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                } else {
+                    mIsPause = false
+                    binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                    binding.playIb.tag = R.drawable.ic_pause_rounded
+                }
+            }
+        }
+        PlayerService.isPlayable.observe(viewLifecycleOwner) { isPlayable ->
+            if (PlayerService.launcher == SOUNDS_LAUNCHER) {
+                if (isPlayable) {
+                    binding.playIb.isClickable = true
+                } else {
+                    binding.playIb.isClickable = false
+                    binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                    binding.playIb.tag = R.drawable.ic_pause_rounded
+                }
             }
         }
     }
@@ -122,76 +238,40 @@ class SoundsFragment : Fragment() {
         }
     }
 
-    private fun setUpListeners() {
-        binding.crownSoundsToolbarIv.setOnClickListener {
-            findNavController().navigate(
-                SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
-            )
-        }
-        binding.timerIb.setOnClickListener {
-            findNavController().navigate(SoundsFragmentDirections.actionNavigationSoundsToSetTimerFragment())
-        }
-        binding.selectedIb.setOnClickListener {
-            findNavController().navigate(
-                SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
-            )
-        }
-        binding.playIb.setOnClickListener {
-            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
-        }
-    }
-
-
-    private fun observeSounds() {
-        soundsViewModel.sections.observe(viewLifecycleOwner) {
-            it.forEach { sound -> showLog(sound.toString()) }
-            adapter.submitList(it.toMutableList())
-        }
-    }
-
-    private fun setUpRecyclerView() {
-        recyclerView = binding.soundsRv
-        recyclerView.layoutManager = LinearLayoutManager(context)
-    }
-
-    private fun setUpAdapter() {
-        adapter = SectionAdapter()
-        adapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        recyclerView.adapter = adapter
-    }
-
     private fun observeRecyclerEvent() {
         adapter.event.observe(viewLifecycleOwner) {
             soundsViewModel.handleEvent(it)
             if (it is SoundsEvent.OnSoundClick) {
-                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
+                if (PlayerService.launcher != SOUNDS_LAUNCHER) {
+                    sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, it.sound)
+                }
+                if (it.sound.isPlaying) {
+                    sendCommandToPlayerService(Constants.ACTION_PLAY_SOUND, it.sound)
+                } else {
+                    sendCommandToPlayerService(Constants.ACTION_STOP_SOUND, it.sound)
+                }
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 playerService?.changeVolume(it.sound)
             }
         }
     }
 
+    //service
     private fun sendCommandToPlayerService(action: String, sound: Sound?) {
         Intent(requireContext(), PlayerService::class.java).also {
-            it.putExtra(Constants.EXTRA_SOUND, sound)
+            it.putExtra(LAUNCHER, SOUNDS_LAUNCHER)
+            it.putExtra(EXTRA_SOUND, sound)
             it.action = action
             requireContext().startService(it)
         }
     }
 
-    /**
-     * Used to bind to our service class
-     */
     private fun bindService() {
         Intent(requireContext(), PlayerService::class.java).also { intent ->
             requireActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         }
     }
 
-    /**
-     * Used to unbind and stop our service class
-     */
     private fun unbindService() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)

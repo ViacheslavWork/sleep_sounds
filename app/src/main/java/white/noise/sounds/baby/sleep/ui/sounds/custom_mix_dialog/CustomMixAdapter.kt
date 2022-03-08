@@ -15,7 +15,6 @@ import white.noise.sounds.baby.sleep.databinding.ItemCustomDialogBinding
 import white.noise.sounds.baby.sleep.model.Sound
 
 class CustomMixAdapter : ListAdapter<Sound, SoundHolder>(SoundDiffCallback()) {
-
     lateinit var binding: ItemCustomDialogBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoundHolder {
         binding =

@@ -47,9 +47,6 @@ class SectionAdapter(
 
     override fun onBindViewHolder(holder: SectionHolder, position: Int) {
         getItem(position).let { section -> holder.onBind(section = section, event = event) }
-        /*holder.itemView.setOnClickListener {
-            event.value = SoundsEvent.OnSoundClick(getItem(position))
-        }*/
     }
 }
 
@@ -94,8 +91,6 @@ class SoundAdapter(
 }
 
 class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    private var player: SimpleExoPlayer? = null
 
     companion object {
         private val imageOption = RequestOptions()

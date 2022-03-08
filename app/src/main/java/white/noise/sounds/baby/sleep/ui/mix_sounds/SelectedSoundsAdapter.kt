@@ -1,6 +1,5 @@
 package white.noise.sounds.baby.sleep.ui.mix_sounds
 
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -21,13 +20,9 @@ import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 
 class SelectedSoundsAdapter(
-    val event: MutableLiveData<SoundsEvent>,
-    private val isClosable: Boolean = false,
-    private val isSoundChangeable: Boolean = false,
-    private val background: Drawable? = null
+    val event: MutableLiveData<SoundsEvent> = MutableLiveData(),
 ) :
     ListAdapter<Sound, SelectedSoundsHolder>(SoundDiffCallback()) {
-    private val removedItems = mutableListOf<Sound>()
 
     lateinit var binding: ItemSoundsBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedSoundsHolder {

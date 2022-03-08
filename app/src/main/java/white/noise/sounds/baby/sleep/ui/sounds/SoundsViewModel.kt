@@ -7,6 +7,7 @@ import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.model.SoundCategory
 import white.noise.sounds.baby.sleep.service.PlayerService
+import white.noise.sounds.baby.sleep.utils.Constants
 
 private const val TAG = "SoundsViewModel"
 
@@ -19,10 +20,11 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
 
     private val selectedSoundsObserver: Observer<Set<Sound>?> = Observer {
-        it?.forEach { showLog(it.toString()) }
-        it?.let { _selectedSounds.postValue(it.toList()) }
+        if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER) {
+            it?.let { _selectedSounds.postValue(it.toList()) }
+            it?.forEach { showLog(it.title) }
+        }
     }
-
     init {
         PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
     }
@@ -34,7 +36,9 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
                 categoryMap[it] = Section(it)
             }
             sounds.value?.forEach {
-                if (PlayerService.currentSounds.containsKey(it.id)) {
+                if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
+                    && PlayerService.currentSounds.containsKey(it.id)
+                ) {
                     categoryMap[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
                 } else {
                     categoryMap[it.category]?.items?.add(it)
@@ -46,7 +50,13 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
 
     fun handleEvent(event: SoundsEvent) {
         when (event) {
-            is SoundsEvent.OnSoundClick -> {}
+            is SoundsEvent.OnSoundClick -> {
+                if (event.sound.isPlaying) {
+                    addToSelected(sound = event.sound)
+                } else {
+                    removeFromSelected(sound = event.sound)
+                }
+            }
             is SoundsEvent.OnSeekBarChanged -> {}
         }
     }

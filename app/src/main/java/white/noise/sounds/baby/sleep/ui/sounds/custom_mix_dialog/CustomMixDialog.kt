@@ -1,6 +1,5 @@
 package white.noise.sounds.baby.sleep.ui.sounds.custom_mix_dialog
 
-import android.content.Context
 import android.content.Context.AUDIO_SERVICE
 import android.media.AudioManager
 import android.os.Bundle
@@ -8,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.DialogCustomMixBinding
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsViewModel
 
@@ -45,9 +44,10 @@ class CustomMixDialog : DialogFragment() {
     private fun setUpRecyclerView() {
         val recyclerView = binding.recyclerView
         val adapter = CustomMixAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
+        recyclerView.layoutManager =
+            LinearLayoutManager(context).apply { orientation = RecyclerView.VERTICAL }
         recyclerView.adapter = adapter
-        soundsViewModel.selectedSounds.observe(viewLifecycleOwner){
+        soundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
     }
@@ -63,11 +63,11 @@ class CustomMixDialog : DialogFragment() {
 
     private fun setUpSystemVolume() {
         val audioManager = requireContext().getSystemService(AUDIO_SERVICE) as AudioManager
-        binding.systemVolumeSeekBar.max =
+        binding.systemVolumeInclude.volumeSeekBar.max =
             audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        binding.systemVolumeSeekBar.progress =
+        binding.systemVolumeInclude.volumeSeekBar.progress =
             audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        binding.systemVolumeSeekBar.setOnSeekBarChangeListener(object :
+        binding.systemVolumeInclude.volumeSeekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0);
@@ -77,6 +77,8 @@ class CustomMixDialog : DialogFragment() {
 
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
+        binding.systemVolumeInclude.cross.visibility = View.INVISIBLE
+        binding.systemVolumeInclude.icon.setImageResource(R.drawable.ic_dynamic)
     }
 
     override fun onDestroyView() {
