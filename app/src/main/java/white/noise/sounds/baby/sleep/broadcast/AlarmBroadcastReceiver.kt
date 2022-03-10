@@ -5,6 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
+import white.noise.sounds.baby.sleep.service.AlarmService
+import white.noise.sounds.baby.sleep.data.database.entity.AlarmEntity
+import white.noise.sounds.baby.sleep.service.RescheduleAlarmsService
 import java.util.*
 
 
@@ -17,45 +20,30 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         } else {
             val toastText = String.format("Alarm Received")
             Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
-            if (!intent.getBooleanExtra(RECURRING, false)) {
-                startAlarmService(context, intent)
-            }
-            run {
-                if (alarmIsToday(intent)) {
-                    startAlarmService(context, intent)
-                }
-            }
+            startAlarmService(context, intent)
+            startNextAlarm(context, intent)
         }
     }
 
-    private fun alarmIsToday(intent: Intent): Boolean {
+    private fun startNextAlarm(context: Context, intent: Intent) {
+        val alarmId: Int = 1
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        val today: Int = calendar.get(Calendar.DAY_OF_WEEK)
-        when (today) {
-            Calendar.MONDAY -> {
-                return intent.getBooleanExtra(MONDAY, false)
-            }
-            Calendar.TUESDAY -> {
-                return intent.getBooleanExtra(TUESDAY, false)
-            }
-            Calendar.WEDNESDAY -> {
-                return intent.getBooleanExtra(WEDNESDAY, false)
-            }
-            Calendar.THURSDAY -> {
-                return intent.getBooleanExtra(THURSDAY, false)
-            }
-            Calendar.FRIDAY -> {
-                return intent.getBooleanExtra(FRIDAY, false)
-            }
-            Calendar.SATURDAY -> {
-                return intent.getBooleanExtra(SATURDAY, false)
-            }
-            Calendar.SUNDAY -> {
-                return intent.getBooleanExtra(SUNDAY, false)
-            }
-        }
-        return false
+        val alarm = AlarmEntity(
+            alarmId = alarmId,
+            hour = calendar.get(Calendar.HOUR_OF_DAY),
+            minute = calendar.get(Calendar.MINUTE),
+            title = intent.getStringExtra(TITLE) ?: "It is time to sleep",
+            started = true,
+            monday = intent.getBooleanExtra(MONDAY, false),
+            tuesday = intent.getBooleanExtra(TUESDAY, false),
+            wednesday = intent.getBooleanExtra(WEDNESDAY, false),
+            thursday = intent.getBooleanExtra(THURSDAY, false),
+            friday = intent.getBooleanExtra(FRIDAY, false),
+            saturday = intent.getBooleanExtra(SATURDAY, false),
+            sunday = intent.getBooleanExtra(SUNDAY, false)
+        )
+        alarm.schedule(context)
     }
 
     private fun startAlarmService(context: Context, intent: Intent) {

@@ -1,6 +1,8 @@
 package white.noise.sounds.baby.sleep.utils
 
 object Constants {
+    const val PREFERENCE_ALARM_IS_SET = "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
+
     const val ACTION_START_TIMER = "ACTION_START_TIMER"
     const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
     const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"

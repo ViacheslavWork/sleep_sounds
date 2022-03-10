@@ -60,11 +60,6 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-        binding.crownSettingsToolbarIv.setOnClickListener {
-            findNavController().navigate(
-                SettingsFragmentDirections.actionNavigationSettingsToGoPremiumFragment()
-            )
-        }
     }
 
     override fun onDestroyView() {

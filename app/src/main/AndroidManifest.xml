@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="white.noise.sounds.baby.sleep">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
@@ -25,6 +24,9 @@
         </activity>
         <service android:name=".service.PlayerService"
             android:foregroundServiceType="dataSync"/>
+        <service
+            android:name=".service.AlarmService"
+            android:foregroundServiceType="dataSync" />
 
         <receiver android:name=".broadcast.AlarmBroadcastReceiver"
             android:exported="false">

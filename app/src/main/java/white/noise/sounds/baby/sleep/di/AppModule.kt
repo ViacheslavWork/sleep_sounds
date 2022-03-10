@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import white.noise.sounds.baby.sleep.ui.mix_sounds.MixesSoundsViewModel
 import white.noise.sounds.baby.sleep.ui.mixes.MixesViewModel
 import white.noise.sounds.baby.sleep.ui.player.PlayerViewModel
+import white.noise.sounds.baby.sleep.ui.settings.SettingsViewModel
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsViewModel
 import white.noise.sounds.baby.sleep.ui.timer.TimerViewModel
 
@@ -13,6 +14,7 @@ val appModule = module {
     viewModel { MixesViewModel(repository = get()) }
     viewModel { MixesSoundsViewModel(repository = get()) }
     viewModel { PlayerViewModel(repository = get()) }
+    viewModel { SettingsViewModel(alarmRepository = get()) }
     viewModel { TimerViewModel() }
 //    viewModel { GoPremiumViewModel() }
 }
