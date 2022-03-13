@@ -54,7 +54,7 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view) {
             binding.offBtn -> timerViewModel.setTime(Times.off)
-            binding.customBtn -> timerViewModel.setTime(Times.Custom(LocalTime.of(0,0,20)))
+            binding.customBtn -> timerViewModel.setTime(Times.Custom(LocalTime.of(0,0,5)))
             binding.minutes10Btn -> timerViewModel.setTime(Times._10minutes)
             binding.minutes15Btn -> timerViewModel.setTime(Times._15minutes)
             binding.minutes20Btn -> timerViewModel.setTime(Times._20minutes)

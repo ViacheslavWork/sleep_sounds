@@ -9,7 +9,6 @@ import android.content.Intent
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
@@ -34,6 +33,8 @@ import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.ui.timer.Times
 import white.noise.sounds.baby.sleep.utils.Constants
+import white.noise.sounds.baby.sleep.utils.Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS
+import white.noise.sounds.baby.sleep.utils.Constants.ACTION_STOP_SERVICE
 import java.util.*
 
 
@@ -75,8 +76,6 @@ class PlayerService : LifecycleService() {
     lateinit var currentTimer: Job
 
     private val currentPlayers: HashMap<String, ExoPlayer> = hashMapOf<String, ExoPlayer>()
-//    private var isPause = false
-
 
     private val mBinder: IBinder = MyBinder()
 
@@ -169,6 +168,86 @@ class PlayerService : LifecycleService() {
     override fun onBind(intent: Intent): IBinder {
         super.onBind(intent)
         return mBinder
+    }
+
+    private fun startForegroundService() {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
+                as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(notificationManager)
+        }
+
+        val notificationBuilder = getNotificationBuilder()
+        val notificationView = RemoteViews(packageName, R.layout.notification_player)
+        setUpRemoteView(notificationView)
+        notificationBuilder.setCustomContentView(notificationView)
+        startForeground(Constants.NOTIFICATION_ID, notificationBuilder.build())
+
+        observeTimer(notificationManager, notificationBuilder, notificationView)
+        observePause(notificationManager, notificationBuilder, notificationView)
+        /*currentSoundsLD.observe(this) {
+            it?.forEach { sound -> currentSounds[sound.id] = sound }
+            currentSounds.forEach{
+                Log.i(TAG, "current sound: ${it.value} ")
+            }
+        }*/
+    }
+
+    private fun observePause(
+        notificationManager: NotificationManager,
+        notificationBuilder: NotificationCompat.Builder,
+        notificationView: RemoteViews
+    ) {
+        isPause.observe(this) {
+            if (it) {
+                currentPlayers.values.forEach { exoPlayer -> exoPlayer.pause() }
+                notificationView.setImageViewResource(
+                    R.id.notification_play_pause_btn,
+                    R.drawable.ic_icn_play
+                )
+                notificationManager.notify(Constants.NOTIFICATION_ID, notificationBuilder.build())
+            } else {
+                currentPlayers.values.forEach { exoPlayer -> exoPlayer.play() }
+                notificationView.setImageViewResource(
+                    R.id.notification_play_pause_btn,
+                    R.drawable.icn_pause
+                )
+                notificationManager.notify(Constants.NOTIFICATION_ID, notificationBuilder.build())
+            }
+        }
+    }
+
+    private fun observeTimer(
+        notificationManager: NotificationManager,
+        notificationBuilder: NotificationCompat.Builder,
+        notificationView: RemoteViews
+    ) {
+        timerTime.observe(this) {
+            notificationView.setTextViewText(
+                R.id.notification_time_tv,
+                it.toString()
+            )
+            notificationManager.notify(Constants.NOTIFICATION_ID, notificationBuilder.build())
+        }
+        isTimerRunning.observe(this) {
+            if (!it && !isFirstRun) {
+                stopService()
+            }
+        }
+    }
+
+    private fun stopService() {
+        isFirstRun = true
+        currentPlayers.forEach { stopSound(it.key) }
+        _isPlayable.postValue(false)
+        stopForeground(true)
+        stopSelf()
+    }
+
+    override fun onDestroy() {
+        isFirstRun = true
+        super.onDestroy()
     }
 
     //Sound part
@@ -278,46 +357,8 @@ class PlayerService : LifecycleService() {
         return exoPlayer
     }
 
-    //Timer part
 
-    private fun startForegroundService() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
-                as NotificationManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(notificationManager)
-        }
-
-        val notificationBuilder = getNotificationBuilder()
-        val notificationView = RemoteViews(packageName, R.layout.notification_player)
-        val action = NotificationCompat.Action.Builder(R.drawable.ic_icon_cross, "Close action", null).build()
-        notificationBuilder.setCustomContentView(notificationView)
-        startForeground(Constants.NOTIFICATION_ID, notificationBuilder.build())
-
-        timerTime.observe(this) {
-            val notification = getNotificationBuilder()
-                .setContentText(it.toString())
-            notificationManager.notify(Constants.NOTIFICATION_ID, notification.build())
-        }
-        isTimerRunning.observe(this) {
-            if (!it) {
-                stopService()
-            }
-        }
-        isPause.observe(this) {
-            if (it) {
-                currentPlayers.values.forEach { exoPlayer -> exoPlayer.pause() }
-            } else {
-                currentPlayers.values.forEach { exoPlayer -> exoPlayer.play() }
-            }
-        }
-        /*currentSoundsLD.observe(this) {
-            it?.forEach { sound -> currentSounds[sound.id] = sound }
-            currentSounds.forEach{
-                Log.i(TAG, "current sound: ${it.value} ")
-            }
-        }*/
-    }
+    //notification part
 
     private fun getNotificationBuilder() = NotificationCompat.Builder(
         this,
@@ -327,24 +368,11 @@ class PlayerService : LifecycleService() {
         .setOngoing(true)
         .setCategory(Notification.EXTRA_MEDIA_SESSION)
         .setSmallIcon(R.drawable.ic_moon)
-        .setColor(resources.getColor(R.color.dark_blue,null))
+        .setColor(resources.getColor(R.color.dark_blue, null))
         .setColorized(true)
-//        .addAction(R.drawable.ic_icon_cross, "Close action", null)
-//        .addAction(R.drawable.icn_pause, "Play-pause action", null)
         .setContentTitle("White noise")
-        .setContentText("00:00:00")
         .setStyle(androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle())
         .setContentIntent(getMainActivityPendingIntent())
-
-
-    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
-        this,
-        0,
-        Intent(this, MainActivity::class.java)
-        /*.also {
-            it.action = ACTION_SHOW_TRACKING_FRAGMENT
-        }*/, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(notificationManager: NotificationManager) {
@@ -355,6 +383,43 @@ class PlayerService : LifecycleService() {
         )
         notificationManager.createNotificationChannel(channel)
     }
+
+    private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
+        this,
+        0,
+        Intent(this, MainActivity::class.java)
+        /*.also {
+            it.action = ACTION_SHOW_TRACKING_FRAGMENT
+        }*/, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    private fun setUpRemoteView(notificationView: RemoteViews) {
+        val playPauseIntent = Intent(this, PlayerService::class.java)
+        playPauseIntent.action = ACTION_PLAY_OR_PAUSE_ALL_SOUNDS
+        val playPauseIntentPending = PendingIntent.getService(
+            this,
+            0,
+            playPauseIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val closeIntent = Intent(this, PlayerService::class.java)
+        closeIntent.action = ACTION_STOP_SERVICE
+        val closeIntentPending = PendingIntent.getService(
+            this,
+            0,
+            closeIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        notificationView.setOnClickPendingIntent(
+            R.id.notification_play_pause_btn,
+            playPauseIntentPending
+        );
+        notificationView.setOnClickPendingIntent(R.id.notification_cross_btn, closeIntentPending);
+    }
+
+    //Timer part
 
     private fun startTimer(time: LocalTime) {
         currentTimer = tickerFlow(time, Duration.ofSeconds(1))
@@ -375,13 +440,6 @@ class PlayerService : LifecycleService() {
             emit(localRestOfTime)
             delay(period.toMillis())
         }
-    }
-
-    private fun stopService() {
-        currentPlayers.forEach { stopSound(it.key) }
-        _isPlayable.postValue(false)
-        stopForeground(true)
-        stopSelf()
     }
 
     inner class MyBinder : Binder() {

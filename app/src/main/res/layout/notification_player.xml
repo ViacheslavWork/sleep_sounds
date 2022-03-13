@@ -14,12 +14,14 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/notification_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="White noise"
             android:textAppearance="@style/H3" />
 
         <TextView
+            android:id="@+id/notification_time_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_00_00"
@@ -43,7 +45,7 @@
             android:clickable="true">
 
             <ImageButton
-                android:id="@+id/btnWidgetPlayPrevious"
+                android:id="@+id/notification_play_pause_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -62,7 +64,7 @@
             android:clickable="true">
 
             <ImageButton
-                android:id="@+id/btnWidgetPlayPauseMusic"
+                android:id="@+id/notification_cross_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
