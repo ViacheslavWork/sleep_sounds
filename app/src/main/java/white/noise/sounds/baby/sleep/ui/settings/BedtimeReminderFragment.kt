@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.R
@@ -37,8 +39,30 @@ class BedtimeReminderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setViewsAvailability(binding.bedtimeReminderSwitch.isChecked)
 
+        setDataFromAlarm()
         setUpWeekButtons()
         setUpListeners()
+        setSwitchStatus()
+    }
+
+    private fun setDataFromAlarm() {
+        lifecycleScope.launch {
+            val alarm = settingsViewModel.getAlarm(1)
+            alarm?.let {
+                withContext(Dispatchers.Main) {
+                    alarmTime = LocalTime.of(alarm.hour, alarm.minute)
+                    binding.hoursTv.text = String.format("%02d", alarmTime.hour)
+                    binding.minutesTv.text = String.format("%02d", alarmTime.minute)
+                    binding.sundayBtn.btn.isSelected = alarm.sunday
+                    binding.mondayBtn.btn.isSelected = alarm.monday
+                    binding.tuesdayBtn.btn.isSelected = alarm.thursday
+                    binding.wednesdayBtn.btn.isSelected = alarm.wednesday
+                    binding.thursdayBtn.btn.isSelected = alarm.thursday
+                    binding.fridayBtn.btn.isSelected = alarm.friday
+                    binding.saturdayBtn.btn.isSelected = alarm.saturday
+                }
+            }
+        }
     }
 
     private fun setUpListeners() {
@@ -51,8 +75,13 @@ class BedtimeReminderFragment : Fragment() {
             }
             if (!isChecked) {
                 lifecycleScope.launch {
-                    settingsViewModel.getAlarm(1).cancelAlarm(requireContext())
+                    val alarmEntity =
+                        settingsViewModel.getAlarm(1)?.apply { cancelAlarm(requireContext()) }
+                    alarmEntity?.let { settingsViewModel.setAlarm(alarmEntity) }
                 }
+                binding.okBtn.isEnabled = false
+            } else {
+                binding.okBtn.isEnabled = true
             }
         }
         binding.backToolbarIv.setOnClickListener { requireActivity().onBackPressed() }
@@ -65,9 +94,25 @@ class BedtimeReminderFragment : Fragment() {
             }
         }
         binding.okBtn.setOnClickListener {
-            scheduleAlarm(alarmTime)
+            var isDaySelected = false
+            getButtons().forEach { if (it.isSelected) isDaySelected = true }
+            if (isDaySelected) {
+                scheduleAlarm(alarmTime)
+            }
+            requireActivity().onBackPressed()
         }
         setUpWeekButtonsListeners()
+    }
+
+    private fun setSwitchStatus() {
+        lifecycleScope.launch {
+            val alarm = settingsViewModel.getAlarm(1)
+            alarm?.let {
+                withContext(Dispatchers.Main) {
+                    binding.bedtimeReminderSwitch.isChecked = alarm.started
+                }
+            }
+        }
     }
 
     private fun setViewsAvailability(isEnabled: Boolean) {
@@ -114,8 +159,8 @@ class BedtimeReminderFragment : Fragment() {
         val picker =
             MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour(10)
-                .setMinute(20)
+                .setHour(alarmTime.hour)
+                .setMinute(alarmTime.minute)
                 .setTitleText("Select Appointment time")
                 .build()
         picker.show(childFragmentManager, "TimePicker")
@@ -170,5 +215,4 @@ class BedtimeReminderFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

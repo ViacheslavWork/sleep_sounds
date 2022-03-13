@@ -113,9 +113,22 @@
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/item_sounds.xml" value="0.7452830188679245" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/item_timer.xml" value="0.3359375" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/item_week_day.xml" value="0.67" />
+        <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/notification_player.xml" value="0.22" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/section_raw.xml" value="0.30344202898550726" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/section_row.xml" value="0.16271442986881937" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/ic_icon_cross.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icn_pause.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icon_train.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icon_universe.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icon_waterfall.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_additional_sounds.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_mixes.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_save_custom.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_sounds.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_mix.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/notification_player.xml" value="0.16666666666666666" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1796875" />
       </map>
     </option>
   </component>

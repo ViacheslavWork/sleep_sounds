@@ -1,5 +1,7 @@
 package white.noise.sounds.baby.sleep.data.database.entity
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import white.noise.sounds.baby.sleep.model.Sound
@@ -10,8 +12,10 @@ class SoundEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
     val title: String,
-    val file: String,
-    val icon: String,
+    @RawRes
+    val file: Int,
+    @DrawableRes
+    val icon: Int,
     var volume: Int,
     var isPlaying: Boolean = false,
     val category: SoundCategory

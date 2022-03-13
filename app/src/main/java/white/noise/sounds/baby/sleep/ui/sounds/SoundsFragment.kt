@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,6 +80,29 @@ class SoundsFragment : Fragment() {
         observeRecyclerEvent()
         observeTimer()
     }
+
+    override fun onResume() {
+        startAdAnimation()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        binding.crownSoundsToolbarIv.clearAnimation()
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        if (isServiceBound) {
+            unbindService()
+        }
+        super.onDestroy()
+    }
+
 
     private fun setUpListeners() {
         binding.crownSoundsToolbarIv.setOnClickListener {
@@ -183,6 +207,14 @@ class SoundsFragment : Fragment() {
         }
     }
 
+    private fun startAdAnimation() {
+        binding.crownSoundsToolbarIv.startAnimation(
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.ad_animation
+            )
+        )
+    }
 
     //observe
     private fun observeSounds() {
@@ -276,18 +308,6 @@ class SoundsFragment : Fragment() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)
         }
-    }
-
-    override fun onDestroy() {
-        if (isServiceBound) {
-            unbindService()
-        }
-        super.onDestroy()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun showLog(message: String) {

@@ -38,6 +38,10 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
         mixes = repository.getMixes()
     }
 
+    suspend fun getMix(mixId: Long): Mix {
+        return repository.getMix(mixId)
+    }
+
     private fun loadMixes(category: MixCategory) {
         _mixes.postValue(repository.getMixes(category = category))
     }

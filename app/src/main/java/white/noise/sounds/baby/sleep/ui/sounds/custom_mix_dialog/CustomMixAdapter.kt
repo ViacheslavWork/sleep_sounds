@@ -54,7 +54,9 @@ class SoundHolder(private val binding: ItemCustomDialogBinding) :
     }
 
     private fun setIcon(sound: Sound) {
-        val imageLoader = ImageLoader.Builder(binding.root.context)
+        binding.icon.setImageResource(sound.icon)
+
+        /*val imageLoader = ImageLoader.Builder(binding.root.context)
             .componentRegistry { add(SvgDecoder(binding.root.context)) }
             .build()
 
@@ -65,7 +67,7 @@ class SoundHolder(private val binding: ItemCustomDialogBinding) :
             .target(binding.icon)
             .build()
 
-        imageLoader.enqueue(request)
+        imageLoader.enqueue(request)*/
     }
 }
 

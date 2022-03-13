@@ -5,10 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
+    private val settingsViewModel: SettingsViewModel by sharedViewModel()
 
     private var _binding: FragmentSettingsBinding? = null
 
@@ -30,7 +36,11 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setListeners()
+        setSwitchStatus()
+    }
 
+    private fun setListeners() {
         binding.startTrialBtn.setOnClickListener {
             findNavController().navigate(
                 SettingsFragmentDirections.actionNavigationSettingsToGoPremiumFragment()
@@ -54,12 +64,41 @@ class SettingsFragment : Fragment() {
         binding.bedTimeReminderSwitch
             .setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    binding.bedTimeReminderSwitch.text = "00:00"
+                    lifecycleScope.launch {
+                        val alarm = settingsViewModel.getAlarm(1)
+                        alarm?.let {
+                            withContext(Dispatchers.Main) {
+                                binding.bedTimeReminderSwitch.text =
+                                    String.format("%d:%d", alarm.hour, alarm.minute)
+                            }
+                            if (!alarm.started) {
+                                alarm.schedule(requireContext())
+                                settingsViewModel.setAlarm(alarm)
+                            }
+                        }
+                    }
                 } else {
+                    lifecycleScope.launch {
+                        val alarm = settingsViewModel.getAlarm(1)
+                        alarm?.let {
+                            it.cancelAlarm(requireContext())
+                            settingsViewModel.setAlarm(alarm)
+                        }
+                    }
                     binding.bedTimeReminderSwitch.text = ""
                 }
             }
+    }
 
+    private fun setSwitchStatus() {
+        lifecycleScope.launch {
+            val alarm = settingsViewModel.getAlarm(1)
+            alarm?.let {
+                withContext(Dispatchers.Main) {
+                    binding.bedTimeReminderSwitch.isChecked = alarm.started
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

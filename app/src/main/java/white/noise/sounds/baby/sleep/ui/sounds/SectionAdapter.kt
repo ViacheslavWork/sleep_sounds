@@ -158,7 +158,7 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
              )
          )*/
 
-        val imageLoader = ImageLoader.Builder(binding.root.context)
+/*        val imageLoader = ImageLoader.Builder(binding.root.context)
             .componentRegistry { add(SvgDecoder(binding.root.context)) }
             .build()
 
@@ -171,7 +171,8 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
             .target(binding.soundsItemIv)
             .build()
 
-        imageLoader.enqueue(request)
+        imageLoader.enqueue(request)*/
+        binding.soundsItemIv.setImageResource(sound.icon)
     }
 
     fun initExoPlayer() {

@@ -10,7 +10,7 @@ import white.noise.sounds.baby.sleep.data.database.entity.AlarmEntity
 @Dao
 interface AlarmsDao {
     @Query("SELECT * FROM alarms WHERE alarmId=:id")
-    fun getAlarm(id: Int): AlarmEntity
+    fun getAlarm(id: Int): AlarmEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(alarmEntity: AlarmEntity)

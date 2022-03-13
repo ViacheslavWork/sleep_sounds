@@ -10,12 +10,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentAdditionalSoundsBinding
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.service.PlayerService
@@ -98,6 +100,28 @@ class AdditionalSoundsFragment : Fragment() {
         observeSectionSoundsEvents()
     }
 
+    override fun onResume() {
+        startAdAnimation()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        binding.crownToolbarIv.clearAnimation()
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        if (isServiceBound) {
+            unbindService()
+        }
+        super.onDestroy()
+    }
+
     private fun setUpListeners() {
         binding.crownToolbarIv.setOnClickListener {
             findNavController().navigate(
@@ -110,6 +134,15 @@ class AdditionalSoundsFragment : Fragment() {
             requireActivity().onBackPressed()
         }
         binding.closeBtn.setOnClickListener { requireActivity().onBackPressed() }
+    }
+
+    private fun startAdAnimation() {
+        binding.crownToolbarIv.startAnimation(
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.ad_animation
+            )
+        )
     }
 
     private fun setUpSectionRecyclerView() {
@@ -191,19 +224,6 @@ class AdditionalSoundsFragment : Fragment() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)
         }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onDestroy() {
-        if (isServiceBound) {
-            unbindService()
-        }
-        super.onDestroy()
     }
 
     private fun showLog(message: String) {

@@ -1,17 +1,17 @@
 package white.noise.sounds.baby.sleep.service
 
-import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.net.Uri
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -20,6 +20,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -34,6 +35,7 @@ import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.ui.timer.Times
 import white.noise.sounds.baby.sleep.utils.Constants
 import java.util.*
+
 
 private const val TAG = "PlayerService"
 
@@ -62,6 +64,8 @@ class PlayerService : LifecycleService() {
         var launcher: String? = ""
 
         var currentMix: Mix? = null
+
+        var currentMixId: Long = -1
     }
 
     private val curSoundsLocal = mutableSetOf<Sound>()
@@ -120,7 +124,7 @@ class PlayerService : LifecycleService() {
                         stopAllSounds()
                         launcher = it.extras?.getString(Constants.LAUNCHER)
                     }*/
-
+                    currentMixId = intent.extras?.getLong(Constants.EXTRA_MIX_ID, -1)!!
                     launcher = it.extras?.getString(Constants.LAUNCHER)
                     playStopSound(sound)
                 }
@@ -175,7 +179,7 @@ class PlayerService : LifecycleService() {
     }
 
     private fun stopAllSounds() {
-        currentPlayers.forEach{stopSound(it.key)}
+        currentPlayers.forEach { stopSound(it.key) }
         currentPlayers.clear()
         curSoundsLocal.clear()
         _currentSoundsLD.postValue(curSoundsLocal)
@@ -232,7 +236,7 @@ class PlayerService : LifecycleService() {
     private fun removeFromCurrentSounds(sound: Sound) {
         var numForRemove = -1
         val list = curSoundsLocal.toMutableList()
-        list.forEachIndexed {index, snd->
+        list.forEachIndexed { index, snd ->
             if (snd.id == sound.id) {
                 numForRemove = index
             }
@@ -255,13 +259,16 @@ class PlayerService : LifecycleService() {
 
     private fun playPlayer(sound: Sound): ExoPlayer {
         Log.i(TAG, "playSound: ")
-        val mediaItem = MediaItem.fromUri(
+        /*val mediaItem = MediaItem.fromUri(
             Uri.parse(
                 "file:///android_asset/sounds/${
                     sound.category.toString()
                         .lowercase(Locale.getDefault())
                 }/${sound.file}"
             )
+        )*/
+        val mediaItem = MediaItem.fromUri(
+            RawResourceDataSource.buildRawResourceUri(sound.file)
         )
         val exoPlayer = ExoPlayer.Builder(applicationContext).build()
         exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ALL
@@ -282,6 +289,9 @@ class PlayerService : LifecycleService() {
         }
 
         val notificationBuilder = getNotificationBuilder()
+        val notificationView = RemoteViews(packageName, R.layout.notification_player)
+        val action = NotificationCompat.Action.Builder(R.drawable.ic_icon_cross, "Close action", null).build()
+        notificationBuilder.setCustomContentView(notificationView)
         startForeground(Constants.NOTIFICATION_ID, notificationBuilder.build())
 
         timerTime.observe(this) {
@@ -309,18 +319,23 @@ class PlayerService : LifecycleService() {
         }*/
     }
 
-    @SuppressLint("ResourceAsColor")
     private fun getNotificationBuilder() = NotificationCompat.Builder(
         this,
         Constants.NOTIFICATION_CHANNEL_ID
     )
         .setAutoCancel(false)
         .setOngoing(true)
-        .setSmallIcon(R.drawable.ic_dynamic)
+        .setCategory(Notification.EXTRA_MEDIA_SESSION)
+        .setSmallIcon(R.drawable.ic_moon)
+        .setColor(resources.getColor(R.color.dark_blue,null))
+        .setColorized(true)
+//        .addAction(R.drawable.ic_icon_cross, "Close action", null)
+//        .addAction(R.drawable.icn_pause, "Play-pause action", null)
         .setContentTitle("White noise")
         .setContentText("00:00:00")
-        .setColor(R.color.dark_blue)
+        .setStyle(androidx.media.app.NotificationCompat.DecoratedMediaCustomViewStyle())
         .setContentIntent(getMainActivityPendingIntent())
+
 
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
         this,
@@ -364,6 +379,7 @@ class PlayerService : LifecycleService() {
 
     private fun stopService() {
         currentPlayers.forEach { stopSound(it.key) }
+        _isPlayable.postValue(false)
         stopForeground(true)
         stopSelf()
     }
@@ -374,5 +390,4 @@ class PlayerService : LifecycleService() {
             get() =// Return this instance of MyService so clients can call public methods
                 this@PlayerService
     }
-
 }

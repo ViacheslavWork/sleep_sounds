@@ -73,7 +73,8 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
             null
         )
 
-        val imageLoader = ImageLoader.Builder(binding.root.context)
+        binding.soundsItemIv.setImageResource(sound.icon)
+ /*       val imageLoader = ImageLoader.Builder(binding.root.context)
             .componentRegistry { add(SvgDecoder(binding.root.context)) }
             .build()
 
@@ -84,7 +85,7 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
             .target(binding.soundsItemIv)
             .build()
 
-        imageLoader.enqueue(request)
+        imageLoader.enqueue(request)*/
     }
 }
 

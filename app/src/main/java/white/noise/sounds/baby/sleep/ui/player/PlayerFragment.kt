@@ -89,6 +89,18 @@ class PlayerFragment : Fragment() {
         observeTimer()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        if (isServiceBound) {
+            unbindService()
+        }
+        super.onDestroy()
+    }
+
     private fun playStopMix(sounds: List<Sound>) {
         sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS,null)
         sounds.forEach {
@@ -169,7 +181,8 @@ class PlayerFragment : Fragment() {
                 root.visibility = View.VISIBLE
                 btnTv.text =
                     String.format(resources.getString(R.string.volume_percentage), sound.volume)
-                val imageLoader = ImageLoader.Builder(binding.root.context)
+                playerBtn.setImageResource(sound.icon)
+                /*val imageLoader = ImageLoader.Builder(binding.root.context)
                     .componentRegistry { add(SvgDecoder(binding.root.context)) }
                     .build()
                 val request = ImageRequest.Builder(binding.root.context)
@@ -178,7 +191,7 @@ class PlayerFragment : Fragment() {
                     .data(Uri.parse("file:///android_asset/icons/${sound.icon}"))
                     .target(playerBtn)
                     .build()
-                imageLoader.enqueue(request)
+                imageLoader.enqueue(request)*/
             }
         }
 //        showLog(it.toString())
@@ -205,9 +218,9 @@ class PlayerFragment : Fragment() {
     //service
     private fun sendCommandToPlayerService(action: String, sound: Sound?) {
         Intent(requireContext(), PlayerService::class.java).also {
-            it.putExtra(Constants.LAUNCHER, Constants.PLAYER_LAUNCHER)
+            it.putExtra(Constants.LAUNCHER, Constants.MIX_LAUNCHER)
             it.putExtra(Constants.EXTRA_SOUND, sound)
-//            it.putExtra(Constants.EXTRA_MIX, mix)
+            it.putExtra(Constants.EXTRA_MIX_ID, mixId)
             it.action = action
             requireContext().startService(it)
         }
@@ -223,18 +236,6 @@ class PlayerFragment : Fragment() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onDestroy() {
-        if (isServiceBound) {
-            unbindService()
-        }
-        super.onDestroy()
     }
 
     private fun showLog(message: String) {

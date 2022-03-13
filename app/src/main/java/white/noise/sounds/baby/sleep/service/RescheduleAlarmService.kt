@@ -17,7 +17,7 @@ class RescheduleAlarmsService(
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        ioScope.launch { alarmRepository.getAlarm(1).schedule(context) }
+        ioScope.launch { alarmRepository.getAlarm(1)?.schedule(context) }
         return START_STICKY
     }
 

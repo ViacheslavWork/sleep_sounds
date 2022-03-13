@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,6 +17,7 @@ import white.noise.sounds.baby.sleep.data.database.entity.toSound
 import white.noise.sounds.baby.sleep.data.database.mixes.MixesDao
 import white.noise.sounds.baby.sleep.data.database.sounds.SoundsDao
 import white.noise.sounds.baby.sleep.data.provider.MixesProvider
+import white.noise.sounds.baby.sleep.data.provider.SoundsFromResourcesProvider
 import white.noise.sounds.baby.sleep.data.provider.SoundsProvider
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
@@ -33,7 +35,7 @@ class Repository(
 ) {
     lateinit var sounds: List<Sound>
 
-    fun getSounds(): LiveData<List<Sound>> {
+    /*fun getSounds(): LiveData<List<Sound>> {
         GlobalScope.launch(Dispatchers.IO) {
             if (soundsDao.getAll().isEmpty()) {
                 soundsDao.deleteAll()
@@ -45,10 +47,14 @@ class Repository(
         return Transformations.map(soundsDao.getAllLD()) {
             return@map it.map { soundEntity -> soundEntity.toSound() }
         }
-        /* val soundsLD =
+        *//* val soundsLD =
              MutableLiveData<List<Sound>>().apply { postValue(soundsProvider.getSounds()) }
-         return soundsLD*/
+         return soundsLD*//*
+    }*/
+    fun getSounds(): LiveData<List<Sound>> {
+        return MutableLiveData(soundsProvider.getSounds())
     }
+
 
   /*  suspend fun getSounds(): List<Sound> = withContext(Dispatchers.IO){
         GlobalScope.launch(Dispatchers.IO) {

@@ -19,7 +19,7 @@ class SettingsViewModel(private val alarmRepository: AlarmRepository) : ViewMode
         viewModelScope.launch { alarmRepository.saveAlarm(alarmEntity) }
     }
 
-    suspend fun getAlarm(alarmId: Int): AlarmEntity {
+    suspend fun getAlarm(alarmId: Int): AlarmEntity? {
         return alarmRepository.getAlarm(alarmId)
     }
 }

@@ -1,7 +1,8 @@
 package white.noise.sounds.baby.sleep.utils
 
 object Constants {
-    const val PREFERENCE_ALARM_IS_SET = "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
+    const val PREFERENCE_ALARM_IS_SET =
+        "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
 
     const val ACTION_START_TIMER = "ACTION_START_TIMER"
     const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
@@ -21,6 +22,7 @@ object Constants {
     const val EXTRA_TIME = "EXTRA_TIME"
     const val EXTRA_SOUND = "EXTRA_SOUND"
     const val EXTRA_MIX = "EXTRA_MIX"
+    const val EXTRA_MIX_ID = "EXTRA_MIX_ID"
 
     const val NOTIFICATION_CHANNEL_ID = "timer_channel"
     const val NOTIFICATION_CHANNEL_NAME = "timer"
