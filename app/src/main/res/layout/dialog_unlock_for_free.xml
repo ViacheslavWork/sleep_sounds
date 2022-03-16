@@ -31,9 +31,10 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/unlock_free_iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="172dp"
+        android:layout_height="170dp"
         android:layout_margin="20dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/mix_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

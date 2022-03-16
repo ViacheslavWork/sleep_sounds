@@ -11,15 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentGreetingBinding
 
 
 class GreetingFragment : Fragment() {
-
     private var _binding: FragmentGreetingBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -31,24 +28,21 @@ class GreetingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.root.animate()
-            .setDuration(3000)
-            .scaleX(1.3f)
-            .scaleY(1.3f)
-        lifecycleScope.launch(Dispatchers.Default) {
-//            delay(3000)
-            withContext(Dispatchers.Main){
-                findNavController().navigate(GreetingFragmentDirections.actionGreetingFragmentToNavigationMixes())
+        if (savedInstanceState == null) {
+            binding.root.animate()
+                .setDuration(3000)
+                .scaleX(1.3f)
+                .scaleY(1.3f)
+            lifecycleScope.launch(Dispatchers.Default) {
+                delay(3500)
+                withContext(Dispatchers.Main){
+                    findNavController().navigate(R.id.action_global_to_mixFragment)
+                }
             }
         }
-
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

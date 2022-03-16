@@ -85,7 +85,7 @@ class RatingDialog : DialogFragment() {
         binding.ohNoTv.visibility = View.VISIBLE
         binding.ohNoTv.text = getString(R.string.we_like_you)
         binding.ratingContentTv.text = getString(R.string.thanks_for_feedback)
-        binding.estimateBtn.text = getString(R.string.estimate_on_google_play)
+        binding.estimateBtn.text = getString(R.string.estimate)
     }
 
     private fun setNotGoodRating() {

@@ -81,7 +81,7 @@ class AdditionalSoundsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         showLog("onViewCreated")
-        mixId?.let { additionalSoundsViewModel.loadMixSounds(mixId!!) }
+        mixId?.let { additionalSoundsViewModel.loadMixSounds(it) }
 //        sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS,null)
 
         bindService()
@@ -151,7 +151,7 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun setUpSectionAdapter() {
-        sectionAdapter = SectionAdapter(isSelectable = false)
+        sectionAdapter = SectionAdapter(isSelectable = true, isSoundChangeable = false)
         sectionAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         sectionRecyclerView.adapter = sectionAdapter
@@ -171,7 +171,7 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun observeSounds() {
-        additionalSoundsViewModel.sounds.observe(viewLifecycleOwner) {
+        additionalSoundsViewModel.sections.observe(viewLifecycleOwner) {
             sectionAdapter.submitList(it.toMutableList())
         }
     }
@@ -198,9 +198,13 @@ class AdditionalSoundsFragment : Fragment() {
     private fun observeSectionSoundsEvents() {
         sectionAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
-                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
+                if (!it.sound.isPremium) {
+                    sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
+                    additionalSoundsViewModel.handleEvent(it)
+                } else {
+                    //TODO
+                }
             }
-            additionalSoundsViewModel.handleEvent(it)
         }
     }
 

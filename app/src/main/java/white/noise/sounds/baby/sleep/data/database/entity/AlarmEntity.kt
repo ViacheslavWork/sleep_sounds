@@ -18,7 +18,6 @@ import white.noise.sounds.baby.sleep.broadcast.AlarmBroadcastReceiver.Companion.
 import white.noise.sounds.baby.sleep.broadcast.AlarmBroadcastReceiver.Companion.TITLE
 import white.noise.sounds.baby.sleep.broadcast.AlarmBroadcastReceiver.Companion.TUESDAY
 import white.noise.sounds.baby.sleep.broadcast.AlarmBroadcastReceiver.Companion.WEDNESDAY
-import white.noise.sounds.baby.sleep.utils.DayUtil
 import java.util.*
 
 @Entity(tableName = "alarms")
@@ -71,7 +70,7 @@ data class AlarmEntity(
             }
         }
 
-        var toastText: String? = null
+        /*var toastText: String? = null
         try {
             toastText = java.lang.String.format(
                 "One Time Alarm %s scheduled for %s at %02d:%02d",
@@ -83,7 +82,8 @@ data class AlarmEntity(
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        Toast.makeText(context, toastText, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, toastText, Toast.LENGTH_LONG).show()*/
+
         val alarmClockInfo =
             AlarmManager.AlarmClockInfo(calendar.timeInMillis, alarmPendingIntent)
         alarmManager.setAlarmClock(alarmClockInfo, alarmPendingIntent)

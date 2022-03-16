@@ -1,17 +1,19 @@
 package white.noise.sounds.baby.sleep.model
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Mix(
-    var id: Long = 0,
+    var id: Long,
     val title: String,
     val sounds: MutableList<Sound> = mutableListOf(),
-    var picturePath: String,
-    val category: MixCategory?
-):Parcelable
+    var picturePath: Uri,
+    val category: MixCategory?,
+    val isPremium: Boolean = false
+) : Parcelable
 
 enum class MixCategory(val title: String) {
     AllSounds("All Sounds"),

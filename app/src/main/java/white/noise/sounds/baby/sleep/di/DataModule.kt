@@ -11,18 +11,14 @@ import white.noise.sounds.baby.sleep.utils.AssetManager
 val dataModule = module {
     single<Repository> {
         Repository(
-            soundsProvider = get(),
-            mixProvider = get(),
-            soundsDao = get(),
-            mixesDao = get()
+                soundsProvider = get(),
+                mixProvider = get(),
+                soundsDao = get(),
+                mixesDao = get()
         )
     }
-    single<AlarmRepository> {
-        AlarmRepository(
-            alarmsDao = get()
-        )
-    }
+    single<AlarmRepository> { AlarmRepository(alarmsDao = get()) }
     factory<SoundsProvider> { SoundsProvider(assetManager = get()) }
-    factory<MixesProvider> { MixesProvider(assetManager = get(), soundsProvider = get()) }
+    factory<MixesProvider> { MixesProvider(context = androidContext()) }
     factory<AssetManager> { AssetManager(context = androidContext()) }
 }

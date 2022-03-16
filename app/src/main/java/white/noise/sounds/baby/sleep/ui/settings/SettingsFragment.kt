@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -11,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -27,6 +30,8 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)*/
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(
@@ -69,7 +74,11 @@ class SettingsFragment : Fragment() {
                         alarm?.let {
                             withContext(Dispatchers.Main) {
                                 binding.bedTimeReminderSwitch.text =
-                                    String.format("%d:%d", alarm.hour, alarm.minute)
+                                    String.format(
+                                        getString(R.string.time_format),
+                                        alarm.hour,
+                                        alarm.minute
+                                    )
                             }
                             if (!alarm.started) {
                                 alarm.schedule(requireContext())

@@ -1,6 +1,5 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
-import white.noise.sounds.baby.sleep.data.SoundFromResources
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.model.SoundCategory
 

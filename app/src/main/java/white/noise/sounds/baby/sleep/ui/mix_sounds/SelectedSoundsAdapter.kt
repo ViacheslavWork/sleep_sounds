@@ -38,12 +38,6 @@ class SelectedSoundsAdapter(
 
 class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    companion object {
-        private val imageOption = RequestOptions()
-            .placeholder(R.drawable.ic_sound_placeholder)
-            .fallback(R.drawable.ic_sound_placeholder)
-    }
-
     fun onBind(sound: Sound, event: MutableLiveData<SoundsEvent>) {
         binding.mixItemTv.text = sound.title
         binding.removeIv.visibility = View.VISIBLE
@@ -60,7 +54,7 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
         binding.root.setOnClickListener {
-            event.value = SoundsEvent.OnSoundClick(sound)
+//            event.value = SoundsEvent.OnSoundClick(sound,bindingAdapterPosition)
         }
         binding.removeIv.setOnClickListener {
             event.value =
@@ -74,18 +68,6 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
         )
 
         binding.soundsItemIv.setImageResource(sound.icon)
- /*       val imageLoader = ImageLoader.Builder(binding.root.context)
-            .componentRegistry { add(SvgDecoder(binding.root.context)) }
-            .build()
-
-        val request = ImageRequest.Builder(binding.root.context)
-            .placeholder(R.drawable.ic_sound_placeholder)
-            .error(R.drawable.ic_sound_placeholder)
-            .data(Uri.parse("file:///android_asset/icons/${sound.icon}"))
-            .target(binding.soundsItemIv)
-            .build()
-
-        imageLoader.enqueue(request)*/
     }
 }
 

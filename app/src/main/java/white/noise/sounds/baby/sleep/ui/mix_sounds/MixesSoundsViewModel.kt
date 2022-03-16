@@ -5,34 +5,52 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.model.Sound
-import white.noise.sounds.baby.sleep.ui.mixes.MixesEvent
+import white.noise.sounds.baby.sleep.model.SoundCategory
 import white.noise.sounds.baby.sleep.ui.sounds.Section
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 
 private const val TAG = "MixesSoundsViewModel"
 
 class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
-    private val _sounds = MutableLiveData<List<Section>>()
-    val sounds: LiveData<List<Section>> = _sounds
+    private val _sections = MutableLiveData<List<Section>>()
+    val sections: LiveData<List<Section>> = _sections
 
     private var _selectedSounds = MutableLiveData<List<Sound>>(listOf())
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
 
-    init {
-        loadAllSounds()
-    }
+    /*  init {
+          loadAllSounds()
+      }
 
-    private fun loadAllSounds() {
-        viewModelScope.launch(Dispatchers.IO) { _sounds.postValue(repository.getSoundsInSections()) }
-    }
+      private fun loadAllSounds() {
+          viewModelScope.launch(Dispatchers.IO) { _sounds.postValue(repository.getSoundsInSections()) }
+      }*/
 
     fun loadMixSounds(mixId: Long) {
-        viewModelScope.launch { _selectedSounds.postValue(repository.getMix(mixId).sounds) }
+        viewModelScope.launch {
+            val mix = repository.getMix(mixId)
+            mix.sounds.forEach { it.isPlaying = true }
+            _selectedSounds.postValue(mix.sounds)
+
+            val sounds = repository.getSounds()
+            val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+            enumValues<SoundCategory>().forEach {
+                mapSoundCategoryToSection[it] = Section(it)
+            }
+            sounds.forEach {
+                if (mix.sounds.map { sound -> sound.id }.contains(it.id)) {
+                    val soundFromMix = mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
+                    mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
+                } else {
+                    mapSoundCategoryToSection[it.category]?.items?.add(it)
+                }
+            }
+            _sections.postValue(mapSoundCategoryToSection.values.toList())
+        }
     }
 
     fun saveChangesInMix(mixId: Long) {
@@ -47,25 +65,36 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
     fun handleEvent(event: SoundsEvent) {
         when (event) {
             is SoundsEvent.OnSoundClick -> {
-                _selectedSounds.value =
-                    selectedSounds.value
-                        ?.toMutableList()
-                        ?.apply { add(event.sound) }
-                        ?.toSet()
-                        ?.toList()
-                        ?.take(8)
+                if (event.sound.isPlaying) {
+                    addToSelected(sound = event.sound)
+                } else {
+                    removeFromSelected(sound = event.sound)
+                }
             }
             is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> {
-                _selectedSounds.value =
-                    selectedSounds.value
-                        ?.toMutableList()
-                        ?.apply { remove(event.sound) }
-                        ?.toList()
+                removeFromSelected(event.sound)
             }
             is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
         }
     }
 
+    private fun addToSelected(sound: Sound) {
+        _selectedSounds.value =
+                selectedSounds.value
+                        ?.toMutableList()
+                        ?.apply { add(sound) }
+                        ?.toSet()
+                        ?.toList()
+                        ?.take(8)
+    }
+
+    private fun removeFromSelected(sound: Sound) {
+        _selectedSounds.value =
+                selectedSounds.value
+                        ?.toMutableList()
+                        ?.apply { remove(sound) }
+                        ?.toList()
+    }
 
 
     private fun showLog(message: String) {

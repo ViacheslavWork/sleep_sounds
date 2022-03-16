@@ -15,6 +15,7 @@ import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentPagerBinding
 import white.noise.sounds.baby.sleep.model.MixCategory
+import white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 
@@ -61,12 +62,25 @@ class PagerFragment : Fragment() {
 
     private fun observeAdaptersEvents() {
         mixesAdapter.event.observe(viewLifecycleOwner) {
-            findNavController().navigate(
-                R.id.action_navigation_mixes_to_playerFragment,
-                bundleOf(PlayerFragment.mixIdKey to it.mix.id)
-            )
-//            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
             mixesViewModel.handleEvent(it)
+            when (it) {
+                is MixesEvent.OnMixClick -> {
+                    if (!it.mix.isPremium) {
+                        findNavController().navigate(
+                            R.id.action_navigation_mixes_to_playerFragment,
+                            bundleOf(PlayerFragment.mixIdKey to it.mix.id)
+                        )
+                    } else {
+                        findNavController().navigate(
+                            R.id.action_navigation_mixes_to_unlockForFreeFragment,
+                            bundleOf(UnlockForFreeDialog.mixKey to it.mix)
+                        )
+                    }
+//            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
+
+                }
+            }
+
         }
     }
 

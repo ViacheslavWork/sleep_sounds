@@ -1,5 +1,6 @@
 package white.noise.sounds.baby.sleep.data.database.entity
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
@@ -11,12 +12,15 @@ import white.noise.sounds.baby.sleep.model.MixCategory
 @Entity(tableName = "mixes")
 data class MixEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
+    val idDatabase: Long = 0,
+    val id: Long,
     val title: String,
     @TypeConverters(SoundsEntitiesListConverter::class)
     val soundsEntities: List<SoundEntity>,
-    var picturePath: String,
-    val category: MixCategory?
+    @TypeConverters(UriConverters::class)
+    var picturePath: Uri,
+    val category: MixCategory?,
+    val isPremium: Boolean = false
 ) {
     companion object {
         fun fromMix(mix: Mix): MixEntity {
@@ -25,7 +29,8 @@ data class MixEntity(
                 title = mix.title,
                 soundsEntities = mix.sounds.map { SoundEntity.fromSound(it) },
                 picturePath = mix.picturePath,
-                category = mix.category
+                category = mix.category,
+                isPremium = mix.isPremium
             )
         }
     }
@@ -37,7 +42,8 @@ fun MixEntity.toMix(): Mix {
         title = title,
         sounds = soundsEntities.map { it.toSound() }.toMutableList(),
         picturePath = picturePath,
-        category = category
+        category = category,
+        isPremium = isPremium
     )
 }
 
@@ -47,4 +53,16 @@ class SoundsEntitiesListConverter {
 
     @TypeConverter
     fun jsonToList(value: String) = Gson().fromJson(value, Array<SoundEntity>::class.java).toList()
+}
+
+class UriConverters {
+    @TypeConverter
+    fun fromString(value: String?): Uri? {
+        return if (value == null) null else Uri.parse(value)
+    }
+
+    @TypeConverter
+    fun toString(uri: Uri?): String? {
+        return uri?.toString()
+    }
 }

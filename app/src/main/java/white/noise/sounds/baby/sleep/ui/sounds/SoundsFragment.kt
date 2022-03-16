@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,7 @@ import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSoundsBinding
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.service.PlayerService
+import white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog
 import white.noise.sounds.baby.sleep.utils.Constants
 import white.noise.sounds.baby.sleep.utils.Constants.EXTRA_SOUND
 import white.noise.sounds.baby.sleep.utils.Constants.LAUNCHER
@@ -57,18 +59,17 @@ class SoundsFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSoundsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.playerGroup.visibility = View.VISIBLE
-        bindService()
-
+        setUpPlayerVisibility(isVisible = true)
+        setUpPlayerVisibility(isVisible = false)
         setUpRecyclerView()
         setUpAdapter()
 
@@ -79,9 +80,27 @@ class SoundsFragment : Fragment() {
         observeSelectedSounds()
         observeRecyclerEvent()
         observeTimer()
+        observePlayable()
+    }
+
+    private fun setUpPlayerVisibility(isVisible: Boolean) {
+        if (isVisible) binding.playerGroup.visibility = View.VISIBLE
+        else binding.playerGroup.visibility = View.GONE
+    }
+
+    private fun observePlayable() {
+        PlayerService.isPlayable.observe(viewLifecycleOwner) {
+            if (it) {
+                bindService()
+            }
+            if (it && PlayerService.launcher == Constants.SOUNDS_LAUNCHER) {
+                setUpPlayerVisibility(isVisible = true)
+            }
+        }
     }
 
     override fun onResume() {
+        soundsViewModel.updateSections()
         startAdAnimation()
         super.onResume()
     }
@@ -103,11 +122,10 @@ class SoundsFragment : Fragment() {
         super.onDestroy()
     }
 
-
     private fun setUpListeners() {
         binding.crownSoundsToolbarIv.setOnClickListener {
             findNavController().navigate(
-                SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
+                    SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
             )
         }
         binding.timerIb.setOnClickListener {
@@ -115,7 +133,7 @@ class SoundsFragment : Fragment() {
         }
         binding.selectedIb.setOnClickListener {
             findNavController().navigate(
-                SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
+                    SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
             )
         }
         binding.playIb.setOnClickListener {
@@ -135,10 +153,19 @@ class SoundsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
+//    private fun setUpRecyclerViewPaddingBottom(isPadding: Boolean) {
+//        try {
+//            if (isPadding) recyclerView.setPadding(0, 0, 0, binding.playerView.height)
+//            else recyclerView.setPadding(0, 0, 0, 0)
+//        } catch (e: Exception) {
+//        }
+//
+//    }
+
     private fun setUpAdapter() {
         adapter = SectionAdapter()
         adapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         recyclerView.adapter = adapter
     }
 
@@ -167,52 +194,14 @@ class SoundsFragment : Fragment() {
                 }
             }
         }
-        soundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
-            when {
-                PlayerService.launcher == SOUNDS_LAUNCHER -> {
-                    when {
-                        it.isNotEmpty() && mIsPause -> {
-                            binding.playIb.isClickable = true
-                            binding.playIb.isEnabled = true
-                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
-                            binding.playIb.tag = R.drawable.ic_play_rounded
-                        }
-                        it.isNotEmpty() -> {
-                            binding.playIb.isClickable = true
-                            binding.playIb.isEnabled = true
-                            binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
-                            binding.playIb.tag = R.drawable.ic_pause_rounded
-                        }
-                        else -> {
-                            binding.playIb.isClickable = false
-                            binding.playIb.isEnabled = false
-                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
-                            binding.playIb.tag = R.drawable.ic_play_rounded
-                        }
-                    }
-                }
-                it.isNotEmpty() -> {
-                    binding.playIb.isClickable = true
-                    binding.playIb.isEnabled = true
-                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
-                    binding.playIb.tag = R.drawable.ic_play_rounded
-                }
-                else -> {
-                    binding.playIb.isClickable = false
-                    binding.playIb.isEnabled = false
-                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
-                    binding.playIb.tag = R.drawable.ic_play_rounded
-                }
-            }
-        }
     }
 
     private fun startAdAnimation() {
         binding.crownSoundsToolbarIv.startAnimation(
-            AnimationUtils.loadAnimation(
-                context,
-                R.anim.ad_animation
-            )
+                AnimationUtils.loadAnimation(
+                        context,
+                        R.anim.ad_animation
+                )
         )
     }
 
@@ -267,25 +256,84 @@ class SoundsFragment : Fragment() {
             binding.numSoundsTv.text = it.size.toString()
             binding.selectedIb.isEnabled = it.isNotEmpty()
             binding.selectedTv.isEnabled = it.isNotEmpty()
+            when {
+                PlayerService.launcher == SOUNDS_LAUNCHER -> {
+                    when {
+                        it.isNotEmpty() && mIsPause -> {
+                            binding.playIb.isClickable = true
+                            binding.playIb.isEnabled = true
+                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                            binding.playIb.tag = R.drawable.ic_play_rounded
+                        }
+                        it.isNotEmpty() -> {
+                            binding.playIb.isClickable = true
+                            binding.playIb.isEnabled = true
+                            binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
+                            binding.playIb.tag = R.drawable.ic_pause_rounded
+                        }
+                        else -> {
+                            binding.playIb.isClickable = false
+                            binding.playIb.isEnabled = false
+                            binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                            binding.playIb.tag = R.drawable.ic_play_rounded
+                            setUpPlayerVisibility(isVisible = false)
+                        }
+                    }
+                }
+                it.isNotEmpty() -> {
+                    binding.playIb.isClickable = true
+                    binding.playIb.isEnabled = true
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                }
+                else -> {
+                    binding.playIb.isClickable = false
+                    binding.playIb.isEnabled = false
+                    binding.playIb.setImageResource(R.drawable.ic_play_rounded)
+                    binding.playIb.tag = R.drawable.ic_play_rounded
+                }
+            }
         }
     }
 
     private fun observeRecyclerEvent() {
         adapter.event.observe(viewLifecycleOwner) {
-            soundsViewModel.handleEvent(it)
             if (it is SoundsEvent.OnSoundClick) {
-                if (PlayerService.launcher != SOUNDS_LAUNCHER) {
-                    sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, it.sound)
-                }
-                if (it.sound.isPlaying) {
-                    sendCommandToPlayerService(Constants.ACTION_PLAY_SOUND, it.sound)
+                if (!it.sound.isPremium) {
+                    playPauseSound(it.sound)
+                    soundsViewModel.handleEvent(it)
                 } else {
-                    sendCommandToPlayerService(Constants.ACTION_STOP_SOUND, it.sound)
+                    findNavController().navigate(
+                            R.id.action_navigation_sounds_to_unlockForFreeFragment,
+                            bundleOf(UnlockForFreeDialog.soundKey to it.sound)
+                    )
+                    playPremiumSoundAfterVideo(it.sound, it.position)
                 }
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 playerService?.changeVolume(it.sound)
+                soundsViewModel.handleEvent(it)
             }
         }
+    }
+
+    private fun playPauseSound(sound: Sound) {
+        if (PlayerService.launcher != SOUNDS_LAUNCHER) {
+            sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
+            if (PlayerService.isPause.value == true) {
+                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
+            }
+        }
+        if (sound.isPlaying) {
+            sendCommandToPlayerService(Constants.ACTION_PLAY_SOUND, sound)
+        } else {
+            sendCommandToPlayerService(Constants.ACTION_STOP_SOUND, sound)
+        }
+    }
+
+    private fun playPremiumSoundAfterVideo(sound: Sound, position: Int) {
+        sound.isPlaying = true
+        adapter.notifyItemChanged(position)
+        playPauseSound(sound)
     }
 
     //service

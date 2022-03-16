@@ -33,6 +33,7 @@ class SaveCustomFragment : Fragment() {
     companion object {
         const val UPLOAD_REQUEST = 1
     }
+
     private val soundsViewModel: SoundsViewModel by sharedViewModel()
     private val mixesViewModel: MixesViewModel by sharedViewModel()
     private var _binding: FragmentSaveCustomBinding? = null
@@ -41,8 +42,8 @@ class SaveCustomFragment : Fragment() {
     private lateinit var selectedImageUri: Uri
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSaveCustomBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,7 +56,7 @@ class SaveCustomFragment : Fragment() {
 
     private fun setUpImagePlaceholder() {
         selectedImageUri =
-            Uri.parse("android.resource://white.noise.sounds.baby.sleep/drawable/mix_placeholder")
+                Uri.parse("android.resource://white.noise.sounds.baby.sleep/drawable/mix_placeholder")
         setImage(selectedImageUri)
     }
 
@@ -90,10 +91,12 @@ class SaveCustomFragment : Fragment() {
         binding.applyBtn.setOnClickListener {
             val imageInExternalStorageUri = saveImageToExternalStorage(imageUri = selectedImageUri)
             val mix = Mix(
-                title = binding.customNameEt.text.toString(),
-                sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
-                picturePath = imageInExternalStorageUri.toString(),
-                category = MixCategory.Others
+                    id = 0,
+                    title = binding.customNameEt.text.toString(),
+                    sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
+                    picturePath = imageInExternalStorageUri,
+                    category = MixCategory.Others,
+                    isPremium = false
             )
             mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
             requireActivity().onBackPressed()
@@ -121,8 +124,8 @@ class SaveCustomFragment : Fragment() {
         // Get the bitmap
         val bitmap = when {
             Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
-                requireActivity().contentResolver,
-                imageUri
+                    requireActivity().contentResolver,
+                    imageUri
             )
             else -> {
                 val source = ImageDecoder.createSource(requireActivity().contentResolver, imageUri)

@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.databinding.DialogTimerBinding
@@ -18,8 +20,8 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = DialogTimerBinding.inflate(inflater, container, false)
@@ -31,19 +33,19 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
     }
 
     private fun setUpListeners() {
-        binding.offBtn.setOnClickListener (this)
-        binding.customBtn.setOnClickListener (this)
-        binding.minutes10Btn.setOnClickListener (this)
-        binding.minutes15Btn.setOnClickListener (this)
-        binding.minutes20Btn.setOnClickListener (this)
-        binding.minutes30Btn.setOnClickListener (this)
-        binding.minutes40Btn.setOnClickListener (this)
-        binding.minutes50Btn.setOnClickListener (this)
+        binding.offBtn.setOnClickListener(this)
+        binding.customBtn.setOnClickListener(this)
+        binding.minutes10Btn.setOnClickListener(this)
+        binding.minutes15Btn.setOnClickListener(this)
+        binding.minutes20Btn.setOnClickListener(this)
+        binding.minutes30Btn.setOnClickListener(this)
+        binding.minutes40Btn.setOnClickListener(this)
+        binding.minutes50Btn.setOnClickListener(this)
         binding.hour1Btn.setOnClickListener(this)
-        binding.hour2Btn.setOnClickListener (this)
-        binding.hour3Btn.setOnClickListener (this)
-        binding.hour4Btn.setOnClickListener (this)
-        binding.hour8Btn.setOnClickListener (this)
+        binding.hour2Btn.setOnClickListener(this)
+        binding.hour3Btn.setOnClickListener(this)
+        binding.hour4Btn.setOnClickListener(this)
+        binding.hour8Btn.setOnClickListener(this)
     }
 
     override fun onDestroyView() {
@@ -52,9 +54,9 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
     }
 
     override fun onClick(view: View?) {
+        var isDismiss = true
         when (view) {
             binding.offBtn -> timerViewModel.setTime(Times.off)
-            binding.customBtn -> timerViewModel.setTime(Times.Custom(LocalTime.of(0,0,5)))
             binding.minutes10Btn -> timerViewModel.setTime(Times._10minutes)
             binding.minutes15Btn -> timerViewModel.setTime(Times._15minutes)
             binding.minutes20Btn -> timerViewModel.setTime(Times._20minutes)
@@ -66,8 +68,28 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
             binding.hour3Btn -> timerViewModel.setTime(Times._3hours)
             binding.hour4Btn -> timerViewModel.setTime(Times._4hours)
             binding.hour8Btn -> timerViewModel.setTime(Times._8hours)
+            binding.customBtn -> {
+                isDismiss = false
+                val picker = showTimePicker()
+                picker.addOnPositiveButtonClickListener {
+                    timerViewModel.setTime(Times.Custom(LocalTime.of(picker.hour, picker.minute)))
+                    isDismiss = true
+                    this.dismiss()
+                }
+            }
         }
-        this.dismiss()
+        if (isDismiss) this.dismiss()
+    }
+
+    private fun showTimePicker(): MaterialTimePicker {
+        val picker = MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .setHour(0)
+                .setMinute(0)
+                .setTitleText("Select Appointment time")
+                .build()
+        picker.show(childFragmentManager, "TimePicker")
+        return picker
     }
 
 }

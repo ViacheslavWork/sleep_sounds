@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -16,9 +15,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import coil.ImageLoader
-import coil.decode.SvgDecoder
-import coil.request.ImageRequest
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
@@ -37,14 +33,17 @@ class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private var mixId: Long? = 0
+    private var isStartPlaying = true
 
     companion object {
         const val mixIdKey = "MIX_ID_KEY"
+        const val isStartPlayingArg = "IS_START_PLAYING_ARG"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mixId = arguments?.getLong(mixIdKey)
+        isStartPlaying = arguments?.getBoolean(isStartPlayingArg, true) == true
     }
 
     override fun onCreateView(
@@ -76,7 +75,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    //    override fun getTheme() = R.style.FullScreenDialogTheme
+//    override fun getTheme() = R.style.FullScreenDialogTheme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindService()
         observeService()
@@ -102,7 +101,12 @@ class PlayerFragment : Fragment() {
     }
 
     private fun playStopMix(sounds: List<Sound>) {
-        sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS,null)
+        sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
+        if (PlayerService.launcher != Constants.MIX_LAUNCHER) {
+            if (PlayerService.isPause.value == true) {
+                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
+            }
+        }
         sounds.forEach {
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it)
         }
@@ -114,17 +118,19 @@ class PlayerFragment : Fragment() {
 
     private fun observeSounds() {
         mixId?.let {
-            playerViewModel.loadSounds(mixId!!).observe(viewLifecycleOwner) {
-                playStopMix(it)
-                initButtons(it)
+            playerViewModel.loadSounds(it).observe(viewLifecycleOwner) { sounds ->
+                if (isStartPlaying) {
+                    playStopMix(sounds)
+                }
+                initButtons(sounds)
             }
         }
     }
 
     private fun observeMix() {
-        mixId.let {
-            playerViewModel.getMix(mixId!!).observe(viewLifecycleOwner) {
-                binding.titleTv.text = it.title
+        mixId?.let {
+            playerViewModel.getMix(it).observe(viewLifecycleOwner) { mix ->
+                binding.titleTv.text = mix.title
             }
         }
     }

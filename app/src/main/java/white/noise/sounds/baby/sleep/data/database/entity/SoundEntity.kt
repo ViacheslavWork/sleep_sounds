@@ -9,27 +9,29 @@ import white.noise.sounds.baby.sleep.model.SoundCategory
 
 @Entity(tableName = "sounds")
 class SoundEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0,
-    val title: String,
-    @RawRes
-    val file: Int,
-    @DrawableRes
-    val icon: Int,
-    var volume: Int,
-    var isPlaying: Boolean = false,
-    val category: SoundCategory
+        @PrimaryKey
+        var id: Long = 0,
+        val title: String,
+        @RawRes
+        val file: Int,
+        @DrawableRes
+        val icon: Int,
+        var volume: Int,
+        var isPlaying: Boolean = false,
+        val category: SoundCategory,
+        val isPremium: Boolean
 ) {
     companion object {
         fun fromSound(sound: Sound): SoundEntity {
             return SoundEntity(
-                id = sound.id,
-                title = sound.title,
-                file = sound.file,
-                icon = sound.icon,
-                volume = sound.volume,
-                isPlaying = sound.isPlaying,
-                category = sound.category
+                    id = sound.id,
+                    title = sound.title,
+                    file = sound.file,
+                    icon = sound.icon,
+                    volume = sound.volume,
+                    isPlaying = sound.isPlaying,
+                    category = sound.category,
+                    isPremium = sound.isPremium
             )
         }
     }
@@ -38,12 +40,13 @@ class SoundEntity(
 
 fun SoundEntity.toSound(): Sound {
     return Sound(
-        id = id,
-        title = title,
-        file = file,
-        icon = icon,
-        volume = volume,
-        isPlaying = isPlaying,
-        category = category
+            id = id,
+            title = title,
+            file = file,
+            icon = icon,
+            volume = volume,
+            isPlaying = isPlaying,
+            category = category,
+            isPremium = isPremium
     )
 }

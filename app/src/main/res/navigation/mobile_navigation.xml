@@ -5,6 +5,19 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_mixes">
 
+    <action android:id="@+id/action_global_to_greetingFragment"
+        app:destination="@id/greetingFragment"
+        app:launchSingleTop="true"/>
+    <action android:id="@+id/action_global_to_mixFragment"
+        app:destination="@id/navigation_mixes"
+        app:launchSingleTop="true"/>
+    <action android:id="@+id/action_global_to_soundsFragment"
+        app:destination="@id/navigation_sounds"
+        app:launchSingleTop="true"/>
+    <action android:id="@+id/action_global_to_sleepTimerFragment"
+        app:destination="@id/sleepTimerFragment"
+        app:launchSingleTop="true"/>
+
     <fragment
         android:id="@+id/navigation_mixes"
         android:name="white.noise.sounds.baby.sleep.ui.mixes.MixesFragment"
@@ -12,7 +25,8 @@
         tools:layout="@layout/fragment_mixes">
         <action
             android:id="@+id/action_navigation_mixes_to_playerFragment"
-            app:destination="@id/playerFragment" />
+            app:destination="@id/playerFragment"
+            app:exitAnim="@anim/nav_default_exit_anim" />
         <action
             android:id="@+id/action_navigation_mixes_to_unlockForFreeFragment"
             app:destination="@id/unlockForFreeFragment" />
@@ -35,6 +49,9 @@
         <action
             android:id="@+id/action_navigation_sounds_to_customMixDialog"
             app:destination="@id/customMixDialog" />
+        <action
+            android:id="@+id/action_navigation_sounds_to_unlockForFreeFragment"
+            app:destination="@id/unlockForFreeFragment" />
     </fragment>
 
     <fragment

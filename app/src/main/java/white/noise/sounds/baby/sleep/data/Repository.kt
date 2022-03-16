@@ -2,9 +2,7 @@ package white.noise.sounds.baby.sleep.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,7 +15,6 @@ import white.noise.sounds.baby.sleep.data.database.entity.toSound
 import white.noise.sounds.baby.sleep.data.database.mixes.MixesDao
 import white.noise.sounds.baby.sleep.data.database.sounds.SoundsDao
 import white.noise.sounds.baby.sleep.data.provider.MixesProvider
-import white.noise.sounds.baby.sleep.data.provider.SoundsFromResourcesProvider
 import white.noise.sounds.baby.sleep.data.provider.SoundsProvider
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
@@ -28,45 +25,16 @@ import white.noise.sounds.baby.sleep.ui.sounds.Section
 private const val TAG = "Repository"
 
 class Repository(
-    private val soundsProvider: SoundsProvider,
-    private val mixProvider: MixesProvider,
-    private val soundsDao: SoundsDao,
-    private val mixesDao: MixesDao
+        private val soundsProvider: SoundsProvider,
+        private val mixProvider: MixesProvider,
+        private val soundsDao: SoundsDao,
+        private val mixesDao: MixesDao
 ) {
-    lateinit var sounds: List<Sound>
+//    lateinit var sounds: List<Sound>
 
-    /*fun getSounds(): LiveData<List<Sound>> {
-        GlobalScope.launch(Dispatchers.IO) {
-            if (soundsDao.getAll().isEmpty()) {
-                soundsDao.deleteAll()
-                soundsDao.insertAll(
-                    soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
-            }
-        }
-
-        return Transformations.map(soundsDao.getAllLD()) {
-            return@map it.map { soundEntity -> soundEntity.toSound() }
-        }
-        *//* val soundsLD =
-             MutableLiveData<List<Sound>>().apply { postValue(soundsProvider.getSounds()) }
-         return soundsLD*//*
-    }*/
-    fun getSounds(): LiveData<List<Sound>> {
-        return MutableLiveData(soundsProvider.getSounds())
+    fun getSounds(): List<Sound> {
+        return soundsProvider.getSounds()
     }
-
-
-  /*  suspend fun getSounds(): List<Sound> = withContext(Dispatchers.IO){
-        GlobalScope.launch(Dispatchers.IO) {
-            if (soundsDao.getAll().isEmpty()) {
-                soundsDao.deleteAll()
-                soundsDao.insertAll(
-                    soundsProvider.getSounds().map { sound -> SoundEntity.fromSound(sound) })
-            }
-        }
-        return@withContext soundsDao.getAll().map { it.toSound() }
-    }*/
-
 
     //TODO: remove it later
     fun getSoundsInSections(): List<Section> {
@@ -97,16 +65,14 @@ class Repository(
 
     fun getMixes(): LiveData<List<Mix>> {
         GlobalScope.launch(Dispatchers.IO) {
-        if (mixesDao.getAll().isEmpty()) {
-            mixesDao.deleteAll()
-            mixesDao.insertAll(
-                    mixProvider.getMixes().map { mix -> MixEntity.fromMix(mix) })
+            if (mixesDao.getAll().isEmpty()) {
+                mixesDao.deleteAll()
+                mixesDao.insertAll(mixProvider.getMixes().map { mix -> MixEntity.fromMix(mix) })
             }
         }
         return Transformations.map(mixesDao.getAllLD()) {
             return@map it.map { mixEntity -> mixEntity.toMix() }
         }
-//        return mixProvider.getMixes()
     }
 
     fun getMixes(category: MixCategory): List<Mix> {
@@ -131,5 +97,10 @@ class Repository(
         return Transformations.map(mixesDao.getMixLD(id)) {
             it.toMix()
         }
+    }
+
+    fun getSound(soundId: Long): Sound? {
+        soundsProvider.getSounds().forEach { if (it.id == soundId) return it }
+        return null
     }
 }

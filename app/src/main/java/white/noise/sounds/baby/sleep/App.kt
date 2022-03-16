@@ -1,6 +1,9 @@
 package white.noise.sounds.baby.sleep
 
 import android.app.Application
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -19,4 +22,5 @@ class App : Application() {
             modules(listOf(appModule, dataModule, serviceModule, roomModule))
         }
     }
+
 }

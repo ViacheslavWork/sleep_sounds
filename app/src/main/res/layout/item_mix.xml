@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="172dp"
+    android:layout_height="170dp"
     android:layout_margin="@dimen/margin_item_mix"
     app:cardCornerRadius="5dp"
     android:adjustViewBounds="true">
@@ -13,9 +13,10 @@
 
         <ImageView
             android:id="@+id/mix_item_iv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="172dp"
+            android:layout_height="170dp"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -27,11 +28,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/item_name"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:breakStrategy="balanced"
             android:textAppearance="@style/H3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/crown_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="7dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_crown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

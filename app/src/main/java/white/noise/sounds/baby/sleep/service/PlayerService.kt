@@ -10,6 +10,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -34,8 +35,6 @@ import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.ui.timer.Times
 import white.noise.sounds.baby.sleep.utils.Constants
 import white.noise.sounds.baby.sleep.utils.Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS
-import white.noise.sounds.baby.sleep.utils.Constants.ACTION_STOP_SERVICE
-import java.util.*
 
 
 private const val TAG = "PlayerService"
@@ -60,6 +59,9 @@ class PlayerService : LifecycleService() {
         private val _currentMixLD = MutableLiveData<Mix?>(null)
         val currentMixLD: LiveData<Mix?> = _currentMixLD
 
+        private val _currentLauncherLD = MutableLiveData<String>(null)
+        val currentLauncherLD: LiveData<String> = _currentLauncherLD
+
         val currentSounds = mutableMapOf<Long, Sound>()
 
         var launcher: String? = ""
@@ -69,13 +71,13 @@ class PlayerService : LifecycleService() {
         var currentMixId: Long = -1
     }
 
+    private val currentPlayers: HashMap<String, ExoPlayer> = hashMapOf<String, ExoPlayer>()
+
     private val curSoundsLocal = mutableSetOf<Sound>()
 
     private var isFirstRun = true
 
     lateinit var currentTimer: Job
-
-    private val currentPlayers: HashMap<String, ExoPlayer> = hashMapOf<String, ExoPlayer>()
 
     private val mBinder: IBinder = MyBinder()
 
@@ -125,6 +127,7 @@ class PlayerService : LifecycleService() {
                     }*/
                     currentMixId = intent.extras?.getLong(Constants.EXTRA_MIX_ID, -1)!!
                     launcher = it.extras?.getString(Constants.LAUNCHER)
+                    _currentLauncherLD.postValue(launcher)
                     playStopSound(sound)
                 }
                 Constants.ACTION_PLAY_SOUND -> {
@@ -136,13 +139,14 @@ class PlayerService : LifecycleService() {
                     val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
                     _currentMixLD.postValue(it.extras?.get(Constants.EXTRA_MIX) as Mix?)
                     launcher = it.extras?.getString(Constants.LAUNCHER)
+                    _currentLauncherLD.postValue(launcher)
                     playSound(sound)
                 }
                 Constants.ACTION_STOP_SOUND -> {
                     Log.d(TAG, "Stop sound")
                     val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
                     _currentMixLD.postValue(it.extras?.get(Constants.EXTRA_MIX) as Mix?)
-                    launcher = it.extras?.getString(Constants.LAUNCHER)
+//                    launcher = it.extras?.getString(Constants.LAUNCHER)
                     stopSound(sound)
                 }
                 Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS -> {
@@ -158,6 +162,7 @@ class PlayerService : LifecycleService() {
                     Log.d(TAG, "Stop service")
                     stopService()
                 }
+                Constants.ACTION_QUIT_APP -> quitApp()
                 else -> Unit
             }
         }
@@ -186,13 +191,25 @@ class PlayerService : LifecycleService() {
 
         observeTimer(notificationManager, notificationBuilder, notificationView)
         observePause(notificationManager, notificationBuilder, notificationView)
+        observeCurrentLauncher(notificationManager, notificationBuilder)
         /*currentSoundsLD.observe(this) {
-            it?.forEach { sound -> currentSounds[sound.id] = sound }
-            currentSounds.forEach{
-                Log.i(TAG, "current sound: ${it.value} ")
-            }
-        }*/
+                it?.forEach { sound -> currentSounds[sound.id] = sound }
+                currentSounds.forEach{
+                    Log.i(TAG, "current sound: ${it.value} ")
+                }
+            }*/
     }
+
+    private fun observeCurrentLauncher(
+        notificationManager: NotificationManager,
+        notificationBuilder: NotificationCompat.Builder,
+    ) {
+        currentLauncherLD.observe(this){
+            notificationBuilder.setContentIntent(getMainActivityPendingIntent())
+            notificationManager.notify(Constants.NOTIFICATION_ID, notificationBuilder.build())
+        }
+    }
+
 
     private fun observePause(
         notificationManager: NotificationManager,
@@ -224,6 +241,11 @@ class PlayerService : LifecycleService() {
         notificationView: RemoteViews
     ) {
         timerTime.observe(this) {
+            if (it.isAfter(LocalTime.of(0, 0, 0))) {
+                notificationView.setViewVisibility(R.id.notification_time_tv, View.VISIBLE)
+            } else {
+                notificationView.setViewVisibility(R.id.notification_time_tv, View.GONE)
+            }
             notificationView.setTextViewText(
                 R.id.notification_time_tv,
                 it.toString()
@@ -239,10 +261,17 @@ class PlayerService : LifecycleService() {
 
     private fun stopService() {
         isFirstRun = true
-        currentPlayers.forEach { stopSound(it.key) }
-        _isPlayable.postValue(false)
+        stopAllSounds()
         stopForeground(true)
         stopSelf()
+    }
+
+    private fun quitApp() {
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra(MainActivity.FINISH, true)
+        stopService()
+        startActivity(intent)
     }
 
     override fun onDestroy() {
@@ -274,6 +303,7 @@ class PlayerService : LifecycleService() {
             removeFromCurrentSounds(sound)
 
             if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
+            if (currentPlayers.isEmpty()) stopService()
         } else {
             currentPlayers[sound.title] =
                 playPlayer(sound).apply { if (isPause.value == true) pause() }
@@ -303,6 +333,7 @@ class PlayerService : LifecycleService() {
             removeFromCurrentSounds(sound)
 
             if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
+            if (currentPlayers.isEmpty()) stopService()
         }
     }
 
@@ -338,26 +369,17 @@ class PlayerService : LifecycleService() {
 
     private fun playPlayer(sound: Sound): ExoPlayer {
         Log.i(TAG, "playSound: ")
-        /*val mediaItem = MediaItem.fromUri(
-            Uri.parse(
-                "file:///android_asset/sounds/${
-                    sound.category.toString()
-                        .lowercase(Locale.getDefault())
-                }/${sound.file}"
-            )
-        )*/
         val mediaItem = MediaItem.fromUri(
             RawResourceDataSource.buildRawResourceUri(sound.file)
         )
         val exoPlayer = ExoPlayer.Builder(applicationContext).build()
         exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ALL
         exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.volume = sound.volume.toFloat() / 100
         exoPlayer.playWhenReady = true
         exoPlayer.prepare()
         return exoPlayer
     }
-
-
     //notification part
 
     private fun getNotificationBuilder() = NotificationCompat.Builder(
@@ -388,9 +410,11 @@ class PlayerService : LifecycleService() {
         this,
         0,
         Intent(this, MainActivity::class.java)
-        /*.also {
-            it.action = ACTION_SHOW_TRACKING_FRAGMENT
-        }*/, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            .also {
+                if (launcher == Constants.MIX_LAUNCHER) it.action = MainActivity.ACTION_SHOW_MIX
+                else if (launcher == Constants.SOUNDS_LAUNCHER) it.action =
+                    MainActivity.ACTION_SHOW_SOUNDS
+            }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     private fun setUpRemoteView(notificationView: RemoteViews) {
@@ -402,9 +426,8 @@ class PlayerService : LifecycleService() {
             playPauseIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-
         val closeIntent = Intent(this, PlayerService::class.java)
-        closeIntent.action = ACTION_STOP_SERVICE
+        closeIntent.action = Constants.ACTION_QUIT_APP
         val closeIntentPending = PendingIntent.getService(
             this,
             0,

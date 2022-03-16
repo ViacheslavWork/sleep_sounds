@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
         android:id="@+id/navigation_sounds"
         android:icon="@drawable/ic_sounds"
         android:title="@string/title_sounds" />
-
     <item
         android:id="@+id/navigation_mixes"
         android:icon="@drawable/ic_mixes"
         android:title="@string/title_mixes" />
-
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"

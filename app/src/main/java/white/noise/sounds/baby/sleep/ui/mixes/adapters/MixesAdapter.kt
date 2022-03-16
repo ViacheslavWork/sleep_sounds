@@ -3,6 +3,7 @@ package white.noise.sounds.baby.sleep.ui.mixes.adapters
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
@@ -14,10 +15,11 @@ import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.ItemMixBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.ui.mixes.MixesEvent
+import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 
 private const val TAG = "MixAdapter"
 
-class MixesAdapter(val event: MutableLiveData<MixesEvent.OnMixClick> = MutableLiveData()) :
+class MixesAdapter(val event: MutableLiveData<MixesEvent> = MutableLiveData()) :
     ListAdapter<Mix, MixesViewHolder>(MixDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MixesViewHolder {
         val binding: ItemMixBinding =
@@ -26,35 +28,24 @@ class MixesAdapter(val event: MutableLiveData<MixesEvent.OnMixClick> = MutableLi
     }
 
     override fun onBindViewHolder(holder: MixesViewHolder, position: Int) {
-        getItem(position).let { mix -> holder.onBind(mix) }
-        holder.itemView.setOnClickListener {
-            event.value = MixesEvent.OnMixClick(getItem(position))
-        }
+        getItem(position).let { mix -> holder.onBind(mix,event) }
     }
 }
 
 class MixesViewHolder(private val binding: ItemMixBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    companion object {
-        private val imageOption = RequestOptions()
-            .placeholder(R.drawable.ic_autumn)
-            .fallback(R.drawable.ic_autumn)
-    }
-
-    fun onBind(mix: Mix) {
+    fun onBind(mix: Mix, event: MutableLiveData<MixesEvent>) {
+        binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
         binding.mixItemTv.text = mix.title
-        Glide.with(itemView.context)
-            .load(
-                Uri.parse(
-                    "file:///android_asset/mixes/${
-                        mix.category.toString().lowercase()
-                    }/${mix.picturePath}"
-                )
-            )
+        if(mix.isPremium) binding.crownIv.visibility = View.VISIBLE
+        else binding.crownIv.visibility = View.GONE
+        binding.mixItemIv.setImageURI(mix.picturePath)
+  /*      Glide.with(itemView.context)
+            .load(mix.picturePath)
             .error(R.drawable.ic_autumn)
             .apply(imageOption)
-            .into(binding.mixItemIv)
+            .into(binding.mixItemIv)*/
     }
 }
 

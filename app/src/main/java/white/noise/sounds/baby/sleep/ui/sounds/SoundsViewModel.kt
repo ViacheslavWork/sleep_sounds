@@ -12,9 +12,8 @@ import white.noise.sounds.baby.sleep.utils.Constants
 private const val TAG = "SoundsViewModel"
 
 class SoundsViewModel(private val repository: Repository) : ViewModel() {
-    var sounds: MutableLiveData<List<Sound>> =
-        repository.getSounds() as MutableLiveData<List<Sound>>
-    var sections: LiveData<List<Section>> = fillSections()
+    private val _sections = MutableLiveData<List<Section>>()
+    val sections: LiveData<List<Section>> = _sections
 
     private val _selectedSounds = MutableLiveData<List<Sound>>(listOf())
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
@@ -29,23 +28,22 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
         PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
     }
 
-    private fun fillSections(): LiveData<List<Section>> {
-        return Transformations.map(sounds) {
-            val categoryMap: MutableMap<SoundCategory, Section> = mutableMapOf()
-            enumValues<SoundCategory>().forEach {
-                categoryMap[it] = Section(it)
-            }
-            sounds.value?.forEach {
-                if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
-                    && PlayerService.currentSounds.containsKey(it.id)
-                ) {
-                    categoryMap[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
-                } else {
-                    categoryMap[it.category]?.items?.add(it)
-                }
-            }
-            return@map categoryMap.values.toList()
+    fun updateSections() {
+        val sounds = repository.getSounds()
+        val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+        enumValues<SoundCategory>().forEach {
+            mapSoundCategoryToSection[it] = Section(it)
         }
+        sounds.forEach {
+            if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
+                    && PlayerService.currentSounds.containsKey(it.id)
+            ) {
+                mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
+            } else {
+                mapSoundCategoryToSection[it.category]?.items?.add(it)
+            }
+        }
+        _sections.postValue(mapSoundCategoryToSection.values.toList())
     }
 
     fun handleEvent(event: SoundsEvent) {
