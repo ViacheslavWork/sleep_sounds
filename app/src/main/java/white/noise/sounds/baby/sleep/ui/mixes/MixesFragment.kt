@@ -12,7 +12,9 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -30,9 +32,25 @@ import white.noise.sounds.baby.sleep.utils.Constants
 private const val TAG = "MixesFragment"
 
 class MixesFragment : Fragment() {
+    companion object {
+        const val mixIdKey = "MIX_ID_KEY"
+        const val playPremiumMixRequest = "PLAY_PREMIUM_MIX_REQUEST"
+    }
+
     private val mixesViewModel: MixesViewModel by sharedViewModel()
     private var _binding: FragmentMixesBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(playPremiumMixRequest) { _, bundle ->
+            val mixId: Long = bundle.getLong(mixIdKey)
+            findNavController().navigate(
+                R.id.action_navigation_mixes_to_playerFragment,
+                bundleOf(PlayerFragment.mixIdKey to mixId)
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

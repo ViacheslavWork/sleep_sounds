@@ -16,6 +16,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:fontFamily">@font/open_sans_regular</item>
+        <item name="dialogCornerRadius">20dp</item>
     </style>
     <!-- Set parent theme as app theme -->
     <style name="FullScreenDialogTheme" parent="Theme.WhiteNoise">
@@ -44,5 +45,9 @@
         <item name="android:backgroundTint">@color/btn_disabled</item>
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="RoundedCornersDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="dialogCornerRadius">5dp</item>
     </style>
 </resources>

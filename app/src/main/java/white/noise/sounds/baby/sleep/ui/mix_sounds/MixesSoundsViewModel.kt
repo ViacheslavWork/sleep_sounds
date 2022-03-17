@@ -43,7 +43,8 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             }
             sounds.forEach {
                 if (mix.sounds.map { sound -> sound.id }.contains(it.id)) {
-                    val soundFromMix = mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
+                    val soundFromMix =
+                        mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
                     mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
                 } else {
                     mapSoundCategoryToSection[it.category]?.items?.add(it)
@@ -73,27 +74,44 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             }
             is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> {
                 removeFromSelected(event.sound)
+                removeFromSections(event.sound)
             }
             is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
         }
     }
 
+    private fun removeFromSections(sound: Sound) {
+/*
+        sections.value?.forEach { section ->
+            section.items.forEach {
+                if (selectedSounds.value?.map { sound -> sound.id }?.contains(it.id) == true) {
+                    val soundFromSelected =
+                        selectedSounds.value!!.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
+                    mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
+                } else {
+                    mapSoundCategoryToSection[it.category]?.items?.add(it)
+                }
+            }
+        }
+*/
+    }
+
     private fun addToSelected(sound: Sound) {
         _selectedSounds.value =
-                selectedSounds.value
-                        ?.toMutableList()
-                        ?.apply { add(sound) }
-                        ?.toSet()
-                        ?.toList()
-                        ?.take(8)
+            selectedSounds.value
+                ?.toMutableList()
+                ?.apply { add(sound) }
+                ?.toSet()
+                ?.toList()
+                ?.take(8)
     }
 
     private fun removeFromSelected(sound: Sound) {
         _selectedSounds.value =
-                selectedSounds.value
-                        ?.toMutableList()
-                        ?.apply { remove(sound) }
-                        ?.toList()
+            selectedSounds.value
+                ?.toMutableList()
+                ?.apply { remove(sound) }
+                ?.toList()
     }
 
 

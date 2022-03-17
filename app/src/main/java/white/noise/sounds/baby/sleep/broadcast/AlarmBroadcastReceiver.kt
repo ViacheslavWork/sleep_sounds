@@ -1,13 +1,20 @@
 package white.noise.sounds.baby.sleep.broadcast
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.Toast
-import white.noise.sounds.baby.sleep.service.AlarmService
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import white.noise.sounds.baby.sleep.MainActivity
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.data.database.entity.AlarmEntity
+import white.noise.sounds.baby.sleep.service.AlarmService
 import white.noise.sounds.baby.sleep.service.RescheduleAlarmsService
+import white.noise.sounds.baby.sleep.utils.Constants
 import java.util.*
 
 
@@ -16,7 +23,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
             startRescheduleAlarmsService(context)
         } else {
-            startAlarmService(context, intent)
+            sendNotification(context)
             startNextAlarm(context, intent)
         }
     }
@@ -72,4 +79,45 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         const val RECURRING = "RECURRING"
         const val TITLE = "TITLE"
     }
+
+    private fun sendNotification(context: Context) {
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
+                as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(notificationManager)
+        }
+
+        val notificationBuilder = getNotificationBuilder(context)
+        notificationManager.notify(1, notificationBuilder.build())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
+        val channel = NotificationChannel(
+            Constants.NOTIFICATION_CHANNEL_ID,
+            Constants.NOTIFICATION_CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_LOW
+        )
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun getNotificationBuilder(context: Context) = NotificationCompat.Builder(
+        context,
+        Constants.NOTIFICATION_CHANNEL_ID
+    )
+        .setAutoCancel(true)
+        .setOngoing(false)
+        .setSmallIcon(R.drawable.ic_moon)
+        .setContentTitle("It is time to sleep!")
+        .setColorized(true)
+        .setColor(context.resources.getColor(R.color.dark_blue, null))
+        .setContentIntent(getMainActivityPendingIntent(context))
+
+    private fun getMainActivityPendingIntent(context: Context) = PendingIntent.getActivity(
+        context,
+        0,
+        Intent(context, MainActivity::class.java),
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 }

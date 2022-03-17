@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradient_liner_bg2"
+    android:background="@drawable/gradient_liner_bg2_rounded_corners"
     android:padding="30dp"
     app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.SmallComponent">
 

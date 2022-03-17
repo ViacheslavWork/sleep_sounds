@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,24 +15,33 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentPagerBinding
+import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
 import white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 
-const val ARG_CATEGORY = "category"
-private const val TAG = "PagerFragment"
+
 
 class PagerFragment : Fragment() {
+    companion object{
+        const val ARG_CATEGORY = "category"
+        private const val TAG = "PagerFragment"
+    }
+
     private val mixesViewModel: MixesViewModel by sharedViewModel()
     private var _binding: FragmentPagerBinding? = null
     private lateinit var mixesAdapter: MixesAdapter
     private var category: MixCategory? = null
+    private lateinit var lastClickedMix: Mix
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,6 +75,7 @@ class PagerFragment : Fragment() {
             mixesViewModel.handleEvent(it)
             when (it) {
                 is MixesEvent.OnMixClick -> {
+                    lastClickedMix = it.mix
                     if (!it.mix.isPremium) {
                         findNavController().navigate(
                             R.id.action_navigation_mixes_to_playerFragment,
@@ -76,8 +87,8 @@ class PagerFragment : Fragment() {
                             bundleOf(UnlockForFreeDialog.mixKey to it.mix)
                         )
                     }
-//            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
-
+                }
+                else -> {
                 }
             }
 

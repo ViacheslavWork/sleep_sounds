@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.AudioManager
 import android.os.Bundle
 import android.os.IBinder
@@ -54,9 +56,12 @@ class CustomMixDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         _binding = DialogCustomMixBinding.inflate(inflater, container, false)
         return binding.root
     }
+//    override fun getTheme() = R.style.RoundedCornersDialog
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindService()

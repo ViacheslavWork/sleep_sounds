@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import white.noise.sounds.baby.sleep.model.MixCategory
-import white.noise.sounds.baby.sleep.ui.mixes.ARG_CATEGORY
 import white.noise.sounds.baby.sleep.ui.mixes.PagerFragment
+import white.noise.sounds.baby.sleep.ui.mixes.PagerFragment.Companion.ARG_CATEGORY
 
 class ViewPagerAdapter(fragment: Fragment, private val categories: List<MixCategory>) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {

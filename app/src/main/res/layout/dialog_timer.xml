@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="70dp"
-        android:background="@drawable/gradient_liner_bg">
+        android:background="@drawable/gradient_liner_bg_rounded_corners">
 
 
         <androidx.constraintlayout.widget.Guideline

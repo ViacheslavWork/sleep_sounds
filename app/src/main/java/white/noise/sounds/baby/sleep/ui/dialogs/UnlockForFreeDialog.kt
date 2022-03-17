@@ -1,7 +1,7 @@
 package white.noise.sounds.baby.sleep.ui.dialogs
 
-import android.app.Activity
-import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
-import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.DialogUnlockForFreeBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
+import white.noise.sounds.baby.sleep.ui.mixes.MixesFragment
+import white.noise.sounds.baby.sleep.ui.mixes.PagerFragment
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsFragment
 
 
@@ -38,6 +40,7 @@ class UnlockForFreeDialog : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         _binding = DialogUnlockForFreeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,13 +58,19 @@ class UnlockForFreeDialog : DialogFragment() {
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.watchVideoBtn.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_unlockForFreeFragment_to_navigation_sounds,
-                bundleOf(SoundsFragment.PLAY_PREMIUM_SOUND_AFTER_VIDEO to sound)
-            )
-            parentFragment?.onActivityResult(SoundsFragment.UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE,
-                Activity.RESULT_OK, Intent().apply { putExtra(SoundsFragment.soundKey, sound) }
-            )
+            requireActivity().onBackPressed()
+            mix?.let {
+                setFragmentResult(
+                    MixesFragment.playPremiumMixRequest,
+                    bundleOf(MixesFragment.mixIdKey to it.id)
+                )
+            }
+            sound?.let {
+                setFragmentResult(
+                    SoundsFragment.playPremiumSoundRequest,
+                    bundleOf(SoundsFragment.playAfterVideoKey to true)
+                )
+            }
             showToast("Open video")
         }
         binding.unlockAllSoundsBtn.setOnClickListener {

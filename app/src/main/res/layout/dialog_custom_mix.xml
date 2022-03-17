@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradient_liner_bg2"
-    app:shapeAppearance="@style/ShapeAppearance.WhiteNoise.SmallComponent">
+    android:background="@drawable/gradient_liner_bg2_rounded_corners"
+    >
 
     <TextView
         android:id="@+id/close_tv"

@@ -1,5 +1,7 @@
 package white.noise.sounds.baby.sleep.ui.timer
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.DialogTimerBinding
 
 class TimerDialog : DialogFragment(), View.OnClickListener {
@@ -24,6 +27,7 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
             savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         _binding = DialogTimerBinding.inflate(inflater, container, false)
         return binding.root
     }

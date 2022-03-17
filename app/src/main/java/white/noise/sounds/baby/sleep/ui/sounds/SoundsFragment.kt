@@ -1,6 +1,5 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -16,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +35,8 @@ class SoundsFragment : Fragment() {
     companion object {
         const val UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE = 1
         const val PLAY_PREMIUM_SOUND_AFTER_VIDEO = "PLAY_PREMIUM_SOUND_AFTER_VIDEO"
-        const val soundKey = "SOUND_KEY"
+        const val playAfterVideoKey = "PLAY_AFTER_VIDEO_KEY"
+        const val playPremiumSoundRequest = "PLAY_PREMIUM_SOUND_REQUEST"
     }
 
     private val TAG = "SoundsFragment"
@@ -43,7 +44,7 @@ class SoundsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SectionAdapter
     private var mIsPause = false
-    private lateinit var lastSelectedSoundHolder: SoundsHolder
+    private lateinit var lastOnClick: SoundsEvent.OnSoundClick
 
     var playerService: PlayerService? = null
 
@@ -63,9 +64,19 @@ class SoundsFragment : Fragment() {
             isServiceBound = false
         }
     }
-
     private var _binding: FragmentSoundsBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(playPremiumSoundRequest) { _, bundle ->
+            val isPlay: Boolean = bundle.getBoolean(playAfterVideoKey)
+            // Do something with the result
+            if (isPlay) {
+                playStopSoundProgrammatically()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,6 +89,10 @@ class SoundsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i(TAG, "onStart: ")
+    }
     override fun onResume() {
         soundsViewModel.updateSections()
         startAdAnimation()
@@ -301,32 +316,29 @@ class SoundsFragment : Fragment() {
     private fun observeRecyclerEvent() {
         adapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
-                lastSelectedSoundHolder = it.soundsHolder
+                lastOnClick = it
                 if (!it.sound.isPremium || it.sound.isPlaying) {
-                    it.soundsHolder.bindingAdapter?.notifyItemChanged(
-                        it.soundsHolder.bindingAdapterPosition,
-                        it.sound.apply { isPlaying = !isPlaying }
-                    )
-                    playPauseSound(it.sound)
-                    soundsViewModel.handleEvent(it)
+                    playStopSoundProgrammatically()
                 } else {
-                     findNavController().navigate(
-                         R.id.action_navigation_sounds_to_unlockForFreeFragment,
-                         bundleOf(UnlockForFreeDialog.soundKey to it.sound)
-                     )
-                     it.soundsHolder.bindingAdapter?.notifyItemChanged(
-                         it.soundsHolder.bindingAdapterPosition,
-                         it.sound.apply { isPlaying = !isPlaying }
-                     )
-                     playPauseSound(it.sound)
-                     soundsViewModel.handleEvent(it)
-
+                    findNavController().navigate(
+                        R.id.action_navigation_sounds_to_unlockForFreeFragment,
+                        bundleOf(UnlockForFreeDialog.soundKey to it.sound)
+                    )
                 }
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 playerService?.changeVolume(it.sound)
                 soundsViewModel.handleEvent(it)
             }
         }
+    }
+
+    private fun playStopSoundProgrammatically() {
+        lastOnClick.soundsHolder.bindingAdapter?.notifyItemChanged(
+            lastOnClick.soundsHolder.bindingAdapterPosition,
+            lastOnClick.sound.apply { isPlaying = !isPlaying }
+        )
+        playPauseSound(lastOnClick.sound)
+        soundsViewModel.handleEvent(lastOnClick)
     }
 
     private fun playPauseSound(sound: Sound) {
@@ -338,34 +350,12 @@ class SoundsFragment : Fragment() {
         }
         if (sound.isPlaying) {
             sendCommandToPlayerService(Constants.ACTION_PLAY_SOUND, sound)
+            if (PlayerService.isPause.value == true) {
+                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
+            }
         } else {
             sendCommandToPlayerService(Constants.ACTION_STOP_SOUND, sound)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            return
-        }
-        if (requestCode == UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE) {
-            val sound = data?.extras?.get(soundKey) as Sound?
-            sound?.let {
-                lastSelectedSoundHolder.bindingAdapter?.notifyItemChanged(
-                    lastSelectedSoundHolder.bindingAdapterPosition,
-                    it.apply { isPlaying = !isPlaying }
-                )
-                playPauseSound(it)
-                soundsViewModel.handleEvent(SoundsEvent.OnSoundClick(it, lastSelectedSoundHolder))
-            }
-        }
-    }
-
-    private fun playStopSoundProgrammatically(sound: Sound, position: Int) {
-        sound.isPlaying = !sound.isPlaying
-//        adapter.notifyDataSetChanged()
-        playPauseSound(sound)
-//        soundsViewModel.handleEvent(SoundsEvent.OnSoundClick(sound, position))
     }
 
     //service

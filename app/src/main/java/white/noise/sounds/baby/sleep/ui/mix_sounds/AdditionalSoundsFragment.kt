@@ -191,6 +191,7 @@ class AdditionalSoundsFragment : Fragment() {
         selectedSoundsAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick) {
                 sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
+                additionalSoundsViewModel.handleEvent(it)
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 showLog(it.sound.volume.toString())
                 playerService?.changeVolume(it.sound)
@@ -202,7 +203,11 @@ class AdditionalSoundsFragment : Fragment() {
     private fun observeSectionSoundsEvents() {
         sectionAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
-                if (!it.sound.isPremium) {
+                if (!it.sound.isPremium || it.sound.isPlaying) {
+                    it.soundsHolder.bindingAdapter?.notifyItemChanged(
+                        it.soundsHolder.bindingAdapterPosition,
+                        it.sound.apply { isPlaying = !isPlaying }
+                    )
                     sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
                     additionalSoundsViewModel.handleEvent(it)
                 } else {
