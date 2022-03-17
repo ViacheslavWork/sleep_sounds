@@ -14,12 +14,8 @@ import java.util.*
 class AlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
-            val toastText = String.format("Alarm Reboot")
-            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
             startRescheduleAlarmsService(context)
         } else {
-            val toastText = String.format("Alarm Received")
-            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
             startAlarmService(context, intent)
             startNextAlarm(context, intent)
         }

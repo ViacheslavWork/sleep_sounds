@@ -1,7 +1,6 @@
 package white.noise.sounds.baby.sleep.ui.mixes.adapters
 
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.ItemMixBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.ui.mixes.MixesEvent
-import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 
 private const val TAG = "MixAdapter"
 
@@ -28,7 +23,7 @@ class MixesAdapter(val event: MutableLiveData<MixesEvent> = MutableLiveData()) :
     }
 
     override fun onBindViewHolder(holder: MixesViewHolder, position: Int) {
-        getItem(position).let { mix -> holder.onBind(mix,event) }
+        getItem(position).let { mix -> holder.onBind(mix, event) }
     }
 }
 
@@ -38,14 +33,14 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
     fun onBind(mix: Mix, event: MutableLiveData<MixesEvent>) {
         binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
         binding.mixItemTv.text = mix.title
-        if(mix.isPremium) binding.crownIv.visibility = View.VISIBLE
+        if (mix.isPremium) binding.crownIv.visibility = View.VISIBLE
         else binding.crownIv.visibility = View.GONE
         binding.mixItemIv.setImageURI(mix.picturePath)
-  /*      Glide.with(itemView.context)
-            .load(mix.picturePath)
-            .error(R.drawable.ic_autumn)
-            .apply(imageOption)
-            .into(binding.mixItemIv)*/
+        /*      Glide.with(itemView.context)
+                  .load(mix.picturePath)
+                  .error(R.drawable.ic_autumn)
+                  .apply(imageOption)
+                  .into(binding.mixItemIv)*/
     }
 }
 

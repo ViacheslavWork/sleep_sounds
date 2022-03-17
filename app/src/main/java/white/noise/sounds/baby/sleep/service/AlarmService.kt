@@ -70,9 +70,10 @@ class AlarmService : Service() {
     )
         .setAutoCancel(true)
         .setOngoing(false)
-        .setSmallIcon(R.drawable.ic_dynamic)
+        .setSmallIcon(R.drawable.ic_moon)
         .setContentTitle("It is time to sleep!")
-//        .setContentText("00:00:00")
+        .setColorized(true)
+        .setColor(resources.getColor(R.color.dark_blue, null))
         .setContentIntent(getMainActivityPendingIntent())
 
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(

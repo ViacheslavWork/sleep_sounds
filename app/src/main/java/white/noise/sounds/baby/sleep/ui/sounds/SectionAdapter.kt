@@ -116,11 +116,11 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
 
         binding.root.setOnClickListener {
             if (!sound.isPremium) {
-                sound.isPlaying = !sound.isPlaying
-                event.value = SoundsEvent.OnSoundClick(sound, bindingAdapterPosition)
-                bindingAdapter?.notifyItemChanged(bindingAdapterPosition)
+//                sound.isPlaying = !sound.isPlaying
+//                bindingAdapter?.notifyItemChanged(bindingAdapterPosition,sound)
+                event.value = SoundsEvent.OnSoundClick(sound, this)
             } else {
-                event.value = SoundsEvent.OnSoundClick(sound, bindingAdapterPosition)
+                event.value = SoundsEvent.OnSoundClick(sound, this)
             }
         }
 

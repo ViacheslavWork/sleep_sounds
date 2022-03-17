@@ -35,7 +35,6 @@ data class AlarmEntity(
     val saturday: Boolean,
     val sunday: Boolean
 ) {
-    @SuppressLint("DefaultLocale")
     fun schedule(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, AlarmBroadcastReceiver::class.java)
@@ -101,10 +100,10 @@ data class AlarmEntity(
         )
         alarmManager.cancel(alarmPendingIntent)
         started = false
-        val toastText =
+/*        val toastText =
             String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId)
         Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
-        Log.i("cancel", toastText)
+        Log.i("cancel", toastText)*/
     }
 
     private fun getAlarmDays(): Set<Int> {

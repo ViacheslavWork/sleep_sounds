@@ -12,8 +12,7 @@ import white.noise.sounds.baby.sleep.model.MixCategory
 @Entity(tableName = "mixes")
 data class MixEntity(
     @PrimaryKey(autoGenerate = true)
-    val idDatabase: Long = 0,
-    val id: Long,
+    val id: Long = 0,
     val title: String,
     @TypeConverters(SoundsEntitiesListConverter::class)
     val soundsEntities: List<SoundEntity>,

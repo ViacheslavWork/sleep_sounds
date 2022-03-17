@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -50,6 +51,8 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.bg_player, null)
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -75,7 +78,7 @@ class PlayerFragment : Fragment() {
         }
     }
 
-//    override fun getTheme() = R.style.FullScreenDialogTheme
+    //    override fun getTheme() = R.style.FullScreenDialogTheme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindService()
         observeService()
@@ -102,10 +105,8 @@ class PlayerFragment : Fragment() {
 
     private fun playStopMix(sounds: List<Sound>) {
         sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
-        if (PlayerService.launcher != Constants.MIX_LAUNCHER) {
-            if (PlayerService.isPause.value == true) {
-                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
-            }
+        if (PlayerService.isPause.value == true) {
+            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
         }
         sounds.forEach {
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it)

@@ -14,8 +14,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSaveCustomBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
@@ -45,6 +48,8 @@ class SaveCustomFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
         _binding = FragmentSaveCustomBinding.inflate(inflater, container, false)
         return binding.root
     }

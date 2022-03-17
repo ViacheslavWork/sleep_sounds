@@ -7,6 +7,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,6 +35,8 @@ class GoPremiumFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
         // Inflate the layout for this fragment
         _binding = FragmentGoPremiumBinding.inflate(inflater, container, false)
         return binding.root

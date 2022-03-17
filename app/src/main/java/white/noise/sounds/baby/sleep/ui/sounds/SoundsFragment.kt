@@ -1,5 +1,6 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -29,11 +32,18 @@ import white.noise.sounds.baby.sleep.utils.Constants.LAUNCHER
 import white.noise.sounds.baby.sleep.utils.Constants.SOUNDS_LAUNCHER
 
 class SoundsFragment : Fragment() {
+    companion object {
+        const val UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE = 1
+        const val PLAY_PREMIUM_SOUND_AFTER_VIDEO = "PLAY_PREMIUM_SOUND_AFTER_VIDEO"
+        const val soundKey = "SOUND_KEY"
+    }
+
     private val TAG = "SoundsFragment"
     private val soundsViewModel: SoundsViewModel by sharedViewModel()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SectionAdapter
     private var mIsPause = false
+    private lateinit var lastSelectedSoundHolder: SoundsHolder
 
     var playerService: PlayerService? = null
 
@@ -57,14 +67,38 @@ class SoundsFragment : Fragment() {
     private var _binding: FragmentSoundsBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
         _binding = FragmentSoundsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onResume() {
+        soundsViewModel.updateSections()
+        startAdAnimation()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        binding.crownSoundsToolbarIv.clearAnimation()
+        super.onPause()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onDestroy() {
+        if (isServiceBound) {
+            unbindService()
+        }
+        super.onDestroy()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,33 +133,10 @@ class SoundsFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        soundsViewModel.updateSections()
-        startAdAnimation()
-        super.onResume()
-    }
-
-    override fun onPause() {
-        binding.crownSoundsToolbarIv.clearAnimation()
-        super.onPause()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onDestroy() {
-        if (isServiceBound) {
-            unbindService()
-        }
-        super.onDestroy()
-    }
-
     private fun setUpListeners() {
         binding.crownSoundsToolbarIv.setOnClickListener {
             findNavController().navigate(
-                    SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
+                SoundsFragmentDirections.actionNavigationSoundsToGoPremiumFragment()
             )
         }
         binding.timerIb.setOnClickListener {
@@ -133,7 +144,7 @@ class SoundsFragment : Fragment() {
         }
         binding.selectedIb.setOnClickListener {
             findNavController().navigate(
-                    SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
+                SoundsFragmentDirections.actionNavigationSoundsToCustomMixDialog()
             )
         }
         binding.playIb.setOnClickListener {
@@ -153,19 +164,10 @@ class SoundsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-//    private fun setUpRecyclerViewPaddingBottom(isPadding: Boolean) {
-//        try {
-//            if (isPadding) recyclerView.setPadding(0, 0, 0, binding.playerView.height)
-//            else recyclerView.setPadding(0, 0, 0, 0)
-//        } catch (e: Exception) {
-//        }
-//
-//    }
-
     private fun setUpAdapter() {
         adapter = SectionAdapter()
         adapter.stateRestorationPolicy =
-                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         recyclerView.adapter = adapter
     }
 
@@ -198,10 +200,10 @@ class SoundsFragment : Fragment() {
 
     private fun startAdAnimation() {
         binding.crownSoundsToolbarIv.startAnimation(
-                AnimationUtils.loadAnimation(
-                        context,
-                        R.anim.ad_animation
-                )
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.ad_animation
+            )
         )
     }
 
@@ -299,15 +301,26 @@ class SoundsFragment : Fragment() {
     private fun observeRecyclerEvent() {
         adapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
-                if (!it.sound.isPremium) {
+                lastSelectedSoundHolder = it.soundsHolder
+                if (!it.sound.isPremium || it.sound.isPlaying) {
+                    it.soundsHolder.bindingAdapter?.notifyItemChanged(
+                        it.soundsHolder.bindingAdapterPosition,
+                        it.sound.apply { isPlaying = !isPlaying }
+                    )
                     playPauseSound(it.sound)
                     soundsViewModel.handleEvent(it)
                 } else {
-                    findNavController().navigate(
-                            R.id.action_navigation_sounds_to_unlockForFreeFragment,
-                            bundleOf(UnlockForFreeDialog.soundKey to it.sound)
-                    )
-                    playPremiumSoundAfterVideo(it.sound, it.position)
+                     findNavController().navigate(
+                         R.id.action_navigation_sounds_to_unlockForFreeFragment,
+                         bundleOf(UnlockForFreeDialog.soundKey to it.sound)
+                     )
+                     it.soundsHolder.bindingAdapter?.notifyItemChanged(
+                         it.soundsHolder.bindingAdapterPosition,
+                         it.sound.apply { isPlaying = !isPlaying }
+                     )
+                     playPauseSound(it.sound)
+                     soundsViewModel.handleEvent(it)
+
                 }
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 playerService?.changeVolume(it.sound)
@@ -330,10 +343,29 @@ class SoundsFragment : Fragment() {
         }
     }
 
-    private fun playPremiumSoundAfterVideo(sound: Sound, position: Int) {
-        sound.isPlaying = true
-        adapter.notifyItemChanged(position)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE) {
+            val sound = data?.extras?.get(soundKey) as Sound?
+            sound?.let {
+                lastSelectedSoundHolder.bindingAdapter?.notifyItemChanged(
+                    lastSelectedSoundHolder.bindingAdapterPosition,
+                    it.apply { isPlaying = !isPlaying }
+                )
+                playPauseSound(it)
+                soundsViewModel.handleEvent(SoundsEvent.OnSoundClick(it, lastSelectedSoundHolder))
+            }
+        }
+    }
+
+    private fun playStopSoundProgrammatically(sound: Sound, position: Int) {
+        sound.isPlaying = !sound.isPlaying
+//        adapter.notifyDataSetChanged()
         playPauseSound(sound)
+//        soundsViewModel.handleEvent(SoundsEvent.OnSoundClick(sound, position))
     }
 
     //service

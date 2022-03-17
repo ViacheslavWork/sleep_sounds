@@ -5,9 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentDetailsBinding
-import white.noise.sounds.baby.sleep.databinding.FragmentSetTimerBinding
 
 
 class DetailsFragment : Fragment() {

@@ -3,18 +3,15 @@ package white.noise.sounds.baby.sleep.ui.settings
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -22,9 +19,8 @@ import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.data.database.entity.AlarmEntity
 import white.noise.sounds.baby.sleep.databinding.FragmentBedtimeReminderBinding
-import white.noise.sounds.baby.sleep.databinding.ItemSoundsBinding
-import white.noise.sounds.baby.sleep.databinding.ToastBinding
 import white.noise.sounds.baby.sleep.utils.Constants
+import white.noise.sounds.baby.sleep.utils.ToastHelper
 
 class BedtimeReminderFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
@@ -60,7 +56,7 @@ class BedtimeReminderFragment : Fragment() {
                     binding.minutesTv.text = String.format("%02d", alarmTime.minute)
                     binding.sundayBtn.btn.isSelected = alarm.sunday
                     binding.mondayBtn.btn.isSelected = alarm.monday
-                    binding.tuesdayBtn.btn.isSelected = alarm.thursday
+                    binding.tuesdayBtn.btn.isSelected = alarm.tuesday
                     binding.wednesdayBtn.btn.isSelected = alarm.wednesday
                     binding.thursdayBtn.btn.isSelected = alarm.thursday
                     binding.fridayBtn.btn.isSelected = alarm.friday
@@ -103,12 +99,7 @@ class BedtimeReminderFragment : Fragment() {
             getButtons().forEach { if (it.isSelected) isDaySelected = true }
             if (isDaySelected) {
                 scheduleAlarm(alarmTime)
-                val widthOfToast = requireActivity().window.decorView.width
-                Toast(context).apply {
-                    duration = Toast.LENGTH_SHORT
-                    setGravity(Gravity.TOP,0,100)
-                    view = ToastBinding.inflate(LayoutInflater.from(context)).root.apply { minWidth = widthOfToast-40 }
-                }.show()
+                ToastHelper.showCustomToast(requireActivity())
             }
             requireActivity().onBackPressed()
         }

@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -20,7 +23,6 @@ import white.noise.sounds.baby.sleep.databinding.FragmentMixesBinding
 import white.noise.sounds.baby.sleep.databinding.ItemMixCategoryBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.service.PlayerService
-import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.ViewPagerAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 import white.noise.sounds.baby.sleep.utils.Constants
@@ -30,18 +32,16 @@ private const val TAG = "MixesFragment"
 class MixesFragment : Fragment() {
     private val mixesViewModel: MixesViewModel by sharedViewModel()
     private var _binding: FragmentMixesBinding? = null
-
-    //    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var mixesAdapter: MixesAdapter
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
         _binding = FragmentMixesBinding.inflate(inflater, container, false)
         setUpViewPager()
         return binding.root

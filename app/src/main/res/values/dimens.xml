@@ -10,7 +10,8 @@
     <dimen name="button_mix_text_size">16sp</dimen>
     <dimen name="margin_mix_button">10dp</dimen>
     <dimen name="margin_item_mix">10dp</dimen>
-    <dimen name="margin_toolbar_horisontal">10dp</dimen>
+    <dimen name="margin_toolbar_horizontal">10dp</dimen>
+    <dimen name="margin_toolbar_end">20dp</dimen>
     <dimen name="margin_settings_item">25dp</dimen>
     <dimen name="size_go_premium_cv">70dp</dimen>
 

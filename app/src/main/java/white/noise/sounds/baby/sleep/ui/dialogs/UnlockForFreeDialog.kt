@@ -1,26 +1,20 @@
 package white.noise.sounds.baby.sleep.ui.dialogs
 
-import android.annotation.SuppressLint
-import android.net.Uri
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.core.graphics.drawable.toBitmap
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
-import white.noise.sounds.baby.sleep.data.Repository
+import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.DialogUnlockForFreeBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
-import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
+import white.noise.sounds.baby.sleep.ui.sounds.SoundsFragment
 
 
 class UnlockForFreeDialog : DialogFragment() {
@@ -41,8 +35,8 @@ class UnlockForFreeDialog : DialogFragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = DialogUnlockForFreeBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,15 +49,24 @@ class UnlockForFreeDialog : DialogFragment() {
 
     private fun setImage() {
         mix?.let { binding.unlockFreeIv.setImageURI(it.picturePath) }
-        sound?.let {binding.unlockFreeIv.setImageResource(it.icon) }
+        sound?.let { binding.unlockFreeIv.setImageResource(it.icon) }
     }
 
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
-        binding.watchVideoBtn.setOnClickListener { showToast("Open video") }
+        binding.watchVideoBtn.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_unlockForFreeFragment_to_navigation_sounds,
+                bundleOf(SoundsFragment.PLAY_PREMIUM_SOUND_AFTER_VIDEO to sound)
+            )
+            parentFragment?.onActivityResult(SoundsFragment.UNLOCK_FOR_FREE_DIALOG_REQUEST_CODE,
+                Activity.RESULT_OK, Intent().apply { putExtra(SoundsFragment.soundKey, sound) }
+            )
+            showToast("Open video")
+        }
         binding.unlockAllSoundsBtn.setOnClickListener {
             findNavController().navigate(
-                    UnlockForFreeDialogDirections.actionUnlockForFreeFragmentToGoPremiumFragment()
+                UnlockForFreeDialogDirections.actionUnlockForFreeFragmentToGoPremiumFragment()
             )
         }
     }

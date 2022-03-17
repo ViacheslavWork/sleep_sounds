@@ -122,6 +122,9 @@
         <action
             android:id="@+id/action_unlockForFreeFragment_to_goPremiumFragment"
             app:destination="@id/goPremiumFragment" />
+        <action
+            android:id="@+id/action_unlockForFreeFragment_to_navigation_sounds"
+            app:destination="@id/navigation_sounds" />
     </dialog>
     <fragment
         android:id="@+id/setTimerFragment"

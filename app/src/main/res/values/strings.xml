@@ -15,7 +15,7 @@
     <string name="bedtime_reminder">Bedtime Reminder</string>
     <string name="feedback">Feedback</string>
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="version">Version </string>
+    <string name="version">Version %s </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="unlock_all_sounds">Unlock\n All Sounds</string>

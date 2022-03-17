@@ -17,7 +17,7 @@ class MixesProvider(val context: Context) {
         /**rain*/
         mixes.add(
                 Mix(
-                    id = 0,
+                    id = 36,
                     title = "Rain and piano",
                     picturePath = resourceUri(R.drawable.rain_and_piano),
                     sounds = mutableListOf<Sound>().apply {
@@ -304,7 +304,6 @@ class MixesProvider(val context: Context) {
                             add(SoundsEnum.Zen.getSound())
                         }, category = MixCategory.Others)
         )
-
         return mixes
     }
 

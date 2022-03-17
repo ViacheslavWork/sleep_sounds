@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSettingsBinding
+import white.noise.sounds.baby.sleep.utils.ToastHelper
 
 class SettingsFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
@@ -30,8 +31,8 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)*/
+        requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
+            ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(
@@ -41,6 +42,7 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.versionTv.text = String.format(resources.getString(R.string.version), "1.1")
         setListeners()
         setSwitchStatus()
     }
@@ -83,6 +85,7 @@ class SettingsFragment : Fragment() {
                             if (!alarm.started) {
                                 alarm.schedule(requireContext())
                                 settingsViewModel.setAlarm(alarm)
+                                ToastHelper.showCustomToast(requireActivity())
                             }
                         }
                     }
