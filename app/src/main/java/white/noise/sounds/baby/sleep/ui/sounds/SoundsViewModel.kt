@@ -24,29 +24,6 @@ import kotlin.collections.toList
 import kotlin.collections.toMutableList
 import kotlin.collections.toSet
 
-
-/*I faced a similar problem when I used WebView inside a RecyclerView. I solved using the following code. Try adding setOnTouchListener for your ArcSeekBar
-
-holder.tipContent.setOnTouchListener(new View.OnTouchListener() {
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        int action = event.getAction();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-            // Disallow ScrollView to intercept touch events.
-            v.getParent().requestDisallowInterceptTouchEvent(true);
-            break;
-            case MotionEvent.ACTION_UP:
-            //Allow ScrollView to intercept touch events once again.
-            v.getParent().requestDisallowInterceptTouchEvent(true);
-            break;
-        }
-        // Handle RecyclerView touch events.
-        v.onTouchEvent(event);
-        return true;
-    }
-});*/
-
 private const val TAG = "SoundsViewModel"
 
 class SoundsViewModel(private val repository: Repository) : ViewModel() {

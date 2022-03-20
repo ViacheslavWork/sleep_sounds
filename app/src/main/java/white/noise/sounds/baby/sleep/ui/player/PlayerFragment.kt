@@ -29,7 +29,6 @@ import white.noise.sounds.baby.sleep.utils.Constants
 
 private const val TAG = "PlayerFragment"
 
-
 class PlayerFragment : Fragment() {
     private val playerViewModel: PlayerViewModel by sharedViewModel()
     private var _binding: FragmentPlayerBinding? = null
@@ -79,7 +78,6 @@ class PlayerFragment : Fragment() {
         }
     }
 
-    //    override fun getTheme() = R.style.FullScreenDialogTheme
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bindService()
         observeService()
@@ -181,10 +179,9 @@ class PlayerFragment : Fragment() {
     private fun initButtons(it: List<Sound>) {
         getButtons().forEach { it.root.visibility = View.GONE }
         binding.editBtn.numSoundsTv.text = it.size.toString()
-        it.forEachIndexed { index, sound ->
+        it.take(5).forEachIndexed { index, sound ->
             getButtons()[index].apply {
                 playerBtn.setOnClickListener {
-//                    showLog("id: $mixId")
                     navigateToAdditionalSoundsFragment()
                 }
                 root.visibility = View.VISIBLE
@@ -193,7 +190,6 @@ class PlayerFragment : Fragment() {
                 playerBtn.setImageResource(sound.icon)
             }
         }
-//        showLog(it.toString())
     }
 
     private fun getButtons(): List<ButtonPlayerBinding> {
@@ -217,6 +213,7 @@ class PlayerFragment : Fragment() {
 
     //service
     private fun sendCommandToPlayerService(action: String, sound: Sound?) {
+        Log.i(TAG, "sendCommandToPlayerService: ")
         Intent(requireContext(), PlayerService::class.java).also {
             it.putExtra(Constants.LAUNCHER, Constants.MIX_LAUNCHER)
             it.putExtra(Constants.EXTRA_SOUND, sound)

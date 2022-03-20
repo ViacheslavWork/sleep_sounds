@@ -1,9 +1,7 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -28,9 +26,9 @@ class SectionAdapter(
     private val isSoundChangeable: Boolean = true
 ) :
     ListAdapter<Section, SectionHolder>(SectionDiffCallback()) {
-    val mapSoundIdToSoundHolderData: MutableMap<Long, SoundHolderData> = mutableMapOf()
+    private val mapSoundIdToSoundHolderData: MutableMap<Long, SoundHolderData> = mutableMapOf()
 
-    public fun getMapSoundIdToHolder(): Map<Long, SoundHolderData> {
+    fun getMapSoundIdToHolder(): Map<Long, SoundHolderData> {
         return mapSoundIdToSoundHolderData
     }
 

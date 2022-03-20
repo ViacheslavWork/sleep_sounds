@@ -26,6 +26,7 @@ import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.ui.sounds.SectionAdapter
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
 import white.noise.sounds.baby.sleep.utils.Constants
+import white.noise.sounds.baby.sleep.utils.MyLog.showLog
 
 
 private const val TAG = "AdditionalSoundsFragment"
@@ -183,7 +184,6 @@ class AdditionalSoundsFragment : Fragment() {
             showLog(it.toString())
             selectedSoundsAdapter.submitList(it.toMutableList())
             it.forEach { sound ->
-                Log.i(TAG, "select sound: $sound")
                 selectSoundInSections(sound)
             }
         }
@@ -218,7 +218,7 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun selectSoundInSections(sound: Sound) {
-        val soundHolderData = sectionAdapter.mapSoundIdToSoundHolderData[sound.id]
+        val soundHolderData = sectionAdapter.getMapSoundIdToHolder()[sound.id]
         soundHolderData?.adapter?.notifyItemChanged(soundHolderData.position, sound)
     }
 
@@ -244,9 +244,9 @@ class AdditionalSoundsFragment : Fragment() {
         }
     }
 
-    private fun showLog(message: String) {
+    /*private fun showLog(message: String) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, message)
         }
-    }
+    }*/
 }

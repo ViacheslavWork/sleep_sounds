@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.databinding.FragmentSetTimerBinding
-import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.utils.Constants
 
@@ -38,25 +37,26 @@ class SetTimerFragment : Fragment() {
     }
 
     private fun observeTime() {
-        timerViewModel.selectedTime.observe(viewLifecycleOwner){
+        timerViewModel.selectedTime.observe(viewLifecycleOwner) {
             if (it !is Times.Custom) {
                 binding.timerBtn.text = it.title
             } else {
-                binding.timerBtn.text = String.format("%d hours %d minutes",it.time?.hour, it.time?.minute)
+                binding.timerBtn.text =
+                    String.format("%d hours %d minutes", it.time?.hour, it.time?.minute)
             }
         }
     }
-
-
-
     private fun setUpListeners() {
         binding.applyBtn.setOnClickListener {
-//            ToastHelper.showToast(requireContext(), "Apply clicked")
             sendCommandToService(Constants.ACTION_START_TIMER)
             requireActivity().onBackPressed()
         }
         binding.closeBtn.setOnClickListener { requireActivity().onBackPressed() }
-        binding.timerBtn.setOnClickListener { findNavController().navigate(SetTimerFragmentDirections.actionSetTimerFragmentToTimerDialog()) }
+        binding.timerBtn.setOnClickListener {
+            findNavController().navigate(
+                SetTimerFragmentDirections.actionSetTimerFragmentToTimerDialog()
+            )
+        }
     }
 
     private fun sendCommandToService(action: String) {

@@ -34,10 +34,6 @@ class SettingsFragment : Fragment() {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        /*requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(
-                resources, R.drawable.gradient_liner_bg, null
-            )*/
         return binding.root
     }
 

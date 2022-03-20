@@ -92,9 +92,6 @@ class SoundsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
     override fun onResume() {
         soundsViewModel.updateSections()
         startAdAnimation()

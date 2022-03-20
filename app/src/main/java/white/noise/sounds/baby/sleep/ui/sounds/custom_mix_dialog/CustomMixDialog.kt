@@ -144,6 +144,4 @@ class CustomMixDialog : DialogFragment() {
         }
         super.onDestroy()
     }
-
-
 }

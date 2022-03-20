@@ -10,9 +10,6 @@ import white.noise.sounds.baby.sleep.databinding.FragmentDetailsBinding
 
 class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(

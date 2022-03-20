@@ -22,9 +22,9 @@ class PlayerViewModel(private val repository: Repository) : ViewModel() {
         return repository.getMixLD(mixId)
     }
 
-    private fun showLog(message: String) {
+  /*  private fun showLog(message: String) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, message)
         }
-    }
+    }*/
 }

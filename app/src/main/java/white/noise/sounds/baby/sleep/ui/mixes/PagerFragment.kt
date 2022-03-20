@@ -89,8 +89,7 @@ class PagerFragment : Fragment() {
                         )
                     }
                 }
-                else -> {
-                }
+                else -> {}
             }
 
         }

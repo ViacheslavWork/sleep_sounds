@@ -1,5 +1,7 @@
 package white.noise.sounds.baby.sleep
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -26,6 +28,7 @@ import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.databinding.ActivityMainBinding
 import white.noise.sounds.baby.sleep.service.PlayerService
 
+
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
@@ -35,15 +38,18 @@ class MainActivity : AppCompatActivity() {
         const val FINISH = "finish_key_extra"
     }
 
-    private lateinit var binding: ActivityMainBinding
+    private var isActivityLetShowTimeFragment = true
+
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
     var time: LocalTime = LocalTime.of(0, 0, 0)
-    private val _mutableTime = MutableLiveData<LocalTime>(time)
+    private val _mutableTime = MutableLiveData(time)
     val timeLD: LiveData<LocalTime> = _mutableTime
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (finishActivityIfNeeded()) return
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
@@ -66,6 +72,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.unlockForFreeFragment -> navView.visibility = View.VISIBLE
                 else -> navView.visibility = View.GONE
             }
+            when (destination.id) {
+                R.id.playerFragment -> letActivityShowTimeFragment(true)
+                else -> letActivityShowTimeFragment(false)
+            }
         }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -82,19 +92,44 @@ class MainActivity : AppCompatActivity() {
             statusBarColor = Color.TRANSPARENT
         }
 
-        /*  window.addFlags(
-              WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-          )*/
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }*/
-
-//        navHostFragment.findNavController().navigate(R.id.action_global_to_mixFragment)
         navView.setupWithNavController(navController)
         navigate(intent, navController)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val navController = (supportFragmentManager
+            .findFragmentById(R.id.nav_host_fr_activity_main) as NavHostFragment).navController
+        navigate(intent, navController)
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        time = LocalTime.of(0, 0, 0)
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun letActivityShowTimeFragment(isLet: Boolean) {
+        isActivityLetShowTimeFragment = isLet
+    }
+
+    private fun navigate(intent: Intent?, navController: NavController) {
+        when (intent?.action) {
+            ACTION_SHOW_MIX -> {
+                navController.navigate(R.id.action_global_to_mixFragment)
+            }
+            ACTION_SHOW_SOUNDS -> {
+                val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view);
+                bottomNavigationView.selectedItemId = R.id.navigation_sounds
+            }
+            else -> {
+                navController.navigate(R.id.action_global_to_greetingFragment)
+            }
+        }
     }
 
     private fun finishActivityIfNeeded(): Boolean {
@@ -106,20 +141,17 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        time = LocalTime.of(0, 0, 0)
-        return super.dispatchTouchEvent(ev)
-    }
-
     private fun setTouchListener(navController: NavController) {
         tickerFlow(Duration.ofSeconds(1))
             .onEach {
-                Log.i(TAG, "time: $it")
+//                Log.i(TAG, "time: $it")
+                Log.i(TAG, "is service running: ${isMyServiceRunning(PlayerService::class.java)}")
                 _mutableTime.postValue(it)
                 if (it == LocalTime.of(0, 0, 10)) {
                     Log.i(TAG, "10 seconds have passed")
                     if (PlayerService.isPlayable.value == true
                         && PlayerService.isPause.value != true
+                        && isActivityLetShowTimeFragment
                     ) {
                         navController.navigate(R.id.action_global_to_sleepTimerFragment)
                     }
@@ -136,25 +168,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val navController = (supportFragmentManager
-            .findFragmentById(R.id.nav_host_fr_activity_main) as NavHostFragment).navController
-        navigate(intent, navController)
-    }
-
-    private fun navigate(intent: Intent?, navController: NavController) {
-        when (intent?.action) {
-            ACTION_SHOW_MIX -> {
-                navController.navigate(R.id.action_global_to_mixFragment)
-            }
-            ACTION_SHOW_SOUNDS -> {
-                val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view);
-                bottomNavigationView.selectedItemId = R.id.navigation_sounds
-            }
-            else -> {
-                navController.navigate(R.id.action_global_to_greetingFragment)
+    private fun isMyServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
             }
         }
+        return false
     }
 }

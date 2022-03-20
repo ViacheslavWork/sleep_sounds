@@ -21,12 +21,9 @@ enum class SoundsEnum(
     /**rain*/
     HeavyRain(0, "Heavy rain", R.raw.heavy_rain, R.drawable.icon_heavy_rain, 50, false, SoundCategory.Rain, true),
     LightRain(1, "Light rain", R.raw.light_rain, R.drawable.icon_light_rain, 50, false, SoundCategory.Rain, false),
-    //TODO change icon
-    RainInCity(2, "Rain in city", R.raw.rain_in_city, R.drawable.icon_light_rain, 50, false, SoundCategory.Rain, false),
-    //TODO change icon
-    RainOnCarRoof(3, "Rain on car roof", R.raw.rain_on_car_roof, R.drawable.icon_light_rain, 50, false, SoundCategory.Rain),
-    //TODO change icon
-    RainOnCity(4, "Rain on city", R.raw.rain_on_city, R.drawable.icon_light_rain, 50, false, SoundCategory.Rain),
+    RainInCity(2, "Rain in city", R.raw.rain_in_city, R.drawable.rain_on_umbrella, 50, false, SoundCategory.Rain, false),
+    RainOnCarRoof(3, "Rain on car roof", R.raw.rain_on_car_roof, R.drawable.rain_on_car, 50, false, SoundCategory.Rain),
+    RainOnCity(4, "Rain on city", R.raw.rain_on_city, R.drawable.rain_1, 50, false, SoundCategory.Rain),
     RainOnRoof(5, "Rain on roof", R.raw.rain_on_roof, R.drawable.icon_rain_on_roof, 50, false, SoundCategory.Rain),
     RainOnTent(6, "Rain on tent", R.raw.rain_on_tent, R.drawable.icon_rain__on_tent, 50, false, SoundCategory.Rain),
     RainOnWindow(7, "Rain on window", R.raw.rain_on_window, R.drawable.icon_rain_on_window, 50, false, SoundCategory.Rain),
@@ -77,6 +74,7 @@ enum class SoundsEnum(
     Universe(40, "Universe", R.raw.universe, R.drawable.icon_universe, 50, false, SoundCategory.Meditation),
     Zen(41, "Zen", R.raw.zen, R.drawable.icon_zen, 50, false, SoundCategory.Meditation),
 
+    /**with my icons*/
     BeachNight(42, "Beach Night", R.raw.beach_night, R.drawable.night_beach, 50, false, SoundCategory.Nature),
     Cave(43, "Cave", R.raw.cave, R.drawable.cave_svgrepo_com, 50, false, SoundCategory.Nature),
     Dryer(44, "Dryer", R.raw.dryer, R.drawable.drier, 50, false, SoundCategory.CityAndInstrument),
@@ -84,7 +82,7 @@ enum class SoundsEnum(
     Melody(46, "Melody", R.raw.melody, R.drawable.melody, 50, false, SoundCategory.CityAndInstrument),
     MusicBox(47, "Music Box", R.raw.music_box, R.drawable.music_box, 50, false, SoundCategory.CityAndInstrument),
     Night(48, "Night", R.raw.night, R.drawable.moon, 50, false, SoundCategory.Nature),
-    //    River(45, "River", R.raw.river, R.drawable.ri, 50, false, SoundCategory.Nature),
+    River(45, "River", R.raw.river, R.drawable.ic_river, 50, false, SoundCategory.Nature),
     Shower(49, "Shower", R.raw.shower, R.drawable.shower_1, 50, false, SoundCategory.CityAndInstrument),
     Shower2(50, "Shower 2", R.raw.shower2, R.drawable.shower_2, 50, false, SoundCategory.CityAndInstrument),
     Waves(51, "Waves", R.raw.waves, R.drawable.waves, 50, false, SoundCategory.Nature),

@@ -89,7 +89,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
 
         val notificationBuilder = getNotificationBuilder(context)
-        notificationManager.notify(1, notificationBuilder.build())
+        notificationManager.notify(Constants.BEDTIME_REMINDER_NOTIFICATION_ID, notificationBuilder.build())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -22,11 +22,8 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.MainActivity
 import white.noise.sounds.baby.sleep.R
@@ -35,7 +32,8 @@ import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.utils.Constants
 import white.noise.sounds.baby.sleep.utils.Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS
-import white.noise.sounds.baby.sleep.utils.Constants.NOTIFICATION_ID
+import white.noise.sounds.baby.sleep.utils.Constants.PLAYER_NOTIFICATION_ID
+import white.noise.sounds.baby.sleep.utils.MyLog
 
 
 private const val TAG = "PlayerService"
@@ -94,32 +92,6 @@ class PlayerService : LifecycleService() {
         Log.i(TAG, "onStartCommand: ")
         intent?.let {
             when (it.action) {
-/*
-                Constants.ACTION_START_TIMER -> {
-                    Log.d(
-                        TAG,
-                        "Started or resumed service: time - ${it.extras?.get(Constants.EXTRA_TIME)}"
-                    )
-                    if (isFirstRun) {
-                        startForegroundService()
-                        isFirstRun = false
-                    }
-
-                    if (::currentTimer.isInitialized) {
-                        currentTimer.cancel()
-                    }
-
-                    if (it.extras != null) {
-                        val time = (it.extras?.get(Constants.EXTRA_TIME) as Times).time
-                        if (time != null) {
-                            startTimer(time)
-                            _isTimerRunning.postValue(true)
-                        } else {
-                            _isTimerRunning.postValue(false)
-                        }
-                    }
-                }
-*/
                 Constants.ACTION_PLAY_OR_STOP_SOUND -> {
                     Log.d(TAG, "Play-pause service")
                     launcher = it.extras?.getString(Constants.LAUNCHER)
@@ -128,10 +100,6 @@ class PlayerService : LifecycleService() {
                         isFirstRun = false
                     }
                     val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
-                    /*if (it.extras?.getString(Constants.LAUNCHER) != launcher) {
-                    stopAllSounds()
-                    launcher = it.extras?.getString(Constants.LAUNCHER)
-                }*/
                     currentMixId =
                         intent.extras?.getLong(Constants.EXTRA_MIX_ID, -1) ?: Constants.NO_MIX_ID
                     loadMix(currentMixId)
@@ -179,7 +147,7 @@ class PlayerService : LifecycleService() {
             }
         }
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder {
@@ -200,28 +168,17 @@ class PlayerService : LifecycleService() {
         val notificationView = RemoteViews(packageName, R.layout.notification_player)
         setUpRemoteView(notificationView)
         notificationBuilder.setCustomContentView(notificationView)
-        startForeground(Constants.NOTIFICATION_ID, notificationBuilder.build())
+        startForeground(Constants.PLAYER_NOTIFICATION_ID, notificationBuilder.build())
 
         observeTimer(notificationManager, notificationBuilder, notificationView)
         observePause(notificationManager, notificationBuilder, notificationView)
         observeCurrentMix(notificationManager, notificationBuilder, notificationView)
         observeCurrentLauncher(notificationManager, notificationBuilder)
-        /*currentSoundsLD.observe(this) {
-                it?.forEach { sound -> currentSounds[sound.id] = sound }
-                currentSounds.forEach{
-                    Log.i(TAG, "current sound: ${it.value} ")
-                }
-            }*/
     }
 
-    /*private fun stopTimer() {
-        _isTimerRunning.value = false
-        _timerTime.value = LocalTime.of(0, 0, 0)
-    }*/
 
     private fun stopService() {
         isFirstRun = true
-//        stopTimer()
         stopAllSounds()
         stopForeground(true)
         stopSelf()
@@ -419,27 +376,35 @@ class PlayerService : LifecycleService() {
     ) {
         currentMixLD.observe(this) {
             Log.i(TAG, "observeCurrentMix: $it")
-            for (notification in notificationManager.activeNotifications) {
-                if (notification.id == Constants.NOTIFICATION_ID) {
-                    if (it != null) {
-                        notificationView.setTextViewText(
-                            R.id.notification_title_tv,
-                            it.title
-                        )
-                        notificationManager.notify(
-                            Constants.NOTIFICATION_ID,
-                            notificationBuilder.build()
-                        )
-                    } else {
-                        notificationView.setTextViewText(
-                            R.id.notification_title_tv,
-                            applicationContext.resources.getString(R.string.playing)
-                        )
-                        notificationManager.notify(
-                            Constants.NOTIFICATION_ID,
-                            notificationBuilder.build()
-                        )
-                    }
+            if (it != null) {
+                notificationView.setTextViewText(
+                    R.id.notification_title_tv,
+                    it.title
+                )
+                if (notificationManager
+                        .activeNotifications
+                        .map { activeNotification -> activeNotification.id }
+                        .contains(PLAYER_NOTIFICATION_ID)
+                ) {
+                    notificationManager.notify(
+                        Constants.PLAYER_NOTIFICATION_ID,
+                        notificationBuilder.build()
+                    )
+                }
+            } else {
+                notificationView.setTextViewText(
+                    R.id.notification_title_tv,
+                    applicationContext.resources.getString(R.string.playing)
+                )
+                if (notificationManager
+                        .activeNotifications
+                        .map { activeNotification -> activeNotification.id }
+                        .contains(PLAYER_NOTIFICATION_ID)
+                ) {
+                    notificationManager.notify(
+                        Constants.PLAYER_NOTIFICATION_ID,
+                        notificationBuilder.build()
+                    )
                 }
             }
         }
@@ -451,18 +416,19 @@ class PlayerService : LifecycleService() {
     ) {
         currentLauncherLD.observe(this) {
             Log.i(TAG, "observeCurrentLauncher: ")
-            for (notification in notificationManager.activeNotifications) {
-                if (notification.id == Constants.NOTIFICATION_ID) {
-                    notificationBuilder.setContentIntent(getMainActivityPendingIntent())
-                    notificationManager.notify(
-                        Constants.NOTIFICATION_ID,
-                        notificationBuilder.build()
-                    )
-                }
+            if (notificationManager
+                    .activeNotifications
+                    .map { activeNotification -> activeNotification.id }
+                    .contains(PLAYER_NOTIFICATION_ID)
+            ) {
+                notificationBuilder.setContentIntent(getMainActivityPendingIntent())
+                notificationManager.notify(
+                    Constants.PLAYER_NOTIFICATION_ID,
+                    notificationBuilder.build()
+                )
             }
         }
     }
-
 
     private fun observePause(
         notificationManager: NotificationManager,
@@ -478,7 +444,7 @@ class PlayerService : LifecycleService() {
                     R.drawable.ic_icn_play
                 )
                 notificationManager.notify(
-                    Constants.NOTIFICATION_ID,
+                    Constants.PLAYER_NOTIFICATION_ID,
                     notificationBuilder.build()
                 )
             } else {
@@ -488,7 +454,7 @@ class PlayerService : LifecycleService() {
                     R.drawable.icn_pause
                 )
                 notificationManager.notify(
-                    Constants.NOTIFICATION_ID,
+                    Constants.PLAYER_NOTIFICATION_ID,
                     notificationBuilder.build()
                 )
             }
@@ -528,40 +494,17 @@ class PlayerService : LifecycleService() {
                     if (notificationManager
                             .activeNotifications
                             .map { activeNotification -> activeNotification.id }
-                            .contains(NOTIFICATION_ID)
+                            .contains(PLAYER_NOTIFICATION_ID)
                     ) {
                         notificationManager.notify(
-                            NOTIFICATION_ID,
+                            PLAYER_NOTIFICATION_ID,
                             notificationBuilder.build()
                         )
                     }
                 }
             } else {
-                if(!isFirstRun) _isPause.postValue(true)
+                if (!isFirstRun) _isPause.postValue(true)
             }
-        }
-    }
-
-    //Timer part
-
-    /* private fun startTimer(time: LocalTime) {
-         currentTimer = tickerFlow(time, Duration.ofSeconds(1))
-             .onEach {
-                 Log.i(TAG, "startTimer: $it")
-                 _timerTime.postValue(it)
-                 if (it == LocalTime.of(0, 0, 0)) {
-                     _isTimerRunning.postValue(false)
-                 }
-             }
-             .launchIn(lifecycleScope)
-     }*/
-
-    private fun tickerFlow(duration: LocalTime, period: Duration) = flow {
-        var localRestOfTime = duration
-        while (localRestOfTime.isAfter(LocalTime.of(0, 0, 0))) {
-            localRestOfTime = localRestOfTime.minusSeconds(1)
-            emit(localRestOfTime)
-            delay(period.toMillis())
         }
     }
 
@@ -573,7 +516,6 @@ class PlayerService : LifecycleService() {
     }
 
     //Data part
-
     private fun loadMix(mixId: Long) {
         if (mixId != Constants.NO_MIX_ID)
             lifecycleScope.launch { _currentMixLD.postValue(repository.getMix(mixId)) }

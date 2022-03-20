@@ -27,7 +27,7 @@ class TimerService : LifecycleService() {
         val timerTime: LiveData<LocalTime> = _timerTime
     }
 
-    lateinit var currentTimer: Job
+    private lateinit var currentTimer: Job
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.i(TAG, "onStartCommand: ")
@@ -36,24 +36,25 @@ class TimerService : LifecycleService() {
                 if (::currentTimer.isInitialized) {
                     currentTimer.cancel()
                 }
-
                 if (it.extras != null) {
                     val time = (it.extras?.get(Constants.EXTRA_TIME) as Times).time
                     if (time != null) {
+                        _isTimerStarted.postValue(true)
                         startTimer(time)
+                    }else {
+                        //this means off clicked in time selected dialog
+                        _isTimerStarted.postValue(false)
+                        _timerTime.postValue(LocalTime.of(0,0,0))
                     }
                 }
             }
         }
-
         return super.onStartCommand(intent, flags, startId)
     }
 
     private fun startTimer(time: LocalTime) {
-        _isTimerStarted.postValue(true)
         currentTimer = tickerFlow(time, Duration.ofSeconds(1))
             .onEach {
-                Log.i(TAG, "startTimer: $it")
                 _timerTime.postValue(it)
                 if (it == LocalTime.of(0, 0, 0)) {
                     _isTimerStarted.postValue(false)

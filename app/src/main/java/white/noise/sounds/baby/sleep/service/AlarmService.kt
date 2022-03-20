@@ -61,7 +61,7 @@ class AlarmService : Service() {
         }
 
         val notificationBuilder = getNotificationBuilder()
-        startForeground(Constants.NOTIFICATION_ID, notificationBuilder.build())
+        startForeground(Constants.PLAYER_NOTIFICATION_ID, notificationBuilder.build())
     }
 
     private fun getNotificationBuilder() = NotificationCompat.Builder(

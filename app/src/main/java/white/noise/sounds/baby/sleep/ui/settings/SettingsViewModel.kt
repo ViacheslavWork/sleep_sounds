@@ -10,11 +10,6 @@ import white.noise.sounds.baby.sleep.data.database.entity.AlarmEntity
 
 class SettingsViewModel(private val alarmRepository: AlarmRepository) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
-    }
-    val text: LiveData<String> = _text
-
     fun setAlarm(alarmEntity: AlarmEntity) {
         viewModelScope.launch { alarmRepository.saveAlarm(alarmEntity) }
     }

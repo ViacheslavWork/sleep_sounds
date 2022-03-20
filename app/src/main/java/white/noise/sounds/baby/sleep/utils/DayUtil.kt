@@ -1,5 +1,7 @@
 package white.noise.sounds.baby.sleep.utils
 
+import android.util.Log
+import white.noise.sounds.baby.sleep.BuildConfig
 import java.util.*
 
 object DayUtil {

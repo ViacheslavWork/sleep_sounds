@@ -284,7 +284,7 @@ class MixesProvider(val context: Context) {
                 picturePath = resourceUri(R.drawable.meditation_in_the_forest),
                 sounds = mutableListOf<Sound>().apply {
                     add(SoundsEnum.Flute.getSound().apply { isPlaying = true })
-                    //TODO add river
+                    add(SoundsEnum.River.getSound().apply { isPlaying = true })
                 }, category = MixCategory.Others, isPremium = false
             )
         )
@@ -292,8 +292,7 @@ class MixesProvider(val context: Context) {
             Mix(id = 29, title = "Library",
                 picturePath = resourceUri(R.drawable.library),
                 sounds = mutableListOf<Sound>().apply {
-                    //add(SoundsEnum.Astral.getSound().apply { isPlaying = true })
-                    //TODO add astral
+                    add(SoundsEnum.Concentration.getSound().apply { isPlaying = true })
                 }, category = MixCategory.Others, isPremium = false
             )
         )

@@ -44,6 +44,7 @@ class GreetingFragment : Fragment() {
         }
     }
     override fun onDestroyView() {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         super.onDestroyView()
         _binding = null
     }

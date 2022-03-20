@@ -100,10 +100,7 @@ data class AlarmEntity(
         )
         alarmManager.cancel(alarmPendingIntent)
         started = false
-/*        val toastText =
-            String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId)
-        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show()
-        Log.i("cancel", toastText)*/
+
     }
 
     private fun getAlarmDays(): Set<Int> {

@@ -11,6 +11,7 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
+import white.noise.sounds.baby.sleep.MainActivity
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.DialogTimerBinding
 
@@ -36,6 +37,11 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
         setUpListeners()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setUpListeners() {
         binding.offBtn.setOnClickListener(this)
         binding.customBtn.setOnClickListener(this)
@@ -50,11 +56,6 @@ class TimerDialog : DialogFragment(), View.OnClickListener {
         binding.hour3Btn.setOnClickListener(this)
         binding.hour4Btn.setOnClickListener(this)
         binding.hour8Btn.setOnClickListener(this)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onClick(view: View?) {

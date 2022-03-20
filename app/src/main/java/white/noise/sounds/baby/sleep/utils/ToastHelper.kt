@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import org.koin.java.KoinJavaComponent.inject
+import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.databinding.ToastBinding
 
 object ToastHelper {
