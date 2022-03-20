@@ -1,13 +1,51 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.model.SoundCategory
 import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.utils.Constants
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.forEach
+import kotlin.collections.forEachIndexed
+import kotlin.collections.listOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.take
+import kotlin.collections.toList
+import kotlin.collections.toMutableList
+import kotlin.collections.toSet
+
+
+/*I faced a similar problem when I used WebView inside a RecyclerView. I solved using the following code. Try adding setOnTouchListener for your ArcSeekBar
+
+holder.tipContent.setOnTouchListener(new View.OnTouchListener() {
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+            // Disallow ScrollView to intercept touch events.
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            break;
+            case MotionEvent.ACTION_UP:
+            //Allow ScrollView to intercept touch events once again.
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            break;
+        }
+        // Handle RecyclerView touch events.
+        v.onTouchEvent(event);
+        return true;
+    }
+});*/
 
 private const val TAG = "SoundsViewModel"
 
@@ -24,6 +62,7 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
             it?.forEach { showLog(it.title) }
         }
     }
+
     init {
         PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
     }
@@ -36,7 +75,7 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
         }
         sounds.forEach {
             if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
-                    && PlayerService.currentSounds.containsKey(it.id)
+                && PlayerService.currentSounds.containsKey(it.id)
             ) {
                 mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
             } else {
@@ -55,7 +94,15 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
                     removeFromSelected(sound = event.sound)
                 }
             }
-            is SoundsEvent.OnSeekBarChanged -> {}
+            is SoundsEvent.OnSeekBarChanged -> {
+                var indexSoundInList = 0
+                selectedSounds.value?.forEachIndexed { index, sound ->
+                    if (sound.id == event.sound.id) indexSoundInList = index
+                }
+                val selSounds = selectedSounds.value?.toMutableList()
+                selSounds?.set(indexSoundInList, event.sound)
+                _selectedSounds.postValue(selSounds!!)
+            }
         }
     }
 
@@ -66,7 +113,7 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
                 ?.apply { add(sound) }
                 ?.toSet()
                 ?.toList()
-                ?.take(8)
+//                ?.take(Constants.MAX_SELECTABLE_SOUNDS)
     }
 
     private fun removeFromSelected(sound: Sound) {

@@ -91,6 +91,8 @@
     <string name="estimate_on_google_play">Estimate on Google Play</string>
     <string name="upload_image">Upload Image</string>
     <string name="rain_and_piano">Rain and Piano</string>
-    <string name="time_format">%02d:%02d</string>
+    <string name="time_format">%01d:%02d:%02d</string>
+    <string name="time_format_short">%02d:%02d</string>
     <string name="set_successfully">Set successfully</string>
+    <string name="playing">Playing</string>
 </resources>

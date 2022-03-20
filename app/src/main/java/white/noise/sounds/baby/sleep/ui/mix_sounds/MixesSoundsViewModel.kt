@@ -1,17 +1,17 @@
 package white.noise.sounds.baby.sleep.ui.mix_sounds
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.data.Repository
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.model.SoundCategory
+import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.ui.sounds.Section
 import white.noise.sounds.baby.sleep.ui.sounds.SoundsEvent
+import white.noise.sounds.baby.sleep.utils.Constants
+import kotlin.collections.set
 
 private const val TAG = "MixesSoundsViewModel"
 
@@ -22,33 +22,70 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
     private var _selectedSounds = MutableLiveData<List<Sound>>(listOf())
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
 
-    /*  init {
-          loadAllSounds()
-      }
+    private val selectedSoundsObserver: Observer<Set<Sound>?> = Observer {
+        if (PlayerService.launcher == Constants.MIX_LAUNCHER) {
+            it?.let { _selectedSounds.postValue(it.toList()) }
+            it?.forEach { showLog(it.toString()) }
+        }
+    }
 
-      private fun loadAllSounds() {
-          viewModelScope.launch(Dispatchers.IO) { _sounds.postValue(repository.getSoundsInSections()) }
-      }*/
+    init {
+        PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
+//        updateSections()
+    }
+
+    /*
+        fun loadMixSounds(mixId: Long) {
+            Log.i(TAG, "loadMixSounds: ")
+            viewModelScope.launch {
+                val mix = repository.getMix(mixId)
+                mix.sounds.forEach { it.isPlaying = true }
+                _selectedSounds.postValue(mix.sounds)
+
+                val sounds = repository.getSounds()
+                val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+                enumValues<SoundCategory>().forEach {
+                    mapSoundCategoryToSection[it] = Section(it)
+                }
+                sounds.forEach {
+                    if (mix.sounds.map { sound -> sound.id }.contains(it.id)) {
+                        val soundFromMix =
+                            mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
+                        mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
+                    } else {
+                        mapSoundCategoryToSection[it.category]?.items?.add(it)
+                    }
+                }
+                _sections.postValue(mapSoundCategoryToSection.values.toList())
+            }
+        }
+    */
+
+    fun loadSounds(mixId: Long): LiveData<List<Sound>> {
+        return Transformations.map(repository.getMixLD(mixId)) {
+            return@map it.sounds.toList()
+        }
+    }
 
     fun loadMixSounds(mixId: Long) {
-        viewModelScope.launch {
-            val mix = repository.getMix(mixId)
-            mix.sounds.forEach { it.isPlaying = true }
-            _selectedSounds.postValue(mix.sounds)
 
-            val sounds = repository.getSounds()
+
+        viewModelScope.launch {
+            val sounds = repository.getSounds().toMutableList()
+            val soundsInService = PlayerService.currentSounds
+            
+            sounds.map { it.id }.forEachIndexed{ index, soundId->
+                if (soundsInService.keys.contains(soundId)) {
+                    sounds[index] = soundsInService[soundId]!!
+                }
+            }
+            sounds.forEach { Log.i(TAG, "loadMixSounds: $it") }
             val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
             enumValues<SoundCategory>().forEach {
                 mapSoundCategoryToSection[it] = Section(it)
             }
             sounds.forEach {
-                if (mix.sounds.map { sound -> sound.id }.contains(it.id)) {
-                    val soundFromMix =
-                        mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
-                    mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
-                } else {
-                    mapSoundCategoryToSection[it.category]?.items?.add(it)
-                }
+                mapSoundCategoryToSection[it.category]?.items?.add(it)
             }
             _sections.postValue(mapSoundCategoryToSection.values.toList())
         }
@@ -74,26 +111,26 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             }
             is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> {
                 removeFromSelected(event.sound)
-                removeFromSections(event.sound)
+//                updateSections()
             }
             is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
         }
     }
 
-    private fun removeFromSections(sound: Sound) {
-/*
-        sections.value?.forEach { section ->
-            section.items.forEach {
-                if (selectedSounds.value?.map { sound -> sound.id }?.contains(it.id) == true) {
-                    val soundFromSelected =
-                        selectedSounds.value!!.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
-                    mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
-                } else {
-                    mapSoundCategoryToSection[it.category]?.items?.add(it)
-                }
+    fun updateSections() {
+        val sounds = repository.getSounds()
+        val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+        enumValues<SoundCategory>().forEach {
+            mapSoundCategoryToSection[it] = Section(it)
+        }
+        sounds.forEach {
+            if (PlayerService.currentSounds.containsKey(it.id)) {
+                mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
+            } else {
+                mapSoundCategoryToSection[it.category]?.items?.add(it)
             }
         }
-*/
+        _sections.postValue(mapSoundCategoryToSection.values.toList())
     }
 
     private fun addToSelected(sound: Sound) {
@@ -103,7 +140,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
                 ?.apply { add(sound) }
                 ?.toSet()
                 ?.toList()
-                ?.take(8)
+//                ?.take(Constants.MAX_SELECTABLE_SOUNDS)
     }
 
     private fun removeFromSelected(sound: Sound) {
@@ -114,6 +151,11 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
                 ?.toList()
     }
 
+    override fun onCleared() {
+        showLog("onCleared")
+        PlayerService.currentSoundsLD.removeObserver(selectedSoundsObserver)
+        super.onCleared()
+    }
 
     private fun showLog(message: String) {
         if (BuildConfig.DEBUG) {

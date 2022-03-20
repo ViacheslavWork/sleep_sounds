@@ -18,6 +18,7 @@
             android:id="@+id/imageView"
             android:layout_width="38dp"
             android:layout_height="wrap_content"
+            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

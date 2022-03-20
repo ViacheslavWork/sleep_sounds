@@ -25,6 +25,7 @@ import white.noise.sounds.baby.sleep.databinding.FragmentMixesBinding
 import white.noise.sounds.baby.sleep.databinding.ItemMixCategoryBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.service.PlayerService
+import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.ViewPagerAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 import white.noise.sounds.baby.sleep.utils.Constants
@@ -104,9 +105,9 @@ class MixesFragment : Fragment() {
     }
 
     private fun observeTimer() {
-        PlayerService.isTimerRunning.observe(viewLifecycleOwner) {
+        TimerService.isTimerStarted.observe(viewLifecycleOwner) {
             if (it) {
-                PlayerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
                     binding.playerTimeTv.text = timerTime.toString()
                 }
             } else {
@@ -124,13 +125,13 @@ class MixesFragment : Fragment() {
             findNavController().navigate(R.id.action_navigation_mixes_to_playerFragment, bundle)
         }
         binding.playerPlayPauseBtn.root.setOnClickListener {
-            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
+            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS)
         }
         binding.playerPlayPauseBtn.btn.setOnClickListener {
-            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
+            sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS)
         }
         binding.playerCrossIb.setOnClickListener {
-            sendCommandToPlayerService(Constants.ACTION_STOP_SERVICE, null)
+            sendCommandToPlayerService(Constants.ACTION_STOP_SERVICE)
         }
         if (PlayerService.currentMixId >= 0) {
             mixesViewModel.getMixLD(PlayerService.currentMixId).observe(viewLifecycleOwner) {
@@ -173,15 +174,15 @@ class MixesFragment : Fragment() {
     private fun setUpListeners() {
         binding.crownMixToolbarIv.setOnClickListener {
             findNavController().navigate(
-                MixesFragmentDirections.actionNavigationMixesToUnlockForFreeFragment()
+                MixesFragmentDirections.actionNavigationMixesToGoPremiumFragment()
             )
         }
     }
 
-    private fun sendCommandToPlayerService(action: String, mix: Mix?) {
+    private fun sendCommandToPlayerService(action: String) {
         Intent(requireContext(), PlayerService::class.java).also {
             it.putExtra(Constants.LAUNCHER, Constants.MIX_LAUNCHER)
-            it.putExtra(Constants.EXTRA_MIX, mix)
+//            it.putExtra(Constants.EXTRA_MIX, mix)
             it.action = action
             requireContext().startService(it)
         }

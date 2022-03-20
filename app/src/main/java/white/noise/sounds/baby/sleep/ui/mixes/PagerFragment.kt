@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +21,8 @@ import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
 
 
-
 class PagerFragment : Fragment() {
-    companion object{
+    companion object {
         const val ARG_CATEGORY = "category"
         private const val TAG = "PagerFragment"
     }
@@ -79,7 +77,10 @@ class PagerFragment : Fragment() {
                     if (!it.mix.isPremium) {
                         findNavController().navigate(
                             R.id.action_navigation_mixes_to_playerFragment,
-                            bundleOf(PlayerFragment.mixIdKey to it.mix.id)
+                            bundleOf(
+                                PlayerFragment.mixIdKey to it.mix.id,
+                                PlayerFragment.isStartPlayingArg to true
+                            )
                         )
                     } else {
                         findNavController().navigate(

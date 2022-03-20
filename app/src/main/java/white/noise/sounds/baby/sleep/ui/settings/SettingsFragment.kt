@@ -77,7 +77,7 @@ class SettingsFragment : Fragment() {
                             withContext(Dispatchers.Main) {
                                 binding.bedTimeReminderSwitch.text =
                                     String.format(
-                                        getString(R.string.time_format),
+                                        getString(R.string.time_format_short),
                                         alarm.hour,
                                         alarm.minute
                                     )

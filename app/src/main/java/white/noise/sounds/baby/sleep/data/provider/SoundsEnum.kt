@@ -70,12 +70,26 @@ enum class SoundsEnum(
     PinkNoise(35, "Pink noise", R.raw.pinknoise, R.drawable.icon_pink_noise, 50, false, SoundCategory.WhiteNoise),
     WhiteNoise(36, "White noise", R.raw.white_noise, R.drawable.icon_white_noise, 50, false, SoundCategory.WhiteNoise),
 
-    /**white noise*/
+    /**meditation*/
     Concentration(38, "Concentration", R.raw.concentration, R.drawable.icon_concentration, 50, false, SoundCategory.Meditation, false),
     Dream(39, "Dream", R.raw.dream, R.drawable.icon_dream, 50, false, SoundCategory.Meditation, false),
     Meditation(37, "Meditation", R.raw.meditation, R.drawable.icon_meditation, 50, false, SoundCategory.Meditation),
     Universe(40, "Universe", R.raw.universe, R.drawable.icon_universe, 50, false, SoundCategory.Meditation),
-    Zen(41, "Zen", R.raw.zen, R.drawable.icon_zen, 50, false, SoundCategory.Meditation);
+    Zen(41, "Zen", R.raw.zen, R.drawable.icon_zen, 50, false, SoundCategory.Meditation),
+
+    BeachNight(42, "Beach Night", R.raw.beach_night, R.drawable.night_beach, 50, false, SoundCategory.Nature),
+    Cave(43, "Cave", R.raw.cave, R.drawable.cave_svgrepo_com, 50, false, SoundCategory.Nature),
+    Dryer(44, "Dryer", R.raw.dryer, R.drawable.drier, 50, false, SoundCategory.CityAndInstrument),
+    Tide(45, "High Tide", R.raw.high_tide, R.drawable.tide, 50, false, SoundCategory.Nature),
+    Melody(46, "Melody", R.raw.melody, R.drawable.melody, 50, false, SoundCategory.CityAndInstrument),
+    MusicBox(47, "Music Box", R.raw.music_box, R.drawable.music_box, 50, false, SoundCategory.CityAndInstrument),
+    Night(48, "Night", R.raw.night, R.drawable.moon, 50, false, SoundCategory.Nature),
+    //    River(45, "River", R.raw.river, R.drawable.ri, 50, false, SoundCategory.Nature),
+    Shower(49, "Shower", R.raw.shower, R.drawable.shower_1, 50, false, SoundCategory.CityAndInstrument),
+    Shower2(50, "Shower 2", R.raw.shower2, R.drawable.shower_2, 50, false, SoundCategory.CityAndInstrument),
+    Waves(51, "Waves", R.raw.waves, R.drawable.waves, 50, false, SoundCategory.Nature),
+    Yoga(52, "Yoga", R.raw.yoga, R.drawable.yoga, 50, false, SoundCategory.Meditation)
+    ;
 
     fun getSound(): Sound {
         return Sound(id, title, file, icon, volume, isPlaying, category, isPremium)

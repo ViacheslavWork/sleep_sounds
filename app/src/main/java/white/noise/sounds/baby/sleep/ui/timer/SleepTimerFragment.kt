@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import white.noise.sounds.baby.sleep.MainActivity
 import white.noise.sounds.baby.sleep.R
@@ -20,6 +21,7 @@ class SleepTimerFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         _binding = FragmentSleepTimerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,12 +29,13 @@ class SleepTimerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.root.setOnClickListener { requireActivity().onBackPressed() }
         (requireActivity() as MainActivity).timeLD.observe(viewLifecycleOwner){
-            binding.timerTv.text = String.format(getString(R.string.time_format), it.minute, it.second)
+            binding.timerTv.text = String.format(getString(R.string.time_format),it.hour, it.minute, it.second)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         _binding = null
     }
 }

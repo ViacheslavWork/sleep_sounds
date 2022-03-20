@@ -26,6 +26,5 @@ enum class SoundCategory(val title: String) {
     Transport("Transport"),
     CityAndInstrument("City And Instrument"),
     WhiteNoise("White Noise"),
-    Meditation("Meditation"),
-    Other("Other")
+    Meditation("Meditation")
 }

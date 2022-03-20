@@ -1,7 +1,9 @@
 package white.noise.sounds.baby.sleep.ui.sounds
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -21,16 +23,21 @@ import white.noise.sounds.baby.sleep.model.Sound
 private const val TAG = "SectionAdapter"
 
 class SectionAdapter(
-        val event: MutableLiveData<SoundsEvent> = MutableLiveData(),
-        private val isSelectable: Boolean = true,
-        private val isSoundChangeable: Boolean = true
+    val event: MutableLiveData<SoundsEvent> = MutableLiveData(),
+    private val isSelectable: Boolean = true,
+    private val isSoundChangeable: Boolean = true
 ) :
-        ListAdapter<Section, SectionHolder>(SectionDiffCallback()) {
+    ListAdapter<Section, SectionHolder>(SectionDiffCallback()) {
+    val mapSoundIdToSoundHolderData: MutableMap<Long, SoundHolderData> = mutableMapOf()
+
+    public fun getMapSoundIdToHolder(): Map<Long, SoundHolderData> {
+        return mapSoundIdToSoundHolderData
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionHolder {
         val binding: SectionRowBinding =
-                SectionRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return SectionHolder(binding, isSelectable, isSoundChangeable)
+            SectionRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SectionHolder(binding, isSelectable, isSoundChangeable, mapSoundIdToSoundHolderData)
     }
 
     override fun onBindViewHolder(holder: SectionHolder, position: Int) {
@@ -38,34 +45,53 @@ class SectionAdapter(
     }
 }
 
-class SectionHolder(private val binding: SectionRowBinding, private val isSelectable: Boolean,private val isSoundChangeable: Boolean) :
-        RecyclerView.ViewHolder(binding.root) {
+class SectionHolder(
+    private val binding: SectionRowBinding,
+    private val isSelectable: Boolean,
+    private val isSoundChangeable: Boolean,
+    private val mapSoundIdToSoundHolderData: MutableMap<Long, SoundHolderData>
+) :
+    RecyclerView.ViewHolder(binding.root) {
     private lateinit var adapter: SoundAdapter
     fun onBind(section: Section, event: MutableLiveData<SoundsEvent>) {
         binding.sectionNameTv.text = section.soundCategory.title
         binding.sectionRv.layoutManager = GridLayoutManager(binding.root.context, 3)
-        adapter = SoundAdapter(event, isSelectable = isSelectable, isSoundChangeable = isSoundChangeable)
+        adapter =
+            SoundAdapter(
+                event,
+                isSelectable = isSelectable,
+                isSoundChangeable = isSoundChangeable,
+                mapSoundIdToSoundHolderData = mapSoundIdToSoundHolderData
+            )
         binding.sectionRv.adapter = adapter
         adapter.submitList(section.items)
     }
 }
 
 class SoundAdapter(
-        val event: MutableLiveData<SoundsEvent>,
-        private val isSelectable: Boolean,
-        private val isSoundChangeable: Boolean
+    val event: MutableLiveData<SoundsEvent>,
+    private val isSelectable: Boolean,
+    private val isSoundChangeable: Boolean,
+    private val mapSoundIdToSoundHolderData: MutableMap<Long, SoundHolderData>
 ) :
-        ListAdapter<Sound, SoundsHolder>(SoundDiffCallback()) {
+    ListAdapter<Sound, SoundsHolder>(SoundDiffCallback()) {
 
     lateinit var binding: ItemSoundsBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SoundsHolder {
         binding =
-                ItemSoundsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemSoundsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SoundsHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SoundsHolder, position: Int) {
-        holder.onBind(getItem(position), event, isSelectable, isSoundChangeable)
+        mapSoundIdToSoundHolderData[getItem(position).id] =
+            SoundHolderData(this, position)
+        holder.onBind(
+            getItem(position),
+            event,
+            isSelectable,
+            isSoundChangeable
+        )
     }
 
     private fun showLog(message: String) {
@@ -76,10 +102,12 @@ class SoundAdapter(
 }
 
 class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun onBind(sound: Sound,
-               event: MutableLiveData<SoundsEvent>,
-               isSelectable: Boolean,
-               isSoundChangeable: Boolean) {
+    fun onBind(
+        sound: Sound,
+        event: MutableLiveData<SoundsEvent>,
+        isSelectable: Boolean,
+        isSoundChangeable: Boolean
+    ) {
         binding.mixItemTv.text = sound.title
         binding.seekBar.visibility = View.INVISIBLE
         if (sound.isPremium) binding.crownIv.visibility = View.VISIBLE
@@ -87,17 +115,17 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
             if (sound.isPlaying) {
                 binding.seekBar.visibility = View.VISIBLE
                 binding.root.background = ResourcesCompat.getDrawable(
-                        binding.root.resources,
-                        R.drawable.gradient_liner_bg5_rounded_corners,
-                        null
+                    binding.root.resources,
+                    R.drawable.gradient_liner_bg5_rounded_corners,
+                    null
                 )
                 Log.i(TAG, "onBind: $sound")
             } else {
                 binding.seekBar.visibility = View.INVISIBLE
                 binding.root.background = ResourcesCompat.getDrawable(
-                        binding.root.resources,
-                        R.drawable.gradient_liner_bg4_rounded_corners,
-                        null
+                    binding.root.resources,
+                    R.drawable.gradient_liner_bg4_rounded_corners,
+                    null
                 )
             }
         }
@@ -123,11 +151,12 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
                 event.value = SoundsEvent.OnSoundClick(sound, this)
             }
         }
-
         binding.soundsItemIv.setImageResource(sound.icon)
     }
 
 }
+
+data class SoundHolderData(val adapter: SoundAdapter, val position: Int)
 
 private class SoundDiffCallback : DiffUtil.ItemCallback<Sound>() {
     override fun areItemsTheSame(oldItem: Sound, newItem: Sound): Boolean {

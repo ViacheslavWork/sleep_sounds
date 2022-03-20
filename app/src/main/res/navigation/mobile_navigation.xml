@@ -26,13 +26,18 @@
         <action
             android:id="@+id/action_navigation_mixes_to_playerFragment"
             app:destination="@id/playerFragment"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:popExitAnim="@anim/slide_down" />
         <action
             android:id="@+id/action_navigation_mixes_to_unlockForFreeFragment"
             app:destination="@id/unlockForFreeFragment" />
         <action
             android:id="@+id/action_navigation_mixes_to_sleepTimerFragment"
             app:destination="@id/sleepTimerFragment" />
+        <action
+            android:id="@+id/action_navigation_mixes_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
     </fragment>
 
     <fragment

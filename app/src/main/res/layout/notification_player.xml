@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    tools:background="@color/dark_blue">
 
-    <LinearLayout
-        android:id="@+id/text_group"
+
+    <TextView
+        android:id="@+id/notification_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/notification_title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="White noise"
-            android:textAppearance="@style/H3" />
-
-        <TextView
-            android:id="@+id/notification_time_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:text="@string/_00_00"
-            android:textAppearance="@style/text4" />
-
-    </LinearLayout>
-
+        android:singleLine="true"
+        android:maxWidth="120dp"
+        android:text="@string/playing"
+        android:layout_centerVertical="true"
+        android:textAppearance="@style/text1" />
 
     <RelativeLayout
         android:id="@+id/layout_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/text_group">
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/notification_time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_toStartOf="@id/frame_play_pause"
+            android:singleLine="true"
+            android:text="@string/_00_00"
+            android:textAppearance="@style/text4"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <FrameLayout
             android:id="@+id/frame_play_pause"
@@ -49,8 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="centerInside"
                 android:background="@null"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_icn_play" />
         </FrameLayout>
 
@@ -59,8 +61,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
             android:clickable="true">
 
             <ImageButton

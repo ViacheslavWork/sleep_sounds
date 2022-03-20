@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -19,14 +20,17 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import jp.wasabeef.blurry.Blurry
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSoundsBinding
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.service.PlayerService
+import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog
 import white.noise.sounds.baby.sleep.utils.Constants
+import white.noise.sounds.baby.sleep.utils.Constants.EXTRA_MIX_ID
 import white.noise.sounds.baby.sleep.utils.Constants.EXTRA_SOUND
 import white.noise.sounds.baby.sleep.utils.Constants.LAUNCHER
 import white.noise.sounds.baby.sleep.utils.Constants.SOUNDS_LAUNCHER
@@ -39,7 +43,7 @@ class SoundsFragment : Fragment() {
         const val playPremiumSoundRequest = "PLAY_PREMIUM_SOUND_REQUEST"
     }
 
-    private val TAG = "SoundsFragment"
+    private val TAG = "SoundsFragmentTAG"
     private val soundsViewModel: SoundsViewModel by sharedViewModel()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SectionAdapter
@@ -52,7 +56,6 @@ class SoundsFragment : Fragment() {
     var isServiceBound: Boolean = false
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, iBinder: IBinder) {
-            Log.d(TAG, "ServiceConnection: connected to service.")
             // We've bound to MyService, cast the IBinder and get MyBinder instance
             val binder = iBinder as PlayerService.MyBinder
             playerService = binder.service
@@ -60,7 +63,6 @@ class SoundsFragment : Fragment() {
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.d(TAG, "ServiceConnection: disconnected from service.")
             isServiceBound = false
         }
     }
@@ -85,13 +87,13 @@ class SoundsFragment : Fragment() {
     ): View {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(resources, R.drawable.background, null)
+
         _binding = FragmentSoundsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        Log.i(TAG, "onStart: ")
     }
     override fun onResume() {
         soundsViewModel.updateSections()
@@ -130,7 +132,10 @@ class SoundsFragment : Fragment() {
         observeRecyclerEvent()
         observeTimer()
         observePlayable()
+        observePause()
     }
+
+
 
     private fun setUpPlayerVisibility(isVisible: Boolean) {
         if (isVisible) binding.playerGroup.visibility = View.VISIBLE
@@ -246,9 +251,9 @@ class SoundsFragment : Fragment() {
         PlayerService.isPlayable.observe(viewLifecycleOwner) { isPlayable ->
             if (PlayerService.launcher == SOUNDS_LAUNCHER) {
                 if (isPlayable) {
-                    binding.playIb.isClickable = true
+//                    binding.playIb.isClickable = true
                 } else {
-                    binding.playIb.isClickable = false
+//                    binding.playIb.isClickable = false
                     binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
                     binding.playIb.tag = R.drawable.ic_pause_rounded
                 }
@@ -257,9 +262,9 @@ class SoundsFragment : Fragment() {
     }
 
     private fun observeTimer() {
-        PlayerService.isTimerRunning.observe(viewLifecycleOwner) {
+        TimerService.isTimerStarted.observe(viewLifecycleOwner) {
             if (it) {
-                PlayerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
                     binding.timerTv.text = timerTime.toString()
                 }
             } else {
@@ -271,26 +276,26 @@ class SoundsFragment : Fragment() {
     private fun observeSelectedSounds() {
         soundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
             binding.numSoundsTv.text = it.size.toString()
-            binding.selectedIb.isEnabled = it.isNotEmpty()
-            binding.selectedTv.isEnabled = it.isNotEmpty()
+//            binding.selectedIb.isEnabled = it.isNotEmpty()
+//            binding.selectedTv.isEnabled = it.isNotEmpty()
             when {
                 PlayerService.launcher == SOUNDS_LAUNCHER -> {
                     when {
                         it.isNotEmpty() && mIsPause -> {
-                            binding.playIb.isClickable = true
-                            binding.playIb.isEnabled = true
+//                            binding.playIb.isClickable = true
+//                            binding.playIb.isEnabled = true
                             binding.playIb.setImageResource(R.drawable.ic_play_rounded)
                             binding.playIb.tag = R.drawable.ic_play_rounded
                         }
                         it.isNotEmpty() -> {
-                            binding.playIb.isClickable = true
-                            binding.playIb.isEnabled = true
+//                            binding.playIb.isClickable = true
+//                            binding.playIb.isEnabled = true
                             binding.playIb.setImageResource(R.drawable.ic_pause_rounded)
                             binding.playIb.tag = R.drawable.ic_pause_rounded
                         }
                         else -> {
-                            binding.playIb.isClickable = false
-                            binding.playIb.isEnabled = false
+//                            binding.playIb.isClickable = false
+//                            binding.playIb.isEnabled = false
                             binding.playIb.setImageResource(R.drawable.ic_play_rounded)
                             binding.playIb.tag = R.drawable.ic_play_rounded
                             setUpPlayerVisibility(isVisible = false)
@@ -298,14 +303,14 @@ class SoundsFragment : Fragment() {
                     }
                 }
                 it.isNotEmpty() -> {
-                    binding.playIb.isClickable = true
-                    binding.playIb.isEnabled = true
+//                    binding.playIb.isClickable = true
+//                    binding.playIb.isEnabled = true
                     binding.playIb.setImageResource(R.drawable.ic_play_rounded)
                     binding.playIb.tag = R.drawable.ic_play_rounded
                 }
                 else -> {
-                    binding.playIb.isClickable = false
-                    binding.playIb.isEnabled = false
+//                    binding.playIb.isClickable = false
+//                    binding.playIb.isEnabled = false
                     binding.playIb.setImageResource(R.drawable.ic_play_rounded)
                     binding.playIb.tag = R.drawable.ic_play_rounded
                 }
@@ -342,6 +347,8 @@ class SoundsFragment : Fragment() {
     }
 
     private fun playPauseSound(sound: Sound) {
+        val launcher = PlayerService.launcher
+        Log.i(TAG, "launcher: $launcher")
         if (PlayerService.launcher != SOUNDS_LAUNCHER) {
             sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
             if (PlayerService.isPause.value == true) {
@@ -363,6 +370,7 @@ class SoundsFragment : Fragment() {
         Intent(requireContext(), PlayerService::class.java).also {
             it.putExtra(LAUNCHER, SOUNDS_LAUNCHER)
             it.putExtra(EXTRA_SOUND, sound)
+            it.putExtra(EXTRA_MIX_ID, Constants.NO_MIX_ID)
             it.action = action
             requireContext().startService(it)
         }

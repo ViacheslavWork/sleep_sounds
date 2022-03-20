@@ -16,6 +16,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="30dp"
         android:scaleType="fitCenter"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/volume_seek_bar"
         app:layout_constraintEnd_toStartOf="@+id/volume_seek_bar"
         app:layout_constraintHorizontal_bias="0.5"

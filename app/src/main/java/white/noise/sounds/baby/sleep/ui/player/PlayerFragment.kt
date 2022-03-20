@@ -23,6 +23,7 @@ import white.noise.sounds.baby.sleep.databinding.ButtonPlayerBinding
 import white.noise.sounds.baby.sleep.databinding.FragmentPlayerBinding
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.service.PlayerService
+import white.noise.sounds.baby.sleep.service.TimerService
 import white.noise.sounds.baby.sleep.ui.mix_sounds.AdditionalSoundsFragment
 import white.noise.sounds.baby.sleep.utils.Constants
 
@@ -44,7 +45,7 @@ class PlayerFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mixId = arguments?.getLong(mixIdKey)
-        isStartPlaying = arguments?.getBoolean(isStartPlayingArg, true) == true
+        isStartPlaying = arguments?.getBoolean(isStartPlayingArg, false) == true
     }
 
     override fun onCreateView(
@@ -121,6 +122,7 @@ class PlayerFragment : Fragment() {
         mixId?.let {
             playerViewModel.loadSounds(it).observe(viewLifecycleOwner) { sounds ->
                 if (isStartPlaying) {
+                    isStartPlaying = false
                     playStopMix(sounds)
                 }
                 initButtons(sounds)
@@ -149,10 +151,10 @@ class PlayerFragment : Fragment() {
     }
 
     private fun observeTimer() {
-        PlayerService.isTimerRunning.observe(viewLifecycleOwner) {
+        TimerService.isTimerStarted.observe(viewLifecycleOwner) {
             if (it) {
                 binding.timeTv.visibility = View.VISIBLE
-                PlayerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
+                TimerService.timerTime.observe(viewLifecycleOwner) { timerTime ->
                     binding.timeTv.text = timerTime.toString()
                 }
             } else {
@@ -189,16 +191,6 @@ class PlayerFragment : Fragment() {
                 btnTv.text =
                     String.format(resources.getString(R.string.volume_percentage), sound.volume)
                 playerBtn.setImageResource(sound.icon)
-                /*val imageLoader = ImageLoader.Builder(binding.root.context)
-                    .componentRegistry { add(SvgDecoder(binding.root.context)) }
-                    .build()
-                val request = ImageRequest.Builder(binding.root.context)
-                    .placeholder(R.drawable.ic_sound_placeholder)
-                    .error(R.drawable.ic_sound_placeholder)
-                    .data(Uri.parse("file:///android_asset/icons/${sound.icon}"))
-                    .target(playerBtn)
-                    .build()
-                imageLoader.enqueue(request)*/
             }
         }
 //        showLog(it.toString())
@@ -216,6 +208,7 @@ class PlayerFragment : Fragment() {
     }
 
     private fun navigateToAdditionalSoundsFragment() {
+        isStartPlaying = true
         findNavController().navigate(
             R.id.action_playerFragment_to_additionalSoundsFragment,
             bundleOf(AdditionalSoundsFragment.mixIdKey to mixId)

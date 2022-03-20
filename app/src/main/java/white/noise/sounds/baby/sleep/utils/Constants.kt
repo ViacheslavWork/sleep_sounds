@@ -15,7 +15,6 @@ object Constants {
     const val ACTION_CHANGE_VOLUME = "ACTION_CHANGE_VOLUME"
     const val ACTION_QUIT_APP = "ACTION_QUIT_APP"
 
-
     const val LAUNCHER = "LAUNCHER"
     const val SOUNDS_LAUNCHER = "SOUNDS_LAUNCHER"
     const val MIX_LAUNCHER = "MIX_LAUNCHER"
@@ -26,8 +25,10 @@ object Constants {
     const val EXTRA_MIX = "EXTRA_MIX"
     const val EXTRA_MIX_ID = "EXTRA_MIX_ID"
 
+
     const val NOTIFICATION_CHANNEL_ID = "timer_channel"
     const val NOTIFICATION_CHANNEL_NAME = "timer"
     const val NOTIFICATION_ID = 1
 
+    const val NO_MIX_ID = -1L
 }

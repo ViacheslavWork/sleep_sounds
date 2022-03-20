@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/rating_content_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
         android:gravity="center"

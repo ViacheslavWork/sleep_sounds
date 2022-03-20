@@ -54,7 +54,6 @@ class AdditionalSoundsFragment : Fragment() {
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, iBinder: IBinder) {
-            Log.d(TAG, "ServiceConnection: connected to service.")
             // We've bound to MyService, cast the IBinder and get MyBinder instance
             val binder = iBinder as PlayerService.MyBinder
             playerService = binder.service
@@ -70,6 +69,7 @@ class AdditionalSoundsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mixId = arguments?.getLong(mixIdKey)
+        mixId?.let { additionalSoundsViewModel.loadMixSounds(it) }
     }
 
     override fun onCreateView(
@@ -84,10 +84,6 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        showLog("onViewCreated")
-        mixId?.let { additionalSoundsViewModel.loadMixSounds(it) }
-//        sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS,null)
-
         bindService()
 
         setUpListeners()
@@ -102,6 +98,7 @@ class AdditionalSoundsFragment : Fragment() {
         observeSelection()
         observeSelectedEvents()
         observeSectionSoundsEvents()
+
     }
 
     override fun onResume() {
@@ -120,6 +117,7 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        sendCommandToPlayerService(Constants.ACTION_STOP_SERVICE, null)
         if (isServiceBound) {
             unbindService()
         }
@@ -184,6 +182,10 @@ class AdditionalSoundsFragment : Fragment() {
         additionalSoundsViewModel.selectedSounds.observe(viewLifecycleOwner) {
             showLog(it.toString())
             selectedSoundsAdapter.submitList(it.toMutableList())
+            it.forEach { sound ->
+                Log.i(TAG, "select sound: $sound")
+                selectSoundInSections(sound)
+            }
         }
     }
 
@@ -192,6 +194,7 @@ class AdditionalSoundsFragment : Fragment() {
             if (it is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick) {
                 sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
                 additionalSoundsViewModel.handleEvent(it)
+                selectSoundInSections(it.sound.apply { isPlaying = false })
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 showLog(it.sound.volume.toString())
                 playerService?.changeVolume(it.sound)
@@ -204,10 +207,7 @@ class AdditionalSoundsFragment : Fragment() {
         sectionAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
                 if (!it.sound.isPremium || it.sound.isPlaying) {
-                    it.soundsHolder.bindingAdapter?.notifyItemChanged(
-                        it.soundsHolder.bindingAdapterPosition,
-                        it.sound.apply { isPlaying = !isPlaying }
-                    )
+                    selectSoundInSections(it.sound.apply { isPlaying = !isPlaying })
                     sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
                     additionalSoundsViewModel.handleEvent(it)
                 } else {
@@ -215,6 +215,11 @@ class AdditionalSoundsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun selectSoundInSections(sound: Sound) {
+        val soundHolderData = sectionAdapter.mapSoundIdToSoundHolderData[sound.id]
+        soundHolderData?.adapter?.notifyItemChanged(soundHolderData.position, sound)
     }
 
     //service

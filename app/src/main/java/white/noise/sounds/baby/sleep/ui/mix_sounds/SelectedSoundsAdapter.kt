@@ -2,6 +2,7 @@ package white.noise.sounds.baby.sleep.ui.mix_sounds
 
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -53,10 +54,22 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
 
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
+        binding.seekBar.setOnTouchListener { v, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN ->                    // Disallow ScrollView to intercept touch events.
+                    v.parent.requestDisallowInterceptTouchEvent(true)
+                MotionEvent.ACTION_UP ->                     //Allow ScrollView to intercept touch events once again.
+                    v.parent.requestDisallowInterceptTouchEvent(true)
+            }
+            // Handle RecyclerView touch events.
+            v.onTouchEvent(event)
+            true
+        }
         binding.root.setOnClickListener {
 //            event.value = SoundsEvent.OnSoundClick(sound,bindingAdapterPosition)
         }
         binding.removeIv.setOnClickListener {
+            sound.isPlaying = false
             event.value =
                 SoundsEvent.AdditionalSoundsEvent.OnRemoveClick(sound, bindingAdapterPosition)
         }

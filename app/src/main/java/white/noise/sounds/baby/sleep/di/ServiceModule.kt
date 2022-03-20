@@ -2,6 +2,7 @@ package white.noise.sounds.baby.sleep.di
 
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.service.RescheduleAlarmsService
 
 val serviceModule = module {
@@ -15,4 +16,5 @@ val serviceModule = module {
             context = androidContext()
         )
     }
+    single <PlayerService> { PlayerService() }
 }

@@ -57,8 +57,13 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_settings, R.id.navigation_mixes, R.id.navigation_sounds, R.id.customMixDialog ->
-                    navView.visibility = View.VISIBLE
+                R.id.navigation_settings,
+                R.id.navigation_mixes,
+                R.id.navigation_sounds,
+                R.id.customMixDialog,
+                R.id.ratingDialog,
+                R.id.timerDialog,
+                R.id.unlockForFreeFragment -> navView.visibility = View.VISIBLE
                 else -> navView.visibility = View.GONE
             }
         }

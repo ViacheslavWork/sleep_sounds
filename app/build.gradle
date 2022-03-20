@@ -100,5 +100,8 @@ dependencies {
     //Gson
     implementation 'com.google.code.gson:gson:2.9.0'
 
-    implementation "androidx.media:media:1.5.0"
+    //Blur
+    implementation 'jp.wasabeef:blurry:4.0.1'
+
+
 }
