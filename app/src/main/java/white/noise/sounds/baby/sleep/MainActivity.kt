@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        this.window.apply {
+        /*this.window.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 window.setDecorFitsSystemWindows(false)
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
             }
             statusBarColor = Color.TRANSPARENT
-        }
+        }*/
 
         navView.setupWithNavController(navController)
         navigate(intent, navController)

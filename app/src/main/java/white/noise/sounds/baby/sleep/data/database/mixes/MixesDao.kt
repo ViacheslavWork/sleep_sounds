@@ -31,6 +31,9 @@ interface MixesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(mixEntity: MixEntity)
 
+    @Query("DELETE FROM mixes WHERE id=:id")
+    fun delete(id: Long)
+
     @Query("DELETE FROM mixes")
     fun deleteAll()
 }

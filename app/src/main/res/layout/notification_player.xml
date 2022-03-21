@@ -15,14 +15,13 @@
         android:singleLine="true"
         android:maxWidth="120dp"
         android:text="@string/playing"
-        android:layout_centerVertical="true"
         android:textAppearance="@style/text1" />
 
     <RelativeLayout
         android:id="@+id/layout_controls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
+        >
 
         <TextView
             android:id="@+id/notification_time_tv"

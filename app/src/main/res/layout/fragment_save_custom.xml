@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/black40"
-        android:enabled="false"
+        android:enabled="true"
         android:paddingVertical="10dp"
         android:text="@string/upload_image"
         android:textAppearance="@style/H2"
@@ -141,6 +141,7 @@
 
     <include
         android:id="@+id/image_layout"
-        layout="@layout/image_custom_mix" />
+        layout="@layout/image_custom_mix"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

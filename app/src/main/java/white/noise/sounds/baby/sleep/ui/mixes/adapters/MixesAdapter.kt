@@ -32,15 +32,16 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
 
     fun onBind(mix: Mix, event: MutableLiveData<MixesEvent>) {
         binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
+        binding.crossIv.setOnClickListener { event.value = MixesEvent.OnDeleteMixClick(mix) }
         binding.mixItemTv.text = mix.title
-        if (mix.isPremium) binding.crownIv.visibility = View.VISIBLE
-        else binding.crownIv.visibility = View.GONE
+        if (mix.isPremium) {
+            binding.crownIv.visibility = View.VISIBLE
+            binding.crossIv.visibility = View.GONE
+        } else {
+            binding.crossIv.visibility = View.VISIBLE
+            binding.crownIv.visibility = View.GONE
+        }
         binding.mixItemIv.setImageURI(mix.picturePath)
-        /*      Glide.with(itemView.context)
-                  .load(mix.picturePath)
-                  .error(R.drawable.ic_autumn)
-                  .apply(imageOption)
-                  .into(binding.mixItemIv)*/
     }
 }
 

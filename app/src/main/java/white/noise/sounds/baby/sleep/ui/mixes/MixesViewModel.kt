@@ -56,6 +56,8 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
 
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
 
+            is MixesEvent.OnDeleteMixClick -> viewModelScope.launch { repository.deleteMix(event.mix.id) }
+
             is MixesEvent.OnMixSave -> {
                 Log.i(TAG, "handleEvent: ${event.mix}")
                 viewModelScope.launch { repository.saveMix(event.mix) }

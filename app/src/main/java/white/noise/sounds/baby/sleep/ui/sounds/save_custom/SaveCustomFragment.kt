@@ -17,6 +17,8 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentSaveCustomBinding
@@ -42,11 +44,13 @@ class SaveCustomFragment : Fragment() {
     private var _binding: FragmentSaveCustomBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var selectedImageUri: Uri
+    private var selectedImageUri: Uri? = null
+    private val _selectedImageUriLD = MutableLiveData<Uri?>()
+    private val selectedImageUriLD: LiveData<Uri?> = _selectedImageUriLD
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(resources, R.drawable.background, null)
@@ -55,15 +59,30 @@ class SaveCustomFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpImagePlaceholder()
+//        setUpImagePlaceholder()
         setUpListeners()
+        observeSelectedImageUri()
     }
 
-    private fun setUpImagePlaceholder() {
+    private fun observeSelectedImageUri() {
+        selectedImageUriLD.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.applyBtn.isEnabled = false
+                binding.uploadImageBtn.isEnabled = true
+                binding.imageLayout.root.visibility = View.GONE
+            } else {
+                binding.uploadImageBtn.isEnabled = false
+                binding.applyBtn.isEnabled = binding.customNameEt.text.isNotEmpty()
+                setImage(it)
+            }
+        }
+    }
+
+    /*private fun setUpImagePlaceholder() {
         selectedImageUri =
                 Uri.parse("android.resource://white.noise.sounds.baby.sleep/drawable/mix_placeholder")
         setImage(selectedImageUri)
-    }
+    }*/
 
     private fun setUpListeners() {
         binding.customNameEt.addTextChangedListener(object : TextWatcher {
@@ -71,7 +90,8 @@ class SaveCustomFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.applyBtn.isEnabled = binding.customNameEt.text.isNotEmpty()
+                binding.applyBtn.isEnabled =
+                    binding.customNameEt.text.isNotEmpty() && selectedImageUri != null
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -79,8 +99,8 @@ class SaveCustomFragment : Fragment() {
         })
 
         binding.imageLayout.photoRemoveIv.setOnClickListener {
-            setPhotoVisibility(false)
-            binding.uploadImageBtn.isEnabled = true
+            selectedImageUri = null
+            _selectedImageUriLD.postValue(null)
         }
 
         binding.imageLayout.photoEditIv.setOnClickListener {
@@ -94,17 +114,19 @@ class SaveCustomFragment : Fragment() {
         binding.closeBtn.setOnClickListener { requireActivity().onBackPressed() }
 
         binding.applyBtn.setOnClickListener {
-            val imageInExternalStorageUri = saveImageToExternalStorage(imageUri = selectedImageUri)
-            val mix = Mix(
+            selectedImageUri?.let {
+                val imageInExternalStorageUri = saveImageToExternalStorage(imageUri = it)
+                val mix = Mix(
                     id = 0,
                     title = binding.customNameEt.text.toString(),
                     sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
                     picturePath = imageInExternalStorageUri,
                     category = MixCategory.Others,
                     isPremium = false
-            )
-            mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
-            requireActivity().onBackPressed()
+                )
+                mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
+                requireActivity().onBackPressed()
+            }
         }
     }
 
@@ -129,8 +151,8 @@ class SaveCustomFragment : Fragment() {
         // Get the bitmap
         val bitmap = when {
             Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
-                    requireActivity().contentResolver,
-                    imageUri
+                requireActivity().contentResolver,
+                imageUri
             )
             else -> {
                 val source = ImageDecoder.createSource(requireActivity().contentResolver, imageUri)
@@ -171,8 +193,9 @@ class SaveCustomFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.data!!
-            setImage(selectedImageUri)
+            val imageUri = data.data!!
+            selectedImageUri = imageUri
+            _selectedImageUriLD.value = imageUri
         }
     }
 

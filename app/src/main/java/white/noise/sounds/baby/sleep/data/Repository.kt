@@ -30,7 +30,6 @@ class Repository(
         private val soundsDao: SoundsDao,
         private val mixesDao: MixesDao
 ) {
-//    lateinit var sounds: List<Sound>
 
     fun getSounds(): List<Sound> {
         return soundsProvider.getSounds()
@@ -97,6 +96,9 @@ class Repository(
         return Transformations.map(mixesDao.getMixLD(id)) {
             it.toMix()
         }
+    }
+    suspend fun deleteMix(id: Long) = withContext(Dispatchers.IO) {
+        mixesDao.delete(id)
     }
 
     fun getSound(soundId: Long): Sound? {
