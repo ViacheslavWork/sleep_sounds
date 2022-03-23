@@ -12,7 +12,8 @@ data class Mix(
     val sounds: MutableList<Sound> = mutableListOf(),
     var picturePath: Uri,
     val category: MixCategory?,
-    val isPremium: Boolean = false
+    val isPremium: Boolean = false,
+    val isCustom: Boolean = false
 ) : Parcelable
 
 enum class MixCategory(val title: String) {

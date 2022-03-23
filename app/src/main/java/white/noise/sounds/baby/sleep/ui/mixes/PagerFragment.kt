@@ -1,6 +1,8 @@
 package white.noise.sounds.baby.sleep.ui.mixes
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.SyncStateContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +18,11 @@ import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.databinding.FragmentPagerBinding
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.MixCategory
+import white.noise.sounds.baby.sleep.service.PlayerService
 import white.noise.sounds.baby.sleep.ui.dialogs.UnlockForFreeDialog
 import white.noise.sounds.baby.sleep.ui.mixes.adapters.MixesAdapter
 import white.noise.sounds.baby.sleep.ui.player.PlayerFragment
+import white.noise.sounds.baby.sleep.utils.Constants
 
 
 class PagerFragment : Fragment() {
@@ -36,10 +40,6 @@ class PagerFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,9 +89,25 @@ class PagerFragment : Fragment() {
                         )
                     }
                 }
+                is MixesEvent.OnDeleteMixClick -> {
+                    if (PlayerService.launcher == Constants.MIX_LAUNCHER
+                        && PlayerService.currentMixId == it.mix.id
+                    ) {
+                        sendCommandToPlayerService(Constants.ACTION_STOP_SERVICE)
+                    }
+                }
+
                 else -> {}
             }
 
+        }
+    }
+
+    private fun sendCommandToPlayerService(action: String) {
+        Intent(requireContext(), PlayerService::class.java).also {
+            it.putExtra(Constants.LAUNCHER, Constants.MIX_LAUNCHER)
+            it.action = action
+            requireContext().startService(it)
         }
     }
 

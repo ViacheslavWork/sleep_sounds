@@ -122,7 +122,8 @@ class SaveCustomFragment : Fragment() {
                     sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
                     picturePath = imageInExternalStorageUri,
                     category = MixCategory.Others,
-                    isPremium = false
+                    isPremium = false,
+                    isCustom = true
                 )
                 mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
                 requireActivity().onBackPressed()

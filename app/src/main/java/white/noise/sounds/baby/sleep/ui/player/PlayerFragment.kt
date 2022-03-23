@@ -132,7 +132,7 @@ class PlayerFragment : Fragment() {
     private fun observeMix() {
         mixId?.let {
             playerViewModel.getMix(it).observe(viewLifecycleOwner) { mix ->
-                binding.titleTv.text = mix.title
+                binding.titleTv.text = mix?.title
             }
         }
     }

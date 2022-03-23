@@ -20,7 +20,7 @@ interface MixesDao {
     fun getMix(id: Long): MixEntity
 
     @Query("SELECT * FROM mixes WHERE id=:id")
-    fun getMixLD(id: Long): LiveData<MixEntity>
+    fun getMixLD(id: Long): LiveData<MixEntity?>
 
     @Query("SELECT * FROM mixes WHERE category LIKE :mixCategory")
     fun getByCategory(mixCategory: MixCategory): LiveData<List<MixEntity>>

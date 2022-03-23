@@ -42,7 +42,7 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
         return repository.getMix(mixId)
     }
 
-    fun getMixLD(mixId: Long): LiveData<Mix> {
+    fun getMixLD(mixId: Long): LiveData<Mix?> {
         return repository.getMixLD(mixId)
     }
 

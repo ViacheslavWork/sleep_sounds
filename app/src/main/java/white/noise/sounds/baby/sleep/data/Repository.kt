@@ -93,9 +93,9 @@ class Repository(
         return@withContext mixesDao.getMix(id).toMix()
     }
 
-    fun getMixLD(id: Long): LiveData<Mix> {
+    fun getMixLD(id: Long): LiveData<Mix?> {
         return Transformations.map(mixesDao.getMixLD(id)) {
-            it.toMix()
+            it?.toMix()
         }
     }
     suspend fun deleteMix(id: Long) = withContext(Dispatchers.IO) {

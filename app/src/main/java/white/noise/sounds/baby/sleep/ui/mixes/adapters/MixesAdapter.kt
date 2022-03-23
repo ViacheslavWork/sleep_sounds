@@ -38,7 +38,11 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
             binding.crownIv.visibility = View.VISIBLE
             binding.crossIv.visibility = View.GONE
         } else {
-            binding.crossIv.visibility = View.VISIBLE
+            if (mix.isCustom) {
+                binding.crossIv.visibility = View.VISIBLE
+            } else {
+                binding.crossIv.visibility = View.GONE
+            }
             binding.crownIv.visibility = View.GONE
         }
         binding.mixItemIv.setImageURI(mix.picturePath)

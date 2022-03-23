@@ -175,7 +175,7 @@ class MixesFragment : Fragment() {
         }
         if (PlayerService.currentMixId >= 0) {
             mixesViewModel.getMixLD(PlayerService.currentMixId).observe(viewLifecycleOwner) {
-                binding.playerMixNameTv.text = it.title
+                binding.playerMixNameTv.text = it?.title
             }
         }
     }

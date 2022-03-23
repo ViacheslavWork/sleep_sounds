@@ -14,11 +14,11 @@ private const val TAG = "PlayerViewModel"
 class PlayerViewModel(private val repository: Repository) : ViewModel() {
     fun loadSounds(mixId: Long): LiveData<List<Sound>> {
         return Transformations.map(repository.getMixLD(mixId)) {
-            return@map it.sounds.toList()
+            return@map it?.sounds?.toList()
         }
     }
 
-    fun getMix(mixId: Long): LiveData<Mix> {
+    fun getMix(mixId: Long): LiveData<Mix?> {
         return repository.getMixLD(mixId)
     }
 

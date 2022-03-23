@@ -63,7 +63,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
 
     fun loadSounds(mixId: Long): LiveData<List<Sound>> {
         return Transformations.map(repository.getMixLD(mixId)) {
-            return@map it.sounds.toList()
+            return@map it?.sounds?.toList()
         }
     }
 

@@ -19,7 +19,8 @@ data class MixEntity(
     @TypeConverters(UriConverters::class)
     var picturePath: Uri,
     val category: MixCategory?,
-    val isPremium: Boolean = false
+    val isPremium: Boolean = false,
+    val isCustom: Boolean = false
 ) {
     companion object {
         fun fromMix(mix: Mix): MixEntity {
@@ -29,7 +30,8 @@ data class MixEntity(
                 soundsEntities = mix.sounds.map { SoundEntity.fromSound(it) },
                 picturePath = mix.picturePath,
                 category = mix.category,
-                isPremium = mix.isPremium
+                isPremium = mix.isPremium,
+                isCustom = mix.isCustom
             )
         }
     }
@@ -42,7 +44,8 @@ fun MixEntity.toMix(): Mix {
         sounds = soundsEntities.map { it.toSound() }.toMutableList(),
         picturePath = picturePath,
         category = category,
-        isPremium = isPremium
+        isPremium = isPremium,
+        isCustom = isCustom
     )
 }
 
