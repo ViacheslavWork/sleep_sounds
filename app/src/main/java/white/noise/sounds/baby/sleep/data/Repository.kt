@@ -64,8 +64,9 @@ class Repository(
 
     fun getMixes(): LiveData<List<Mix>> {
         GlobalScope.launch(Dispatchers.IO) {
+//            mixesDao.deleteAll()
             if (mixesDao.getAll().isEmpty()) {
-                mixesDao.deleteAll()
+                Log.i(TAG, "getMixes: ")
                 mixesDao.insertAll(mixProvider.getMixes().map { mix -> MixEntity.fromMix(mix) })
             }
         }

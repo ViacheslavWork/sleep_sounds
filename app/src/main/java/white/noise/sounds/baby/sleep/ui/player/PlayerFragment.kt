@@ -108,6 +108,7 @@ class PlayerFragment : Fragment() {
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
         }
         sounds.forEach {
+            Log.i(TAG, "playStopMix: ${it.title}, ${it.file}")
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it)
         }
     }

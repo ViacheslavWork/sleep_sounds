@@ -10,7 +10,7 @@ import white.noise.sounds.baby.sleep.data.database.entity.UriConverters
 
 @Database(
     entities = [MixEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(SoundsEntitiesListConverter::class, UriConverters::class)

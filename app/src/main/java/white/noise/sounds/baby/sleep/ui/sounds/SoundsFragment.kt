@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -20,7 +19,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import jp.wasabeef.blurry.Blurry
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import white.noise.sounds.baby.sleep.BuildConfig
 import white.noise.sounds.baby.sleep.R
@@ -131,7 +129,6 @@ class SoundsFragment : Fragment() {
         observePlayable()
         observePause()
     }
-
 
 
     private fun setUpPlayerVisibility(isVisible: Boolean) {
@@ -338,6 +335,10 @@ class SoundsFragment : Fragment() {
         lastOnClick.soundsHolder.bindingAdapter?.notifyItemChanged(
             lastOnClick.soundsHolder.bindingAdapterPosition,
             lastOnClick.sound.apply { isPlaying = !isPlaying }
+        )
+        Log.i(
+            TAG,
+            "playStopSoundProgrammatically: ${lastOnClick.sound.title}${lastOnClick.sound.file}"
         )
         playPauseSound(lastOnClick.sound)
         soundsViewModel.handleEvent(lastOnClick)
