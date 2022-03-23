@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.SoundPool
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -20,6 +21,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.SeekParameters.CLOSEST_SYNC
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -28,24 +35,18 @@ import org.threeten.bp.LocalTime
 import white.noise.sounds.baby.sleep.MainActivity
 import white.noise.sounds.baby.sleep.R
 import white.noise.sounds.baby.sleep.data.Repository
+import white.noise.sounds.baby.sleep.mediaplayer.MyPerfectMediaPlayer
 import white.noise.sounds.baby.sleep.model.Mix
 import white.noise.sounds.baby.sleep.model.Sound
 import white.noise.sounds.baby.sleep.utils.Constants
 import white.noise.sounds.baby.sleep.utils.Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS
 import white.noise.sounds.baby.sleep.utils.Constants.PLAYER_NOTIFICATION_ID
-import white.noise.sounds.baby.sleep.utils.MyLog
 
 
 private const val TAG = "PlayerService"
 
 class PlayerService : LifecycleService() {
     companion object {
-/*        private val _isTimerRunning = MutableLiveData<Boolean>()
-        val isTimerRunning: LiveData<Boolean> = _isTimerRunning
-
-        private val _timerTime = MutableLiveData<LocalTime>()
-        val timerTime: LiveData<LocalTime> = _timerTime*/
-
         private val _isPause = MutableLiveData<Boolean>(false)
         val isPause: LiveData<Boolean> = _isPause
 
@@ -89,6 +90,7 @@ class PlayerService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
         Log.i(TAG, "onStartCommand: ")
         intent?.let {
             when (it.action) {
@@ -291,17 +293,35 @@ class PlayerService : LifecycleService() {
     }
 
     private fun playPlayer(sound: Sound): ExoPlayer {
-        Log.i(TAG, "playSound: ")
+//        MyPerfectMediaPlayer.create(context = applicationContext, sound.file)
+        val soundPool = SoundPool.Builder().build()
+        val afd = applicationContext.resources.openRawResourceFd(sound.file)
+        val soundId = soundPool.load(afd, 1)
+//        soundPool.play(sound.file, 0f, 100f, 1, Int.MAX_VALUE, 1f)
+
+//        val myPerfectMediaPlayer = MyPerfectMediaPlayer.create(applicationContext,sound.file)
         val mediaItem = MediaItem.fromUri(
             RawResourceDataSource.buildRawResourceUri(sound.file)
         )
         val exoPlayer = ExoPlayer.Builder(applicationContext).build()
-        exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ALL
+        exoPlayer.repeatMode = ExoPlayer.REPEAT_MODE_ONE
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.volume = sound.volume.toFloat() / 100
         exoPlayer.playWhenReady = true
         exoPlayer.prepare()
         return exoPlayer
+    }
+
+    //creating mediaSource
+    private fun buildMediaSource(mediaItem: MediaItem): MediaSource {
+        // Create a data source factory.
+        val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(applicationContext)
+
+        // Create a progressive media source pointing to a stream uri.
+        val mediaSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(mediaItem)
+
+        return mediaSource
     }
 
     /*private fun checkIsAddSoundAvailable(): Boolean {
