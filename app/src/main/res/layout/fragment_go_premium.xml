@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:background="@drawable/gradient_liner_bg"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:background="@drawable/gradient_liner_bg">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/go_premium_tool_bar"
@@ -150,10 +149,10 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/month_btn"
                 style="@style/DarkBtnStyle"
-                android:paddingVertical="20dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="25dp"
+                android:paddingVertical="20dp"
                 android:text="@string/month"
                 android:textAppearance="@style/text3"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
@@ -166,10 +165,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
-                android:text="@string/go_premium_info"
-                android:textAppearance="@style/P1"
-                android:textAlignment="center"
                 android:alpha="0.7"
+                android:text="@string/go_premium_info"
+                android:textAlignment="center"
+                android:textAppearance="@style/P1"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="@id/content_start"
@@ -182,8 +181,8 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
                 android:text="@string/details"
-                android:textAppearance="@style/text1"
                 android:textAlignment="center"
+                android:textAppearance="@style/text1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintHorizontal_chainStyle="packed"

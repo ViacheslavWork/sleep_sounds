@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="white.noise.sounds.baby.sleep">
+    package="relax.deep.sleep.sounds.calm">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
-        android:name=".App"
+        android:name="relax.deep.sleep.sounds.calm.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhiteNoise">
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
-            android:label="@string/app_name">
+            android:name="relax.deep.sleep.sounds.calm.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,23 +25,22 @@
         </activity>
 
         <service
-            android:name=".service.PlayerService"
+            android:name="relax.deep.sleep.sounds.calm.service.PlayerService"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name=".service.TimerService"
+            android:name="relax.deep.sleep.sounds.calm.service.TimerService"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name=".service.AlarmService"
+            android:name="relax.deep.sleep.sounds.calm.service.AlarmService"
             android:foregroundServiceType="dataSync" />
 
         <receiver
-            android:name=".broadcast.AlarmBroadcastReceiver"
+            android:name="relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
 
     </application>
 
