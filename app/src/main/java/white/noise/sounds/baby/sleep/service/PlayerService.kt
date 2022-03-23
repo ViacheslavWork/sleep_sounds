@@ -293,13 +293,6 @@ class PlayerService : LifecycleService() {
     }
 
     private fun playPlayer(sound: Sound): ExoPlayer {
-//        MyPerfectMediaPlayer.create(context = applicationContext, sound.file)
-        val soundPool = SoundPool.Builder().build()
-        val afd = applicationContext.resources.openRawResourceFd(sound.file)
-        val soundId = soundPool.load(afd, 1)
-//        soundPool.play(sound.file, 0f, 100f, 1, Int.MAX_VALUE, 1f)
-
-//        val myPerfectMediaPlayer = MyPerfectMediaPlayer.create(applicationContext,sound.file)
         val mediaItem = MediaItem.fromUri(
             RawResourceDataSource.buildRawResourceUri(sound.file)
         )
