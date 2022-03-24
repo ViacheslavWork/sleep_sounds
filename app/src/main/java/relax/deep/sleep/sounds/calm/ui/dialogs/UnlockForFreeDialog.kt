@@ -57,24 +57,69 @@ class UnlockForFreeDialog : DialogFragment() {
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.watchVideoBtn.setOnClickListener {
-            requireActivity().onBackPressed()
-            mix?.let {
-                setFragmentResult(
-                    MixesFragment.playPremiumMixRequest,
-                    bundleOf(MixesFragment.mixIdKey to it.id)
-                )
-            }
-            sound?.let {
-                setFragmentResult(
-                    SoundsFragment.playPremiumSoundRequest,
-                    bundleOf(SoundsFragment.playAfterVideoKey to true)
-                )
-            }
+            toDoAfterVideo()
             showToast("Open video")
         }
         binding.unlockAllSoundsBtn.setOnClickListener {
             findNavController().navigate(
                 UnlockForFreeDialogDirections.actionUnlockForFreeFragmentToGoPremiumFragment()
+            )
+        }
+    }
+
+    /*private fun loadInterAd() {
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(
+            requireContext(),
+            resources.getString(R.string.interstitial_test_id),
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    interAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    interAd = interstitialAd
+                }
+            })
+    }
+
+    private fun showInterAd(function: () -> Unit) {
+        if (interAd != null) {
+            interAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    function()
+                    interAd = null
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
+                    function()
+                    interAd = null
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    function()
+                    interAd = null
+                }
+            }
+            interAd?.show(requireActivity())
+        } else {
+            function()
+        }
+    }*/
+
+    private fun toDoAfterVideo() {
+        requireActivity().onBackPressed()
+        mix?.let {
+            setFragmentResult(
+                MixesFragment.playPremiumMixRequest,
+                bundleOf(MixesFragment.mixIdKey to it.id)
+            )
+        }
+        sound?.let {
+            setFragmentResult(
+                SoundsFragment.playPremiumSoundRequest,
+                bundleOf(SoundsFragment.playAfterVideoKey to true)
             )
         }
     }

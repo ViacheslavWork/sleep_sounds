@@ -16,6 +16,7 @@ import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.ItemSoundsBinding
 import relax.deep.sleep.sounds.calm.databinding.SectionRowBinding
 import relax.deep.sleep.sounds.calm.model.Sound
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 
 private const val TAG = "SectionAdapter"
@@ -106,9 +107,10 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         isSelectable: Boolean,
         isSoundChangeable: Boolean
     ) {
+        val hasPremiumStatus = PremiumPreferences.hasPremiumStatus(binding.root.context)
         binding.mixItemTv.text = sound.title
         binding.seekBar.visibility = View.INVISIBLE
-        if (sound.isPremium) binding.crownIv.visibility = View.VISIBLE
+        if (sound.isPremium && !hasPremiumStatus) binding.crownIv.visibility = View.VISIBLE
         if (isSelectable) {
             if (sound.isPlaying) {
                 binding.seekBar.visibility = View.VISIBLE
@@ -141,13 +143,7 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         })
 
         binding.root.setOnClickListener {
-            if (!sound.isPremium) {
-//                sound.isPlaying = !sound.isPlaying
-//                bindingAdapter?.notifyItemChanged(bindingAdapterPosition,sound)
-                event.value = SoundsEvent.OnSoundClick(sound, this)
-            } else {
-                event.value = SoundsEvent.OnSoundClick(sound, this)
-            }
+            event.value = SoundsEvent.OnSoundClick(sound, this)
         }
         binding.soundsItemIv.setImageResource(sound.icon)
     }

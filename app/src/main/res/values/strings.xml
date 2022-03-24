@@ -19,8 +19,9 @@
     <string name="unlock_all_sounds">Unlock\n All Sounds</string>
     <string name="remove_ads">Remove\n Ads</string>
     <string name="_7_day_free_trial">7-day Free Trial</string>
-    <string name="month">/ month</string>
-    <string name="go_premium_info">This subscription gives you unlimited access to our app content library if you don’t cancel before the trial ends, you will be automatically charged $10,24 each year until you cancel. If you choose the monthly subscription, you will be automatically charged $4,6$ each month until you cancel.</string>
+    <string name="try_for_free_7_days">Try for free: 7 days\n After %s%s per year </string>
+    <string name="per_month">%s%s / month</string>
+    <string name="go_premium_info">This subscription gives you unlimited access to our app content library if you don’t cancel before the trial ends, you will be automatically charged %s%s each year until you cancel. If you choose the monthly subscription, you will be automatically charged %s%s each month until you cancel.</string>
     <string name="details">Details</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
     <string name="details_content">By premium, you can:\n\n

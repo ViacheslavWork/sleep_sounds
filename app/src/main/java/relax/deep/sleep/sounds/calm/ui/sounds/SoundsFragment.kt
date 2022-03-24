@@ -32,6 +32,7 @@ import relax.deep.sleep.sounds.calm.utils.Constants.EXTRA_MIX_ID
 import relax.deep.sleep.sounds.calm.utils.Constants.EXTRA_SOUND
 import relax.deep.sleep.sounds.calm.utils.Constants.LAUNCHER
 import relax.deep.sleep.sounds.calm.utils.Constants.SOUNDS_LAUNCHER
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 class SoundsFragment : Fragment() {
     companion object {
@@ -92,7 +93,12 @@ class SoundsFragment : Fragment() {
 
     override fun onResume() {
         soundsViewModel.updateSections()
-        startAdAnimation()
+        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+            binding.crownSoundsToolbarIv.visibility = View.GONE
+        } else {
+            binding.crownSoundsToolbarIv.visibility = View.VISIBLE
+            startAdAnimation()
+        }
         super.onResume()
     }
 
@@ -316,7 +322,10 @@ class SoundsFragment : Fragment() {
         adapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
                 lastOnClick = it
-                if (!it.sound.isPremium || it.sound.isPlaying) {
+                if (!it.sound.isPremium
+                    || it.sound.isPlaying
+                    || PremiumPreferences.hasPremiumStatus(requireContext())
+                ) {
                     playStopSoundProgrammatically()
                 } else {
                     findNavController().navigate(

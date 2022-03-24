@@ -33,6 +33,6 @@ object Constants {
 
     const val NO_MIX_ID = -1L
 
-    private const val SUBSCRIPTION_ID_MONTH = "month_subscribe"
-    private const val SUBSCRIPTION_ID_YEAR = "year_subscribe"
+    const val SUBSCRIPTION_ID_MONTH = "month_subscribe"
+    const val SUBSCRIPTION_ID_YEAR = "year_subscribe"
 }

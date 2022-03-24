@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="25dp"
                 android:paddingVertical="20dp"
-                android:text="@string/month"
+                android:text="@string/per_month"
                 android:textAppearance="@style/text3"
                 app:layout_constraintEnd_toStartOf="@+id/content_end"
                 app:layout_constraintStart_toStartOf="@+id/content_start"

@@ -2,11 +2,13 @@ package relax.deep.sleep.sounds.calm.ui.go_premium
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.RelativeSizeSpan
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -19,6 +21,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentGoPremiumBinding
+import relax.deep.sleep.sounds.calm.subscription.Subscribable
+import relax.deep.sleep.sounds.calm.subscription.Subscription
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 
 private const val DELAY_BETWEEN_SCROLL_MS = 25L
@@ -38,15 +43,62 @@ class GoPremiumFragment : Fragment() {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
         // Inflate the layout for this fragment
+
+        //TODO only for debugging
+//        PremiumPreferences.setStoredPremiumStatus(requireContext(), true)
+
+
         _binding = FragmentGoPremiumBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setEnablingToSubscriptionButtons()
         setUpListeners()
         setUpRecyclerView()
+        observeSubscriptionsPrices()
     }
 
+    private fun setEnablingToSubscriptionButtons() {
+        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+            binding.yearBtn.isEnabled = false
+            binding.monthBtn.isEnabled = false
+        } else {
+            binding.yearBtn.isEnabled = true
+            binding.monthBtn.isEnabled = true
+        }
+    }
+
+    private fun observeSubscriptionsPrices() {
+        (requireActivity() as Subscribable).getSubscriptionsToPricesLD()
+            .observe(viewLifecycleOwner) {
+                val yearPrice = it[Subscription.YEAR]
+                val monthPrice = it[Subscription.MONTH]
+                binding.infoTv.text = String.format(
+                    resources.getString(R.string.go_premium_info),
+                    yearPrice?.currency,
+                    yearPrice?.price,
+                    monthPrice?.currency,
+                    monthPrice?.price
+                )
+                binding.monthBtn.text = String.format(
+                    resources.getString(R.string.per_month), monthPrice?.currency, monthPrice?.price
+                )
+                val yearBtnText = String.format(
+                    resources.getString(R.string.try_for_free_7_days),
+                    yearPrice?.currency,
+                    yearPrice?.price,
+                )
+                val cs = SpannableStringBuilder(yearBtnText)
+                cs.setSpan(
+                    RelativeSizeSpan(0.625f),
+                    20,
+                    cs.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                binding.yearBtn.text = cs
+            }
+    }
 
     private fun setUpRecyclerView() {
         recyclerView = binding.goPremiumRv
@@ -56,26 +108,26 @@ class GoPremiumFragment : Fragment() {
         recyclerView.adapter = adapter
         adapter.submitList(
             listOf(
-                Picture(R.drawable.icon_wolf,"wolf"),
-                Picture(R.drawable.icon_car,"car"),
-                Picture(R.drawable.icon_concentration,"concentration"),
-                Picture(R.drawable.icon_zen,"zen"),
-                Picture(R.drawable.icon_heavy_rain,"heavy-rain"),
-                Picture(R.drawable.icon_underwater,"icon-underwater"),
+                Picture(R.drawable.icon_wolf, "wolf"),
+                Picture(R.drawable.icon_car, "car"),
+                Picture(R.drawable.icon_concentration, "concentration"),
+                Picture(R.drawable.icon_zen, "zen"),
+                Picture(R.drawable.icon_heavy_rain, "heavy-rain"),
+                Picture(R.drawable.icon_underwater, "icon-underwater"),
 
-                Picture(R.drawable.icon_wolf,"wolf"),
-                Picture(R.drawable.icon_car,"car"),
-                Picture(R.drawable.icon_concentration,"concentration"),
-                Picture(R.drawable.icon_zen,"zen"),
-                Picture(R.drawable.icon_heavy_rain,"heavy-rain"),
-                Picture(R.drawable.icon_underwater,"icon-underwater"),
+                Picture(R.drawable.icon_wolf, "wolf"),
+                Picture(R.drawable.icon_car, "car"),
+                Picture(R.drawable.icon_concentration, "concentration"),
+                Picture(R.drawable.icon_zen, "zen"),
+                Picture(R.drawable.icon_heavy_rain, "heavy-rain"),
+                Picture(R.drawable.icon_underwater, "icon-underwater"),
 
-                Picture(R.drawable.icon_wolf,"wolf"),
-                Picture(R.drawable.icon_car,"car"),
-                Picture(R.drawable.icon_concentration,"concentration"),
-                Picture(R.drawable.icon_zen,"zen"),
-                Picture(R.drawable.icon_heavy_rain,"heavy-rain"),
-                Picture(R.drawable.icon_underwater,"icon-underwater"),
+                Picture(R.drawable.icon_wolf, "wolf"),
+                Picture(R.drawable.icon_car, "car"),
+                Picture(R.drawable.icon_concentration, "concentration"),
+                Picture(R.drawable.icon_zen, "zen"),
+                Picture(R.drawable.icon_heavy_rain, "heavy-rain"),
+                Picture(R.drawable.icon_underwater, "icon-underwater"),
             )
         )
 
@@ -106,7 +158,8 @@ class GoPremiumFragment : Fragment() {
         autoScrollFeaturesList()
     }
 
-    private class DisableTouchLinearLayoutManager(context: Context?) : LinearLayoutManager(context) {
+    private class DisableTouchLinearLayoutManager(context: Context?) :
+        LinearLayoutManager(context) {
         private var isScrollEnabled = false
         fun setScrollEnabled(flag: Boolean) {
             isScrollEnabled = flag
@@ -123,8 +176,6 @@ class GoPremiumFragment : Fragment() {
     }
 
 
-
-
     private fun setUpListeners() {
         binding.crossGoPremiumToolbarIv.setOnClickListener { requireActivity().onBackPressed() }
         binding.detailsTv.setOnClickListener {
@@ -132,8 +183,12 @@ class GoPremiumFragment : Fragment() {
                 GoPremiumFragmentDirections.actionGoPremiumFragmentToDetailsFragment()
             )
         }
-        binding.yearBtn.setOnClickListener { Toast.makeText(context,"Year subscription",Toast.LENGTH_SHORT).show() }
-        binding.monthBtn.setOnClickListener { Toast.makeText(context,"Month subscription",Toast.LENGTH_SHORT).show() }
+        binding.yearBtn.setOnClickListener {
+            (requireActivity() as Subscribable).subscribe(Subscription.YEAR)
+        }
+        binding.monthBtn.setOnClickListener {
+            (requireActivity() as Subscribable).subscribe(Subscription.MONTH)
+        }
     }
 
     override fun onDestroyView() {

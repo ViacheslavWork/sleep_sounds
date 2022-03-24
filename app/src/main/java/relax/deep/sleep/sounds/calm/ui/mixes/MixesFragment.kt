@@ -32,6 +32,7 @@ import relax.deep.sleep.sounds.calm.service.TimerService
 import relax.deep.sleep.sounds.calm.ui.mixes.adapters.ViewPagerAdapter
 import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
 import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 private const val TAG = "MixesFragment"
 
@@ -68,7 +69,10 @@ class MixesFragment : Fragment() {
             val mixId: Long = bundle.getLong(mixIdKey)
             findNavController().navigate(
                 R.id.action_navigation_mixes_to_playerFragment,
-                bundleOf(PlayerFragment.mixIdKey to mixId)
+                bundleOf(
+                    PlayerFragment.mixIdKey to mixId,
+                    PlayerFragment.isStartPlayingArg to true
+                )
             )
         }
     }
@@ -94,7 +98,12 @@ class MixesFragment : Fragment() {
     }
 
     override fun onResume() {
-        startAdAnimation()
+        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+            binding.crownMixToolbarIv.visibility = View.GONE
+        } else {
+            binding.crownMixToolbarIv.visibility = View.VISIBLE
+            startAdAnimation()
+        }
         super.onResume()
     }
 

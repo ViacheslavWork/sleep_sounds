@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import relax.deep.sleep.sounds.calm.databinding.ItemMixBinding
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.ui.mixes.MixesEvent
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 private const val TAG = "MixAdapter"
 
@@ -34,7 +35,7 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
         binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
         binding.crossIv.setOnClickListener { event.value = MixesEvent.OnDeleteMixClick(mix) }
         binding.mixItemTv.text = mix.title
-        if (mix.isPremium) {
+        if (mix.isPremium && !PremiumPreferences.hasPremiumStatus(binding.root.context)) {
             binding.crownIv.visibility = View.VISIBLE
             binding.crossIv.visibility = View.GONE
         } else {

@@ -22,6 +22,7 @@ import relax.deep.sleep.sounds.calm.ui.dialogs.UnlockForFreeDialog
 import relax.deep.sleep.sounds.calm.ui.mixes.adapters.MixesAdapter
 import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
 import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 
 class PagerFragment : Fragment() {
@@ -73,7 +74,9 @@ class PagerFragment : Fragment() {
             when (it) {
                 is MixesEvent.OnMixClick -> {
                     lastClickedMix = it.mix
-                    if (!it.mix.isPremium) {
+                    if (!it.mix.isPremium
+                        || PremiumPreferences.hasPremiumStatus(requireContext())
+                    ) {
                         findNavController().navigate(
                             R.id.action_navigation_mixes_to_playerFragment,
                             bundleOf(
