@@ -91,4 +91,7 @@ dependencies {
 
     //inapp billing
     implementation 'com.anjlab.android.iab.v3:library:2.0.3'
+
+    //ads
+    implementation 'com.google.android.gms:play-services-ads:20.5.0'
 }

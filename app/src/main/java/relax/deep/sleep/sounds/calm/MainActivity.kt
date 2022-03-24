@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -64,11 +65,15 @@ class MainActivity : AppCompatActivity(), Subscribable {
 
     private val _isPremiumLd = MutableLiveData<Boolean>()
     private val isPremiumLd: LiveData<Boolean> = _isPremiumLd
-    private val _mutableSubscriptionToPriceLD = MutableLiveData<Map<Subscription, SubscriptionPrice>>()
+    private val _mutableSubscriptionToPriceLD =
+        MutableLiveData<Map<Subscription, SubscriptionPrice>>()
     private val mapSubscriptionToPriceLD: LiveData<Map<Subscription, SubscriptionPrice>> get() = _mutableSubscriptionToPriceLD
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MobileAds.initialize(this)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         if (finishActivityIfNeeded()) return
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -255,34 +260,42 @@ class MainActivity : AppCompatActivity(), Subscribable {
                 showToast(this@MainActivity, "Subscriptions update error.")
             }
         })
-//        PremiumPreferences.setStoredPremiumStatus(this,hasSubscription())
+        PremiumPreferences.setStoredPremiumStatus(this,hasSubscription())
         //for test
-        PremiumPreferences.setStoredPremiumStatus(this,false)
+//        PremiumPreferences.setStoredPremiumStatus(this, false)
 
         isPremium = hasSubscription()
         _isPremiumLd.postValue(hasSubscription())
     }
 
     private fun getSubscriptionsPrice() {
-        var monthPrice = SubscriptionPrice("$", "5")
-        var yearPrice = SubscriptionPrice("$", "10")
+        var monthPrice = SubscriptionPrice("-", "-")
+        var yearPrice = SubscriptionPrice("-", "-")
 
         bp?.getSubscriptionListingDetailsAsync(SUBSCRIPTION_ID_MONTH,
             object : BillingProcessor.ISkuDetailsResponseListener {
                 override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
-                    val product = products?.get(0)
-                    monthPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                    try {
+                        val product = products?.get(0)
+                        monthPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                    } catch (e: IndexOutOfBoundsException) {
+                        showLog("onSkuDetailsResponse: empty products", TAG)
+                    }
                 }
 
                 override fun onSkuDetailsError(error: String?) {
-                    showToast(this@MainActivity, "Can't download actual price")
+//                    showToast(this@MainActivity, "Can't download actual price")
                 }
             })
         bp?.getSubscriptionListingDetailsAsync(SUBSCRIPTION_ID_YEAR,
             object : BillingProcessor.ISkuDetailsResponseListener {
                 override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
-                    val product = products?.get(0)
-                    yearPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                    try {
+                        val product = products?.get(0)
+                        yearPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                    } catch (e: IndexOutOfBoundsException) {
+                        showLog("onSkuDetailsResponse: empty products", TAG)
+                    }
                 }
 
                 override fun onSkuDetailsError(error: String?) {

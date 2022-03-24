@@ -11,6 +11,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import org.koin.android.ext.android.inject
+import relax.deep.sleep.sounds.calm.R
+import relax.deep.sleep.sounds.calm.advertising.MyInterstitialAd
 import relax.deep.sleep.sounds.calm.databinding.DialogUnlockForFreeBinding
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.model.Sound
@@ -28,6 +31,7 @@ class UnlockForFreeDialog : DialogFragment() {
     private val binding get() = _binding!!
     private var mix: Mix? = null
     private var sound: Sound? = null
+    private val interstitialAd: MyInterstitialAd by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,7 @@ class UnlockForFreeDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        interstitialAd.loadInterAd()
         _binding = DialogUnlockForFreeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,7 +62,7 @@ class UnlockForFreeDialog : DialogFragment() {
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.watchVideoBtn.setOnClickListener {
-            toDoAfterVideo()
+            interstitialAd.showInterAd(requireActivity()) { toDoAfterVideo() }
             showToast("Open video")
         }
         binding.unlockAllSoundsBtn.setOnClickListener {
@@ -66,47 +71,6 @@ class UnlockForFreeDialog : DialogFragment() {
             )
         }
     }
-
-    /*private fun loadInterAd() {
-        val adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(
-            requireContext(),
-            resources.getString(R.string.interstitial_test_id),
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    interAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    interAd = interstitialAd
-                }
-            })
-    }
-
-    private fun showInterAd(function: () -> Unit) {
-        if (interAd != null) {
-            interAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-                override fun onAdDismissedFullScreenContent() {
-                    function()
-                    interAd = null
-                }
-
-                override fun onAdFailedToShowFullScreenContent(adError: AdError?) {
-                    function()
-                    interAd = null
-                }
-
-                override fun onAdShowedFullScreenContent() {
-                    function()
-                    interAd = null
-                }
-            }
-            interAd?.show(requireActivity())
-        } else {
-            function()
-        }
-    }*/
 
     private fun toDoAfterVideo() {
         requireActivity().onBackPressed()
