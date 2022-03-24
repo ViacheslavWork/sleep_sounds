@@ -26,7 +26,6 @@ class MixesProvider(val context: Context) {
                     add(SoundsEnum.Piano.getSound().apply { isPlaying = true })
                 },
                 category = MixCategory.Rain,
-                isPremium = true
             )
         )
         mixes.add(
@@ -40,7 +39,7 @@ class MixesProvider(val context: Context) {
                         .apply { volume = 70 })
                 },
                 category = MixCategory.Rain,
-                isPremium = true
+                isPremium = false
             )
         )
         mixes.add(
@@ -57,7 +56,7 @@ class MixesProvider(val context: Context) {
                 picturePath = resourceUri(R.drawable.rain),
                 sounds = mutableListOf<Sound>().apply {
                     add(SoundsEnum.LightRain.getSound().apply { isPlaying = true })
-                }, category = MixCategory.Rain
+                }, category = MixCategory.Rain, isPremium = false
             )
         )
         mixes.add(

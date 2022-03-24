@@ -225,11 +225,11 @@ class MainActivity : AppCompatActivity(), Subscribable {
     override fun subscribe(subscription: Subscription) {
         when (subscription) {
             Subscription.MONTH -> {
-                showToast(this, "Month subscription")
+//                showToast(this, "Month subscription")
                 bp?.subscribe(this, SUBSCRIPTION_ID_MONTH)
             }
             Subscription.YEAR -> {
-                showToast(this, "Year subscription")
+//                showToast(this, "Year subscription")
                 bp?.subscribe(this, SUBSCRIPTION_ID_YEAR)
             }
         }
@@ -250,14 +250,14 @@ class MainActivity : AppCompatActivity(), Subscribable {
     }
 
     private fun updateSubscriptionStatus() {
-        Log.i(TAG, "updateSubscriptionStatus: ")
+        showLog("updateSubscriptionStatus: ", TAG)
         bp?.loadOwnedPurchasesFromGoogleAsync(object : BillingProcessor.IPurchasesResponseListener {
             override fun onPurchasesSuccess() {
-                showToast(this@MainActivity, "Subscriptions updated.")
+//                showToast(this@MainActivity, "Subscriptions updated.")
             }
 
             override fun onPurchasesError() {
-                showToast(this@MainActivity, "Subscriptions update error.")
+//                showToast(this@MainActivity, "Subscriptions update error.")
             }
         })
         PremiumPreferences.setStoredPremiumStatus(this,hasSubscription())
@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity(), Subscribable {
                 }
 
                 override fun onSkuDetailsError(error: String?) {
-                    showToast(this@MainActivity, "Can't download actual price")
+//                    showToast(this@MainActivity, "Can't download actual price")
                 }
             })
         val mapSubscriptionToPrice = mutableMapOf<Subscription, SubscriptionPrice>()

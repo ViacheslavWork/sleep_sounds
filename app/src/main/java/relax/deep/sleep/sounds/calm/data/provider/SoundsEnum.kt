@@ -16,10 +16,10 @@ enum class SoundsEnum(
         var volume: Int,
         var isPlaying: Boolean = false,
         val category: SoundCategory,
-        val isPremium: Boolean = false
+        val isPremium: Boolean = true
 ) {
     /**rain*/
-    HeavyRain(0, "Heavy rain", R.raw.heavy_rain, R.drawable.icon_heavy_rain, 50, false, SoundCategory.Rain, true),
+    HeavyRain(0, "Heavy rain", R.raw.heavy_rain, R.drawable.icon_heavy_rain, 50, false, SoundCategory.Rain, false),
     LightRain(1, "Light rain", R.raw.light_rain, R.drawable.icon_light_rain, 50, false, SoundCategory.Rain, false),
     RainInCity(2, "Rain in city", R.raw.rain_in_city, R.drawable.rain_on_umbrella, 50, false, SoundCategory.Rain, false),
     RainOnCarRoof(3, "Rain on car roof", R.raw.rain_on_car_roof, R.drawable.rain_on_car, 50, false, SoundCategory.Rain),
@@ -33,7 +33,7 @@ enum class SoundsEnum(
     /**nature*/
     Fire(10, "Fire", R.raw.fire, R.drawable.icon_fire, 50, false, SoundCategory.Nature, false),
     Forest(11, "Forest", R.raw.forest, R.drawable.icon_forest, 50, false, SoundCategory.Nature, false),
-    Underwater(12, "Underwater", R.raw.underwater, R.drawable.icon_underwater, 50, false, SoundCategory.Nature),
+    Underwater(12, "Underwater", R.raw.underwater, R.drawable.icon_underwater, 50, false, SoundCategory.Nature,false),
     Wind(13, "Wind", R.raw.wind, R.drawable.icon_wind, 50, false, SoundCategory.Nature),
     WindLeaves(14, "Wind leaves", R.raw.wind_leaves, R.drawable.icon_wind_leaves, 50, false, SoundCategory.Nature),
 

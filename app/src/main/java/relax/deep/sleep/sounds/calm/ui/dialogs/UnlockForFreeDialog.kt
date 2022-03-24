@@ -12,7 +12,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
-import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.advertising.MyInterstitialAd
 import relax.deep.sleep.sounds.calm.databinding.DialogUnlockForFreeBinding
 import relax.deep.sleep.sounds.calm.model.Mix
@@ -56,14 +55,16 @@ class UnlockForFreeDialog : DialogFragment() {
 
     private fun setImage() {
         mix?.let { binding.unlockFreeIv.setImageURI(it.picturePath) }
-        sound?.let { binding.unlockFreeIv.setImageResource(it.icon) }
+        sound?.let {
+            binding.unlockFreeIv.setImageResource(it.icon)
+            binding.unlockFreeIv.setColorFilter(Color.argb(255, 255, 255, 255))
+        }
     }
 
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.watchVideoBtn.setOnClickListener {
             interstitialAd.showInterAd(requireActivity()) { toDoAfterVideo() }
-            showToast("Open video")
         }
         binding.unlockAllSoundsBtn.setOnClickListener {
             findNavController().navigate(
