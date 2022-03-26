@@ -68,12 +68,10 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun loadMixSounds(mixId: Long) {
-
-
         viewModelScope.launch {
             val sounds = repository.getSounds().toMutableList()
             val soundsInService = PlayerService.currentSounds
-            
+
             sounds.map { it.id }.forEachIndexed{ index, soundId->
                 if (soundsInService.keys.contains(soundId)) {
                     sounds[index] = soundsInService[soundId]!!
@@ -95,7 +93,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val mix = repository.getMix(mixId)
             mix.sounds.clear()
-            selectedSounds.value?.let { mix.sounds.addAll(selectedSounds.value!!) }
+            mix.sounds.addAll(PlayerService.currentSounds.values)
             repository.saveMix(mix)
         }
     }

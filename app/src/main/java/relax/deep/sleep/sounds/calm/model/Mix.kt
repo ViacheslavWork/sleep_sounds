@@ -9,7 +9,7 @@ data class Mix(
     var id: Long,
     val title: String,
     val sounds: MutableList<Sound> = mutableListOf(),
-    var picturePath: Uri,
+    var picturePath: Uri?,
     val category: MixCategory?,
     val isPremium: Boolean = true,
     val isCustom: Boolean = false

@@ -141,9 +141,9 @@ class PlayerFragment : Fragment() {
         PlayerService.isPause.observe(viewLifecycleOwner) {
             binding.playerPlayPauseBtn.setImageDrawable(
                 if (it) {
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_icn_play, null)
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_play_rounded, null)
                 } else {
-                    ResourcesCompat.getDrawable(resources, R.drawable.icn_pause, null)
+                    ResourcesCompat.getDrawable(resources, R.drawable.ic_pause_rounded, null)
                 }
             )
         }

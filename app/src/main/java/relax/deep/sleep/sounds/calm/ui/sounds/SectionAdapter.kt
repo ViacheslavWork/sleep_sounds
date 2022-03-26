@@ -1,9 +1,12 @@
 package relax.deep.sleep.sounds.calm.ui.sounds
 
+import android.content.Context
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData

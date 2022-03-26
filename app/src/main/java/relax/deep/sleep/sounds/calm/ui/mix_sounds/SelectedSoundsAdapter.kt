@@ -1,9 +1,8 @@
 package relax.deep.sleep.sounds.calm.ui.mix_sounds
 
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.content.Context
+import android.util.DisplayMetrics
+import android.view.*
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
@@ -77,6 +76,16 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
         )
 
         binding.soundsItemIv.setImageResource(sound.icon)
+
+        val windowManager =
+            binding.root.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val density = displayMetrics.density
+        val width = (((displayMetrics.widthPixels / density) / 3 - 21) * density).toInt()
+        val layoutParams = binding.root.layoutParams
+        layoutParams.width = width
+        binding.root.layoutParams = layoutParams
     }
 }
 

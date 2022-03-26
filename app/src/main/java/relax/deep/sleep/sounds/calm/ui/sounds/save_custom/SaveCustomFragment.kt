@@ -5,6 +5,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -67,12 +68,12 @@ class SaveCustomFragment : Fragment() {
     private fun observeSelectedImageUri() {
         selectedImageUriLD.observe(viewLifecycleOwner) {
             if (it == null) {
-                binding.applyBtn.isEnabled = false
+//                binding.applyBtn.isEnabled = false
                 binding.uploadImageBtn.isEnabled = true
                 binding.imageLayout.root.visibility = View.GONE
             } else {
                 binding.uploadImageBtn.isEnabled = false
-                binding.applyBtn.isEnabled = binding.customNameEt.text.isNotEmpty()
+//                binding.applyBtn.isEnabled = binding.customNameEt.text.isNotEmpty()
                 setImage(it)
             }
         }
@@ -90,8 +91,7 @@ class SaveCustomFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.applyBtn.isEnabled =
-                    binding.customNameEt.text.isNotEmpty() && selectedImageUri != null
+                binding.applyBtn.isEnabled = binding.customNameEt.text.isNotEmpty()
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -114,20 +114,19 @@ class SaveCustomFragment : Fragment() {
         binding.closeBtn.setOnClickListener { requireActivity().onBackPressed() }
 
         binding.applyBtn.setOnClickListener {
-            selectedImageUri?.let {
-                val imageInExternalStorageUri = saveImageToExternalStorage(imageUri = it)
-                val mix = Mix(
-                    id = 0,
-                    title = binding.customNameEt.text.toString(),
-                    sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
-                    picturePath = imageInExternalStorageUri,
-                    category = MixCategory.Others,
-                    isPremium = false,
-                    isCustom = true
-                )
-                mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
-                requireActivity().onBackPressed()
-            }
+            val imageInExternalStorageUri: Uri? =
+                saveImageToExternalStorage(imageUri = selectedImageUri)
+            val mix = Mix(
+                id = 0,
+                title = binding.customNameEt.text.toString(),
+                sounds = soundsViewModel.selectedSounds.value?.toMutableList()!!,
+                picturePath = imageInExternalStorageUri,
+                category = MixCategory.Others,
+                isPremium = false,
+                isCustom = true
+            )
+            mixesViewModel.handleEvent(MixesEvent.OnMixSave(mix))
+            requireActivity().onBackPressed()
         }
     }
 
@@ -146,11 +145,14 @@ class SaveCustomFragment : Fragment() {
         binding.imageLayout.root.visibility = visibility
     }
 
-    private fun saveImageToExternalStorage(imageUri: Uri): Uri {
+    private fun saveImageToExternalStorage(imageUri: Uri?): Uri? {
+        if (imageUri == null) {
+            return null
+        }
         val fileName = imageUri.toString().substringAfterLast("/")
 
         // Get the bitmap
-        val bitmap = when {
+        val srcBmp = when {
             Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
                 requireActivity().contentResolver,
                 imageUri
@@ -160,6 +162,52 @@ class SaveCustomFragment : Fragment() {
                 ImageDecoder.decodeBitmap(source)
             }
         }
+
+        var dstBmp = srcBmp
+        if (srcBmp.width >= srcBmp.height) {
+            dstBmp = Bitmap.createBitmap(
+                srcBmp,
+                srcBmp.width / 2 - srcBmp.height / 2,
+                0,
+                srcBmp.height,
+                srcBmp.height
+            );
+        } else {
+            dstBmp = Bitmap.createBitmap(
+                srcBmp,
+                0,
+                srcBmp.height / 2 - srcBmp.width / 2,
+                srcBmp.width,
+                srcBmp.width
+            );
+        }
+
+        val width: Int = dstBmp.width
+        val height: Int = dstBmp.height
+        val newWidth = 688
+        val newHeight = 680
+
+        // calculate the scale - in this case = 0.4f
+
+        // calculate the scale - in this case = 0.4f
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+
+        // createa matrix for the manipulation
+
+        // createa matrix for the manipulation
+        val matrix = Matrix()
+        // resize the bit map
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight)
+
+        // recreate the new Bitmap
+
+        // recreate the new Bitmap
+        val resizedBitmap = Bitmap.createBitmap(
+            dstBmp, 0, 0,
+            width, height, matrix, true
+        )
 
         // Get the context wrapper instance
         val wrapper = ContextWrapper(requireContext())
@@ -176,7 +224,7 @@ class SaveCustomFragment : Fragment() {
             val stream: OutputStream = FileOutputStream(file)
 
             // Compress bitmap
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
 
             // Flush the stream
             stream.flush()

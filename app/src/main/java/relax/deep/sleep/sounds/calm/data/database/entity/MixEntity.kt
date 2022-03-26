@@ -17,7 +17,7 @@ data class MixEntity(
     @TypeConverters(SoundsEntitiesListConverter::class)
     val soundsEntities: List<SoundEntity>,
     @TypeConverters(UriConverters::class)
-    var picturePath: Uri,
+    var picturePath: Uri?,
     val category: MixCategory?,
     val isPremium: Boolean = false,
     val isCustom: Boolean = false

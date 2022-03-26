@@ -97,7 +97,7 @@
 
     <string name="app_id">ca-app-pub-9075995454638935~7323183568</string>
     <string name="rewarded_id">ca-app-pub-9075995454638935/8444693543</string>
-    <string name="licence_key">TODO!!!!!!</string>
+    <string name="licence_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArrlHwJoQMDMK/p7Kur87+RSeWlzFdWlyryQny4yw48CnjCQR9y7GcqaDCE2yV5PO9E9wRlUhLylht3f4Ij7wR7GOzEUFzdLI0+jrcWsOawwGzt79FFV6T4jkFe+Y7x95TrmGM2m6cjzc4UugKIcUfr+pVnHoU2tN8TtuFBU/mfhQeK4vvyCsqY/JKksJfwpNVRJ0jEi37AgJyM8j4gKGesvqW8F7sRCOd36WqcrtaodEipL5CDtJWIxn9t58rivZ4HLBFaQHe5o2525cJX8sIMf1FpfX/RQCUJecxrq2pcQNx8xfDA4fb09jvm3uVHVBuO6oxU2Dhq3xa4o5TZSeVwIDAQAB</string>
     <string name="purchase_id_test">android.test.purchased</string>
 
     <string name="app_test_id">ca-app-pub-3940256099942544~3347511713</string>

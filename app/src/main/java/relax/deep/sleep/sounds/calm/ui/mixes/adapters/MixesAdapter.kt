@@ -8,9 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.ItemMixBinding
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.ui.mixes.MixesEvent
+import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 private const val TAG = "MixAdapter"
@@ -31,6 +35,12 @@ class MixesAdapter(val event: MutableLiveData<MixesEvent> = MutableLiveData()) :
 class MixesViewHolder(private val binding: ItemMixBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
+    companion object {
+        private val imageOption = RequestOptions()
+            .placeholder(R.drawable.mix_placeholder)
+            .fallback(R.drawable.mix_placeholder)
+    }
+
     fun onBind(mix: Mix, event: MutableLiveData<MixesEvent>) {
         binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
         binding.crossIv.setOnClickListener { event.value = MixesEvent.OnDeleteMixClick(mix) }
@@ -46,10 +56,16 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
             }
             binding.crownIv.visibility = View.GONE
         }
-        binding.mixItemIv.setImageURI(mix.picturePath)
+        val url = mix.picturePath.toString()
+        Glide.with(itemView.context)
+            .load(url)
+            .apply(imageOption)
+            .into(binding.mixItemIv)
+        showLog("onBind: ${mix.picturePath}", TAG)
+//        binding.mixItemIv.setImageResource(R.drawable.mix_placeholder)
+//        binding.mixItemIv.setImageURI(mix.picturePath)
     }
 }
-
 
 private class MixDiffCallback : DiffUtil.ItemCallback<Mix>() {
     override fun areItemsTheSame(oldItem: Mix, newItem: Mix): Boolean =

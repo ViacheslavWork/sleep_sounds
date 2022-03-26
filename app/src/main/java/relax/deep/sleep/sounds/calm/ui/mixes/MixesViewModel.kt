@@ -1,5 +1,7 @@
 package relax.deep.sleep.sounds.calm.ui.mixes
 
+import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +11,10 @@ import kotlinx.coroutines.launch
 import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.model.MixCategory
+import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
+import java.io.File
+import java.net.URI
 
 private const val TAG = "MixesViewModel"
 
@@ -56,7 +62,10 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
 
             is MixesEvent.OnMixClick -> _currentMix.value = event.mix
 
-            is MixesEvent.OnDeleteMixClick -> viewModelScope.launch { repository.deleteMix(event.mix.id) }
+            is MixesEvent.OnDeleteMixClick -> viewModelScope.launch {
+                repository.deleteMix(event.mix.id)
+                deleteImageFile(event.mix.picturePath)
+            }
 
             is MixesEvent.OnMixSave -> {
                 Log.i(TAG, "handleEvent: ${event.mix}")
@@ -65,4 +74,10 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
+    private fun deleteImageFile(picturePath: Uri?) {
+        picturePath?.let {
+            showLog("deleteImageFile: ${it.path}", TAG)
+            File(it.path).delete()
+        }
+    }
 }
