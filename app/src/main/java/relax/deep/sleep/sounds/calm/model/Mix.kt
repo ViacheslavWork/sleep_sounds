@@ -11,7 +11,7 @@ data class Mix(
     val sounds: MutableList<Sound> = mutableListOf(),
     var picturePath: Uri?,
     val category: MixCategory?,
-    val isPremium: Boolean = true,
+    var isPremium: Boolean = true,
     val isCustom: Boolean = false
 ) : Parcelable
 

@@ -84,7 +84,7 @@ class MixesFragment : Fragment() {
     ): View {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
+            ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
         _binding = FragmentMixesBinding.inflate(inflater, container, false)
         setUpViewPager()
         return binding.root
@@ -144,6 +144,13 @@ class MixesFragment : Fragment() {
                 binding.playerPlayPauseBtn.btn.setImageResource(R.drawable.icn_pause)
             }
         }
+
+        PlayerService.currentMixLD.observe(viewLifecycleOwner){
+            it?.also {
+                binding.playerPlayPauseBtn.mixItemIv.setImageURI(it.picturePath)
+            }
+        }
+
         PlayerService.isPlayable.observe(viewLifecycleOwner) {
             if (it && PlayerService.launcher == Constants.MIX_LAUNCHER) {
                 bindService()

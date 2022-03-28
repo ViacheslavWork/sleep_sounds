@@ -16,7 +16,7 @@ data class Sound(
     var volume: Int,
     var isPlaying: Boolean = false,
     val category: SoundCategory,
-    val isPremium: Boolean = true
+    var isPremium: Boolean = true
 ) : Parcelable
 
 enum class SoundCategory(val title: String) {

@@ -59,12 +59,15 @@ class PlayerService : LifecycleService() {
         val currentLauncherLD: LiveData<String> = _currentLauncherLD
 
         val currentSounds = mutableMapOf<Long, Sound>()
+        fun getCurrentMapSoundIdToSound() = currentSounds.toMap()
 
         var launcher: String? = ""
+            private set
 
         var currentMix: Mix? = null
 
         var currentMixId: Long = Constants.NO_MIX_ID
+            private set
 
         private val currentPlayers: HashMap<String, ExoPlayer> = hashMapOf<String, ExoPlayer>()
     }
@@ -119,13 +122,13 @@ class PlayerService : LifecycleService() {
                     loadMix(currentMixId)
                     Log.i(TAG, "onStartCommand: mix id $currentMixId")
                     _currentLauncherLD.postValue(launcher)
-                    playSound(sound)
+                    playStopSound(sound)
                 }
                 Constants.ACTION_STOP_SOUND -> {
                     Log.d(TAG, "Stop sound")
                     val sound = it.extras?.get(Constants.EXTRA_SOUND) as Sound
 //                    launcher = it.extras?.getString(Constants.LAUNCHER)
-                    stopSound(sound)
+                    playStopSound(sound)
                 }
                 Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS -> {
                     _isPause.postValue(!isPause.value!!)
@@ -174,7 +177,6 @@ class PlayerService : LifecycleService() {
         observeCurrentLauncher(notificationManager, notificationBuilder)
     }
 
-
     private fun stopService() {
         isFirstRun = true
         stopAllSounds()
@@ -218,47 +220,33 @@ class PlayerService : LifecycleService() {
 
     private fun playStopSound(sound: Sound) {
         if (currentPlayers.keys.contains(sound.title)) {
-            stopSound(sound.title)
-            currentPlayers.remove(sound.title)
-
-            removeFromCurrentSounds(sound)
-
-            if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
-            if (currentPlayers.isEmpty()) stopService()
+            stopSound(sound)
         } else {
-            currentPlayers[sound.title] =
-                playPlayer(sound).apply { if (isPause.value == true) pause() }
-
-            addToCurrentSounds(sound)
-
-            _isPlayable.postValue(true)
+            playSound(sound)
         }
     }
 
     private fun playSound(sound: Sound) {
-        if (!currentPlayers.keys.contains(sound.title)) {
-            currentPlayers[sound.title] =
-                playPlayer(sound).apply { if (isPause.value == true) pause() }
+        currentPlayers[sound.title] =
+            playPlayer(sound).apply { if (isPause.value == true) pause() }
 
-            addToCurrentSounds(sound)
+        addToCurrentSounds(sound)
 
-            _isPlayable.postValue(true)
-        }
+        _isPlayable.postValue(true)
     }
 
     private fun stopSound(sound: Sound) {
-        if (currentPlayers.keys.contains(sound.title)) {
-            stopSound(sound.title)
-            currentPlayers.remove(sound.title)
+        stopSound(sound.title)
+        currentPlayers.remove(sound.title)
 
-            removeFromCurrentSounds(sound)
+        removeFromCurrentSounds(sound)
 
-            if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
-            if (currentPlayers.isEmpty()) stopService()
-        }
+        if (currentPlayers.isEmpty()) _isPlayable.postValue(false)
+        if (currentPlayers.isEmpty()) stopService()
     }
 
     private fun addToCurrentSounds(sound: Sound) {
+
         curSoundsLocal.add(sound)
         _currentSoundsLD.postValue(curSoundsLocal)
         currentSounds[sound.id] = sound
@@ -316,6 +304,7 @@ class PlayerService : LifecycleService() {
     /*private fun checkIsAddSoundAvailable(): Boolean {
         return currentPlayers.size < Constants.MAX_SELECTABLE_SOUNDS
     }*/
+
     //notification part
 
     private fun getNotificationBuilder() = NotificationCompat.Builder(
@@ -372,9 +361,10 @@ class PlayerService : LifecycleService() {
         )
 
         notificationView.setOnClickPendingIntent(
+
             R.id.notification_play_pause_btn,
             playPauseIntentPending
-        );
+        )
         notificationView.setOnClickPendingIntent(R.id.notification_cross_btn, closeIntentPending);
     }
 

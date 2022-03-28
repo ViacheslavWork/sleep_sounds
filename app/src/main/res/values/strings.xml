@@ -102,5 +102,7 @@
 
     <string name="app_test_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="interstitial_test_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="congratulations_you_are_lucky">Congratulations,\nyou are lucky!</string>
+    <string name="no_need_to_watch_ads_now">No need to watch ads now</string>
 
 </resources>

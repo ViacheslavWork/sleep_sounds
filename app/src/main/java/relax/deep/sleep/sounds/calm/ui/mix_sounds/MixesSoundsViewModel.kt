@@ -115,7 +115,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-    fun updateSections() {
+   /* fun updateSections() {
         val sounds = repository.getSounds()
         val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
         enumValues<SoundCategory>().forEach {
@@ -129,7 +129,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             }
         }
         _sections.postValue(mapSoundCategoryToSection.values.toList())
-    }
+    }*/
 
     private fun addToSelected(sound: Sound) {
         _selectedSounds.value =

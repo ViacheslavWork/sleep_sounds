@@ -85,7 +85,7 @@ class SoundsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
+            ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
 
         _binding = FragmentSoundsBinding.inflate(inflater, container, false)
         return binding.root
@@ -343,7 +343,10 @@ class SoundsFragment : Fragment() {
     private fun playStopSoundProgrammatically() {
         lastOnClick.soundsHolder.bindingAdapter?.notifyItemChanged(
             lastOnClick.soundsHolder.bindingAdapterPosition,
-            lastOnClick.sound.apply { isPlaying = !isPlaying }
+            lastOnClick.sound.apply {
+                isPlaying = !isPlaying
+                isPremium = false
+            }
         )
         Log.i(
             TAG,

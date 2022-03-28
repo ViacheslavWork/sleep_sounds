@@ -17,6 +17,9 @@
     <action android:id="@+id/action_global_to_sleepTimerFragment"
         app:destination="@id/sleepTimerFragment"
         app:launchSingleTop="true"/>
+    <action
+        android:id="@+id/action_global_to_luckyDialog"
+        app:destination="@id/luckyDialog" />
 
     <fragment
         android:id="@+id/navigation_mixes"
@@ -130,6 +133,9 @@
         <action
             android:id="@+id/action_unlockForFreeFragment_to_navigation_sounds"
             app:destination="@id/navigation_sounds" />
+        <action
+            android:id="@+id/action_unlockForFreeFragment_to_luckyDialog"
+            app:destination="@id/luckyDialog" />
     </dialog>
     <fragment
         android:id="@+id/setTimerFragment"
@@ -188,4 +194,8 @@
         android:name="relax.deep.sleep.sounds.calm.ui.DetailsFragment"
         android:label="DetailsFragment"
         tools:layout="@layout/fragment_details"/>
+    <dialog
+        android:id="@+id/luckyDialog"
+        android:name="relax.deep.sleep.sounds.calm.ui.dialogs.LuckyDialog"
+        android:label="LuckyDialog" />
 </navigation>

@@ -34,7 +34,7 @@ class MyInterstitialAd(private val context: Context, private val interstitialId:
             })
     }
 
-    fun showInterAd(activity: Activity, functionAfterAd: () -> Unit) {
+    fun showInterAd(activity: Activity, functionAfterAd: () -> Unit): Boolean {
         if (interAd != null) {
             interAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -59,9 +59,11 @@ class MyInterstitialAd(private val context: Context, private val interstitialId:
                 }
             }
             interAd?.show(activity)
+            return true
         } else {
             showLog("interId = null", TAG)
             functionAfterAd()
+            return false
         }
     }
 }

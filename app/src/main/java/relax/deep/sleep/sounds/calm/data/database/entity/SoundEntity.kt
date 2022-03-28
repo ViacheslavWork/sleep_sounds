@@ -17,7 +17,7 @@ class SoundEntity(
         @DrawableRes
         val icon: Int,
         var volume: Int,
-        var isPlaying: Boolean = false,
+//        var isPlaying: Boolean = false,
         val category: SoundCategory,
         val isPremium: Boolean
 ) {
@@ -29,7 +29,7 @@ class SoundEntity(
                     file = sound.file,
                     icon = sound.icon,
                     volume = sound.volume,
-                    isPlaying = sound.isPlaying,
+//                    isPlaying = sound.isPlaying,
                     category = sound.category,
                     isPremium = sound.isPremium
             )
@@ -45,7 +45,7 @@ fun SoundEntity.toSound(): Sound {
             file = file,
             icon = icon,
             volume = volume,
-            isPlaying = isPlaying,
+            isPlaying = false,
             category = category,
             isPremium = isPremium
     )

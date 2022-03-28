@@ -1,12 +1,9 @@
 package relax.deep.sleep.sounds.calm.ui.sounds
 
-import android.content.Context
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
@@ -113,7 +110,13 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         val hasPremiumStatus = PremiumPreferences.hasPremiumStatus(binding.root.context)
         binding.mixItemTv.text = sound.title
         binding.seekBar.visibility = View.INVISIBLE
-        if (sound.isPremium && !hasPremiumStatus) binding.crownIv.visibility = View.VISIBLE
+
+        if (sound.isPremium && !hasPremiumStatus) {
+            binding.crownIv.visibility = View.VISIBLE
+        } else {
+            binding.crownIv.visibility = View.GONE
+        }
+
         if (isSelectable) {
             if (sound.isPlaying) {
                 binding.seekBar.visibility = View.VISIBLE

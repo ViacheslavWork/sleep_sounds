@@ -15,9 +15,6 @@ import relax.deep.sleep.sounds.calm.utils.ToastHelper
 
 class RatingDialog : DialogFragment() {
     private var _binding: DialogRatingBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

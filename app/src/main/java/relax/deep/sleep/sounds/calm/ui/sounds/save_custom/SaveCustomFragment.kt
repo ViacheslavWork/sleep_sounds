@@ -28,6 +28,7 @@ import relax.deep.sleep.sounds.calm.model.MixCategory
 import relax.deep.sleep.sounds.calm.ui.mixes.MixesEvent
 import relax.deep.sleep.sounds.calm.ui.mixes.MixesViewModel
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsViewModel
+import relax.deep.sleep.sounds.calm.utils.Constants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -54,7 +55,7 @@ class SaveCustomFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
+            ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
         _binding = FragmentSaveCustomBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -214,7 +215,7 @@ class SaveCustomFragment : Fragment() {
 
         // Initializing a new file
         // The bellow line return a directory in external storage
-        var file = File(wrapper.getExternalFilesDir(null), "custom_mix_images")
+        var file = File(wrapper.getExternalFilesDir(null), Constants.CUSTOM_MIX_EXTERNAL_DIRECTORY)
         file.mkdirs()
         // Create a file to save the image
         file = File(file, "${fileName}.jpg")

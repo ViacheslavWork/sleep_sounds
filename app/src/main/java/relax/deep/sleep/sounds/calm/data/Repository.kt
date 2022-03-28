@@ -25,14 +25,17 @@ import relax.deep.sleep.sounds.calm.ui.sounds.Section
 private const val TAG = "Repository"
 
 class Repository(
-        private val soundsProvider: SoundsProvider,
-        private val mixProvider: MixesProvider,
-        private val soundsDao: SoundsDao,
-        private val mixesDao: MixesDao
+    private val soundsProvider: SoundsProvider,
+    private val mixProvider: MixesProvider,
+    private val soundsDao: SoundsDao,
+    private val mixesDao: MixesDao
 ) {
 
-    fun getSounds(): List<Sound> {
-        return soundsProvider.getSounds()
+    suspend fun getSounds(): List<Sound> = withContext(Dispatchers.IO) {
+        if (soundsDao.getAll().isEmpty()) {
+            soundsDao.insertAll(soundsProvider.getSounds().map { SoundEntity.fromSound(it) })
+        }
+        return@withContext soundsDao.getAll().map { it.toSound() }
     }
 
     //TODO: remove it later
@@ -98,6 +101,7 @@ class Repository(
             it?.toMix()
         }
     }
+
     suspend fun deleteMix(id: Long) = withContext(Dispatchers.IO) {
         mixesDao.delete(id)
     }
@@ -105,5 +109,9 @@ class Repository(
     fun getSound(soundId: Long): Sound? {
         soundsProvider.getSounds().forEach { if (it.id == soundId) return it }
         return null
+    }
+
+    suspend fun saveSound(sound: Sound) = withContext(Dispatchers.IO) {
+        soundsDao.insert(SoundEntity.fromSound(sound))
     }
 }

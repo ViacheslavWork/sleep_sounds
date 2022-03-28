@@ -10,9 +10,13 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.advertising.MyInterstitialAd
+import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.databinding.DialogUnlockForFreeBinding
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.model.Sound
@@ -31,6 +35,7 @@ class UnlockForFreeDialog : DialogFragment() {
     private var mix: Mix? = null
     private var sound: Sound? = null
     private val interstitialAd: MyInterstitialAd by inject()
+    private val repository: Repository by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +69,8 @@ class UnlockForFreeDialog : DialogFragment() {
     private fun setUpListeners() {
         binding.closeUnlockFreeBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.watchVideoBtn.setOnClickListener {
-            interstitialAd.showInterAd(requireActivity()) { toDoAfterVideo() }
+            val isShown = interstitialAd.showInterAd(requireActivity()) { toDoAfterVideo() }
+            if (!isShown) findNavController().navigate(R.id.action_global_to_luckyDialog)
         }
         binding.unlockAllSoundsBtn.setOnClickListener {
             findNavController().navigate(
@@ -80,12 +86,18 @@ class UnlockForFreeDialog : DialogFragment() {
                 MixesFragment.playPremiumMixRequest,
                 bundleOf(MixesFragment.mixIdKey to it.id)
             )
+            lifecycleScope.launch {
+                repository.saveMix(it.apply { isPremium = false })
+            }
         }
         sound?.let {
             setFragmentResult(
                 SoundsFragment.playPremiumSoundRequest,
                 bundleOf(SoundsFragment.playAfterVideoKey to true)
             )
+            lifecycleScope.launch {
+                repository.saveSound(it.apply { isPremium = false })
+            }
         }
     }
 

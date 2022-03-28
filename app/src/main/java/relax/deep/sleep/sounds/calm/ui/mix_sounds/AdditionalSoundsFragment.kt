@@ -78,7 +78,7 @@ class AdditionalSoundsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
-            ResourcesCompat.getDrawable(resources, R.drawable.background, null)
+            ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
         _binding = FragmentAdditionalSoundsBinding.inflate(inflater, container, false)
         return binding.root
     }

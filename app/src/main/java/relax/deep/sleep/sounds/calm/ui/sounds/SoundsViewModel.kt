@@ -1,27 +1,16 @@
 package relax.deep.sleep.sounds.calm.ui.sounds
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
 import relax.deep.sleep.sounds.calm.BuildConfig
 import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.model.Sound
 import relax.deep.sleep.sounds.calm.model.SoundCategory
 import relax.deep.sleep.sounds.calm.service.PlayerService
 import relax.deep.sleep.sounds.calm.utils.Constants
-import kotlin.collections.List
-import kotlin.collections.MutableMap
-import kotlin.collections.Set
-import kotlin.collections.forEach
-import kotlin.collections.forEachIndexed
-import kotlin.collections.listOf
-import kotlin.collections.mutableMapOf
+import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import kotlin.collections.set
-import kotlin.collections.toList
-import kotlin.collections.toMutableList
-import kotlin.collections.toSet
 
 private const val TAG = "SoundsViewModel"
 
@@ -44,21 +33,24 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun updateSections() {
-        val sounds = repository.getSounds()
-        val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
-        enumValues<SoundCategory>().forEach {
-            mapSoundCategoryToSection[it] = Section(it)
-        }
-        sounds.forEach {
-            if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
-                && PlayerService.currentSounds.containsKey(it.id)
-            ) {
-                mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
-            } else {
-                mapSoundCategoryToSection[it.category]?.items?.add(it)
+        showLog("updateSections: ", TAG)
+        viewModelScope.launch {
+            val sounds = repository.getSounds()
+            val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+            enumValues<SoundCategory>().forEach {
+                mapSoundCategoryToSection[it] = Section(it)
             }
+            sounds.forEach {
+                if (PlayerService.launcher == Constants.SOUNDS_LAUNCHER
+                    && PlayerService.currentSounds.containsKey(it.id)
+                ) {
+                    mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
+                } else {
+                    mapSoundCategoryToSection[it.category]?.items?.add(it)
+                }
+            }
+            _sections.postValue(mapSoundCategoryToSection.values.toList())
         }
-        _sections.postValue(mapSoundCategoryToSection.values.toList())
     }
 
     fun handleEvent(event: SoundsEvent) {
@@ -104,11 +96,5 @@ class SoundsViewModel(private val repository: Repository) : ViewModel() {
         showLog("onCleared")
         PlayerService.currentSoundsLD.removeObserver(selectedSoundsObserver)
         super.onCleared()
-    }
-
-    private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
-        }
     }
 }
