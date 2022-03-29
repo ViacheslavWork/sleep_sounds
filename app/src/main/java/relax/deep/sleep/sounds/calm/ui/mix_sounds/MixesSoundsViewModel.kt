@@ -31,43 +31,9 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
 
     init {
         PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
-//        updateSections()
     }
 
-    /*
-        fun loadMixSounds(mixId: Long) {
-            Log.i(TAG, "loadMixSounds: ")
-            viewModelScope.launch {
-                val mix = repository.getMix(mixId)
-                mix.sounds.forEach { it.isPlaying = true }
-                _selectedSounds.postValue(mix.sounds)
-
-                val sounds = repository.getSounds()
-                val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
-                enumValues<SoundCategory>().forEach {
-                    mapSoundCategoryToSection[it] = Section(it)
-                }
-                sounds.forEach {
-                    if (mix.sounds.map { sound -> sound.id }.contains(it.id)) {
-                        val soundFromMix =
-                            mix.sounds.filter { mixSound -> mixSound.id == it.id }.take(1)[0]
-                        mapSoundCategoryToSection[it.category]?.items?.add(soundFromMix)
-                    } else {
-                        mapSoundCategoryToSection[it.category]?.items?.add(it)
-                    }
-                }
-                _sections.postValue(mapSoundCategoryToSection.values.toList())
-            }
-        }
-    */
-
-    fun loadSounds(mixId: Long): LiveData<List<Sound>> {
-        return Transformations.map(repository.getMixLD(mixId)) {
-            return@map it?.sounds?.toList()
-        }
-    }
-
-    fun loadMixSounds(mixId: Long) {
+    fun loadSounds() {
         viewModelScope.launch {
             val sounds = repository.getSounds().toMutableList()
             val soundsInService = PlayerService.currentSounds
@@ -105,9 +71,8 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
                     removeFromSelected(sound = event.sound)
                 }
             }
-            is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick -> {
+            is SoundsEvent.OnRemoveClick -> {
                 removeFromSelected(event.sound)
-//                updateSections()
             }
             is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
         }

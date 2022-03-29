@@ -246,7 +246,7 @@ class PlayerService : LifecycleService() {
     }
 
     private fun addToCurrentSounds(sound: Sound) {
-
+        sound.isPlaying = true
         curSoundsLocal.add(sound)
         _currentSoundsLD.postValue(curSoundsLocal)
         currentSounds[sound.id] = sound

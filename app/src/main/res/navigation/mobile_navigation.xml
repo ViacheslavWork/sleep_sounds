@@ -128,6 +128,9 @@
         <action
             android:id="@+id/action_additionalSoundsFragment_to_goPremiumFragment"
             app:destination="@id/goPremiumFragment" />
+        <action
+            android:id="@+id/action_mixesSoundsFragment_to_unlockForFreeFragment"
+            app:destination="@id/unlockForFreeFragment" />
     </fragment>
     <dialog
         android:id="@+id/unlockForFreeFragment"

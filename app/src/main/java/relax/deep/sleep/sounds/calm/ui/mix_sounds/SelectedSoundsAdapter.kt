@@ -1,5 +1,6 @@
 package relax.deep.sleep.sounds.calm.ui.mix_sounds
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.*
@@ -16,8 +17,7 @@ import relax.deep.sleep.sounds.calm.ui.sounds.SoundsEvent
 
 class SelectedSoundsAdapter(
     val event: MutableLiveData<SoundsEvent> = MutableLiveData(),
-) :
-    ListAdapter<Sound, SelectedSoundsHolder>(SoundDiffCallback()) {
+) : ListAdapter<Sound, SelectedSoundsHolder>(SoundDiffCallback()) {
 
     lateinit var binding: ItemSoundsBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedSoundsHolder {
@@ -33,6 +33,7 @@ class SelectedSoundsAdapter(
 
 class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
     RecyclerView.ViewHolder(binding.root) {
+    @SuppressLint("ClickableViewAccessibility")
     fun onBind(sound: Sound, event: MutableLiveData<SoundsEvent>) {
         binding.mixItemTv.text = sound.title
         binding.removeIv.visibility = View.VISIBLE
@@ -48,6 +49,7 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
 
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
+
         //this for handling touch seek bar in horizontal orientation
         binding.seekBar.setOnTouchListener { v, event ->
             when (event.action) {
@@ -60,13 +62,9 @@ class SelectedSoundsHolder(private val binding: ItemSoundsBinding) :
             v.onTouchEvent(event)
             true
         }
-        binding.root.setOnClickListener {
-//            event.value = SoundsEvent.OnSoundClick(sound,bindingAdapterPosition)
-        }
+
         binding.removeIv.setOnClickListener {
-            sound.isPlaying = false
-            event.value =
-                SoundsEvent.AdditionalSoundsEvent.OnRemoveClick(sound, bindingAdapterPosition)
+            event.value = SoundsEvent.OnRemoveClick(sound)
         }
 
         binding.root.background = ResourcesCompat.getDrawable(

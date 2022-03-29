@@ -13,7 +13,9 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,10 +24,13 @@ import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentAdditionalSoundsBinding
 import relax.deep.sleep.sounds.calm.model.Sound
 import relax.deep.sleep.sounds.calm.service.PlayerService
+import relax.deep.sleep.sounds.calm.ui.dialogs.UnlockForFreeDialog
 import relax.deep.sleep.sounds.calm.ui.sounds.SectionAdapter
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsEvent
+import relax.deep.sleep.sounds.calm.ui.sounds.SoundsFragment
 import relax.deep.sleep.sounds.calm.utils.Constants
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
 
 private const val TAG = "AdditionalSoundsFragment"
@@ -43,6 +48,8 @@ class AdditionalSoundsFragment : Fragment() {
 
     private lateinit var selectedSoundsRecyclerView: RecyclerView
     private lateinit var selectedSoundsAdapter: SelectedSoundsAdapter
+
+    private lateinit var lastOnClick: SoundsEvent.OnSoundClick
 
     private var _binding: FragmentAdditionalSoundsBinding? = null
     private val binding get() = _binding!!
@@ -68,15 +75,20 @@ class AdditionalSoundsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mixId = arguments?.getLong(mixIdKey)
-        mixId?.let { additionalSoundsViewModel.loadMixSounds(it) }
+        additionalSoundsViewModel.loadSounds()
+        setFragmentResultListener(SoundsFragment.playPremiumSoundRequest) { _, bundle ->
+            val isPlay: Boolean = bundle.getBoolean(SoundsFragment.playAfterVideoKey)
+            // Do something with the result
+            if (isPlay) {
+                playStopSound(lastOnClick)
+            }
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         requireActivity().findViewById<ConstraintLayout>(R.id.container).background =
             ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
         _binding = FragmentAdditionalSoundsBinding.inflate(inflater, container, false)
@@ -190,10 +202,8 @@ class AdditionalSoundsFragment : Fragment() {
 
     private fun observeSelectedEvents() {
         selectedSoundsAdapter.event.observe(viewLifecycleOwner) {
-            if (it is SoundsEvent.AdditionalSoundsEvent.OnRemoveClick) {
-                sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
-                additionalSoundsViewModel.handleEvent(it)
-                selectSoundInSections(it.sound.apply { isPlaying = false })
+            if (it is SoundsEvent.OnRemoveClick) {
+                playStopSound(it)
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 showLog(it.sound.volume.toString())
                 playerService?.changeVolume(it.sound)
@@ -205,15 +215,26 @@ class AdditionalSoundsFragment : Fragment() {
     private fun observeSectionSoundsEvents() {
         sectionAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnSoundClick) {
-                if (!it.sound.isPremium || it.sound.isPlaying) {
-                    selectSoundInSections(it.sound.apply { isPlaying = !isPlaying })
-                    sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it.sound)
-                    additionalSoundsViewModel.handleEvent(it)
+                lastOnClick = it
+                if (!it.sound.isPremium
+                    || it.sound.isPlaying
+                    || PremiumPreferences.hasPremiumStatus(requireContext())
+                ) {
+                    playStopSound(it)
                 } else {
-                    //TODO
+                    findNavController().navigate(
+                        R.id.action_mixesSoundsFragment_to_unlockForFreeFragment,
+                        bundleOf(UnlockForFreeDialog.soundKey to it.sound)
+                    )
                 }
             }
         }
+    }
+
+    private fun playStopSound(soundsEvent: SoundsEvent) {
+        sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, soundsEvent.sound)
+        additionalSoundsViewModel.handleEvent(soundsEvent)
+        selectSoundInSections(soundsEvent.sound.apply { isPlaying = !isPlaying })
     }
 
     private fun selectSoundInSections(sound: Sound) {
@@ -242,10 +263,4 @@ class AdditionalSoundsFragment : Fragment() {
             requireActivity().unbindService(serviceConnection)
         }
     }
-
-    /*private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
-        }
-    }*/
 }
