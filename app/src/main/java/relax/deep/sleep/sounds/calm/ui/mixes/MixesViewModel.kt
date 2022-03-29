@@ -49,10 +49,6 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
         return repository.getMixLD(mixId)
     }
 
-    private fun loadMixes(category: MixCategory) {
-        _mixes.postValue(repository.getMixes(category = category))
-    }
-
     fun handleEvent(event: MixesEvent) {
         when (event) {
             is MixesEvent.OnCategoryClick -> {}
