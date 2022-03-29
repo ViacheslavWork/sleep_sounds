@@ -41,7 +41,7 @@ fun MixEntity.toMix(): Mix {
     return Mix(
         id = id,
         title = title,
-        sounds = soundsEntities.map { it.toSound() }.toMutableList(),
+        sounds = soundsEntities.map { it.toSound().apply { isPlaying = true } }.toMutableList(),
         picturePath = picturePath,
         category = category,
         isPremium = isPremium,

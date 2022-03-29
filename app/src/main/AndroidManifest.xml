@@ -36,7 +36,7 @@
             android:name="relax.deep.sleep.sounds.calm.service.TimerService"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name="relax.deep.sleep.sounds.calm.service.AlarmService"
+            android:name="relax.deep.sleep.sounds.calm.service.RescheduleAlarmsService"
             android:foregroundServiceType="dataSync" />
 
         <receiver

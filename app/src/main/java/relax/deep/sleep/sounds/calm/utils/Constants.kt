@@ -9,6 +9,7 @@ object Constants {
         "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
 
     const val CUSTOM_MIX_EXTERNAL_DIRECTORY = "custom_mix_images"
+    const val LOG_EXTERNAL_DIRECTORY = "logs"
 
     const val ACTION_START_TIMER = "ACTION_START_TIMER"
     const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"

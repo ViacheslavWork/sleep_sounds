@@ -37,6 +37,7 @@ import relax.deep.sleep.sounds.calm.subscription.SubscriptionPrice
 import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_MONTH
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_YEAR
+import relax.deep.sleep.sounds.calm.utils.LoggerToFile
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 

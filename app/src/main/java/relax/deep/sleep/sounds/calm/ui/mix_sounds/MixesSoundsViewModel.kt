@@ -71,13 +71,11 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         viewModelScope.launch {
             val sounds = repository.getSounds().toMutableList()
             val soundsInService = PlayerService.currentSounds
-
-            sounds.map { it.id }.forEachIndexed{ index, soundId->
+            sounds.map { it.id }.forEachIndexed { index, soundId ->
                 if (soundsInService.keys.contains(soundId)) {
                     sounds[index] = soundsInService[soundId]!!
                 }
             }
-            sounds.forEach { Log.i(TAG, "loadMixSounds: $it") }
             val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
             enumValues<SoundCategory>().forEach {
                 mapSoundCategoryToSection[it] = Section(it)
@@ -115,21 +113,21 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         }
     }
 
-   /* fun updateSections() {
-        val sounds = repository.getSounds()
-        val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
-        enumValues<SoundCategory>().forEach {
-            mapSoundCategoryToSection[it] = Section(it)
-        }
-        sounds.forEach {
-            if (PlayerService.currentSounds.containsKey(it.id)) {
-                mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
-            } else {
-                mapSoundCategoryToSection[it.category]?.items?.add(it)
-            }
-        }
-        _sections.postValue(mapSoundCategoryToSection.values.toList())
-    }*/
+    /* fun updateSections() {
+         val sounds = repository.getSounds()
+         val mapSoundCategoryToSection: MutableMap<SoundCategory, Section> = mutableMapOf()
+         enumValues<SoundCategory>().forEach {
+             mapSoundCategoryToSection[it] = Section(it)
+         }
+         sounds.forEach {
+             if (PlayerService.currentSounds.containsKey(it.id)) {
+                 mapSoundCategoryToSection[it.category]?.items?.add(PlayerService.currentSounds[it.id]!!)
+             } else {
+                 mapSoundCategoryToSection[it.category]?.items?.add(it)
+             }
+         }
+         _sections.postValue(mapSoundCategoryToSection.values.toList())
+     }*/
 
     private fun addToSelected(sound: Sound) {
         _selectedSounds.value =
