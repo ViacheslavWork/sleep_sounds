@@ -37,12 +37,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bedtime_reminder"
-            app:thumbTint="@color/white"
             android:textAppearance="@style/text2"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@id/content_end"
             app:layout_constraintStart_toEndOf="@id/content_start"
             app:layout_constraintTop_toTopOf="parent"
+            app:thumbTint="@color/white"
             tools:layout_editor_absoluteY="26dp" />
 
         <TextView
@@ -141,7 +141,7 @@
             app:constraint_referenced_ids="sunday_btn, monday_btn, tuesday_btn,wednesday_btn,thursday_btn, friday_btn, saturday_btn"
             app:flow_horizontalStyle="spread_inside"
             app:flow_verticalGap="10dp"
-            app:flow_wrapMode="aligned"
+            app:flow_wrapMode="chain"
             app:layout_constraintEnd_toEndOf="@id/content_end"
             app:layout_constraintStart_toStartOf="@id/content_start"
             app:layout_constraintTop_toBottomOf="@id/repeat_tv" />
@@ -179,7 +179,6 @@
             android:id="@+id/ok_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
             android:backgroundTint="@android:color/transparent"
             android:src="@drawable/ic_icon_check"
             app:backgroundTint="@color/white"
@@ -187,6 +186,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/content_end"
             app:layout_constraintStart_toEndOf="@id/content_start"
+            app:layout_constraintTop_toBottomOf="@id/flow"
             app:tint="@color/white" />
 
         <!--            app:constraint_referenced_ids="time_block,repeat_tv, sunday_btn,monday_btn,tuesday_btn,wednesday_btn,thursday_btn,friday_btn,saturday_btn" -->

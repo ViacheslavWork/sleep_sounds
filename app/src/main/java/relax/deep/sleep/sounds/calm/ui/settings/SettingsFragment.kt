@@ -10,16 +10,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentSettingsBinding
+import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.Constants.CUSTOM_ALARM_ID
+import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
 import relax.deep.sleep.sounds.calm.utils.ToastHelper
 
 class SettingsFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
-
+    private val everyDayAlarmManager: EveryDayAlarmManager by inject()
     private var _binding: FragmentSettingsBinding? = null
 
     // This property is only valid between onCreateView and
@@ -38,9 +43,18 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.versionTv.text = String.format(resources.getString(R.string.version), "1.1")
+        binding.versionTv.text =
+            String.format(resources.getString(R.string.version), Constants.CURRENT_VERSION)
+        setSwitchAccessibility()
         setListeners()
         setSwitchStatus()
+    }
+
+    private fun setSwitchAccessibility() {
+        lifecycleScope.launch {
+            val alarm = async { settingsViewModel.getAlarm(CUSTOM_ALARM_ID) }
+            alarm.await()?.let { binding.bedTimeReminderSwitch.isEnabled = true }
+        }
     }
 
     private fun setListeners() {
@@ -68,7 +82,7 @@ class SettingsFragment : Fragment() {
             .setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     lifecycleScope.launch {
-                        val alarm = settingsViewModel.getAlarm(1)
+                        val alarm = settingsViewModel.getAlarm(CUSTOM_ALARM_ID)
                         alarm?.let {
                             withContext(Dispatchers.Main) {
                                 binding.bedTimeReminderSwitch.text =
@@ -80,6 +94,7 @@ class SettingsFragment : Fragment() {
                             }
                             if (!alarm.started) {
                                 alarm.schedule(requireContext())
+                                everyDayAlarmManager.cancelEveryDayAlarm()
                                 settingsViewModel.setAlarm(alarm)
                                 ToastHelper.showCustomToast(requireActivity())
                             }
@@ -87,10 +102,11 @@ class SettingsFragment : Fragment() {
                     }
                 } else {
                     lifecycleScope.launch {
-                        val alarm = settingsViewModel.getAlarm(1)
+                        val alarm = settingsViewModel.getAlarm(CUSTOM_ALARM_ID)
                         alarm?.let {
                             it.cancelAlarm(requireContext())
                             settingsViewModel.setAlarm(alarm)
+                            everyDayAlarmManager.scheduleEveryDayAlarm()
                         }
                     }
                     binding.bedTimeReminderSwitch.text = ""
@@ -100,7 +116,7 @@ class SettingsFragment : Fragment() {
 
     private fun setSwitchStatus() {
         lifecycleScope.launch {
-            val alarm = settingsViewModel.getAlarm(1)
+            val alarm = settingsViewModel.getAlarm(CUSTOM_ALARM_ID)
             alarm?.let {
                 withContext(Dispatchers.Main) {
                     binding.bedTimeReminderSwitch.isChecked = alarm.started

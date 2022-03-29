@@ -18,6 +18,13 @@
         app:destination="@id/sleepTimerFragment"
         app:launchSingleTop="true"/>
     <action
+        android:id="@+id/action_global_to_playerFragment"
+        app:destination="@id/playerFragment"
+        app:enterAnim="@anim/slide_up"
+        app:exitAnim="@anim/slide_down"
+        app:popExitAnim="@anim/slide_down"
+        app:launchSingleTop="true"/>
+    <action
         android:id="@+id/action_global_to_luckyDialog"
         app:destination="@id/luckyDialog" />
 

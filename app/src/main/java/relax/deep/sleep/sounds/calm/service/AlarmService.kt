@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import relax.deep.sleep.sounds.calm.MainActivity
 import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver.Companion.TITLE
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.TITLE
 import relax.deep.sleep.sounds.calm.utils.Constants
 
 

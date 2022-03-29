@@ -1,6 +1,10 @@
 package relax.deep.sleep.sounds.calm.utils
 
+import org.threeten.bp.LocalTime
+
 object Constants {
+    const val CURRENT_VERSION = "1.1"
+
     const val PREFERENCE_ALARM_IS_SET =
         "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
 
@@ -37,4 +41,9 @@ object Constants {
 
     const val SUBSCRIPTION_ID_MONTH = "month_subscribe"
     const val SUBSCRIPTION_ID_YEAR = "year_subscribe"
+
+    const val ALARM_ID = "ALARM_ID"
+    const val CUSTOM_ALARM_ID = 1
+    const val EVERY_DAY_ALARM_ID = 2
+    val EVERY_DAY_REMINDER_TIME: LocalTime = LocalTime.of(22,0)
 }

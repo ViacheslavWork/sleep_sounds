@@ -335,9 +335,9 @@ class PlayerService : LifecycleService() {
         this,
         0,
         Intent(this, MainActivity::class.java)
-            .also {
-                if (launcher == Constants.MIX_LAUNCHER) it.action = MainActivity.ACTION_SHOW_MIX
-                else if (launcher == Constants.SOUNDS_LAUNCHER) it.action =
+            .apply {
+                if (launcher == Constants.MIX_LAUNCHER) action = MainActivity.ACTION_SHOW_MIX
+                else if (launcher == Constants.SOUNDS_LAUNCHER) action =
                     MainActivity.ACTION_SHOW_SOUNDS
             }, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )

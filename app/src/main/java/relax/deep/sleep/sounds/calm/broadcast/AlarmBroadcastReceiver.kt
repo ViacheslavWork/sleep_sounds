@@ -11,10 +11,22 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import relax.deep.sleep.sounds.calm.MainActivity
 import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.data.database.entity.AlarmEntity
+import relax.deep.sleep.sounds.calm.model.Alarm
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.FRIDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.HOUR
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.IS_CUSTOM
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.MINUTE
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.MONDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.SATURDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.SUNDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.THURSDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.TITLE
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.TUESDAY
+import relax.deep.sleep.sounds.calm.model.Alarm.Companion.WEDNESDAY
 import relax.deep.sleep.sounds.calm.service.AlarmService
 import relax.deep.sleep.sounds.calm.service.RescheduleAlarmsService
 import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.Constants.ALARM_ID
 import java.util.*
 
 
@@ -23,21 +35,26 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         if (Intent.ACTION_BOOT_COMPLETED == intent.action) {
             startRescheduleAlarmsService(context)
         } else {
-            sendNotification(context)
+            sendNotification(
+                context,
+                intent.getStringExtra(TITLE),
+                intent.getBooleanExtra(IS_CUSTOM, false)
+            )
             startNextAlarm(context, intent)
         }
     }
 
     private fun startNextAlarm(context: Context, intent: Intent) {
-        val alarmId: Int = 1
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        val alarm = AlarmEntity(
-            alarmId = alarmId,
-            hour = calendar.get(Calendar.HOUR_OF_DAY),
-            minute = calendar.get(Calendar.MINUTE),
-            title = intent.getStringExtra(TITLE) ?: "It is time to sleep",
+        val alarm = Alarm(
+            alarmId = intent.getIntExtra(ALARM_ID, Constants.EVERY_DAY_ALARM_ID),
+            hour = intent.getIntExtra(HOUR, calendar.get(Calendar.HOUR_OF_DAY)),
+            minute = intent.getIntExtra(MINUTE, calendar.get(Calendar.MINUTE)),
+            title = intent.getStringExtra(TITLE)
+                ?: context.getString(R.string.custom_alarm_notification_title),
             started = true,
+            isCustom = intent.getBooleanExtra(IS_CUSTOM, false),
             monday = intent.getBooleanExtra(MONDAY, false),
             tuesday = intent.getBooleanExtra(TUESDAY, false),
             wednesday = intent.getBooleanExtra(WEDNESDAY, false),
@@ -68,19 +85,8 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    companion object {
-        const val MONDAY = "MONDAY"
-        const val TUESDAY = "TUESDAY"
-        const val WEDNESDAY = "WEDNESDAY"
-        const val THURSDAY = "THURSDAY"
-        const val FRIDAY = "FRIDAY"
-        const val SATURDAY = "SATURDAY"
-        const val SUNDAY = "SUNDAY"
-        const val RECURRING = "RECURRING"
-        const val TITLE = "TITLE"
-    }
 
-    private fun sendNotification(context: Context) {
+    private fun sendNotification(context: Context, stringExtra: String?, isCustomAlarm: Boolean) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
 
@@ -89,7 +95,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         }
 
         val notificationBuilder = getNotificationBuilder(context)
-        notificationManager.notify(Constants.BEDTIME_REMINDER_NOTIFICATION_ID, notificationBuilder.build())
+
+        val action = if (!isCustomAlarm) MainActivity.ACTION_SHOW_PLAYER else null
+
+        notificationBuilder.setContentTitle(stringExtra)
+            .setContentIntent(getMainActivityPendingIntent(context, action))
+        notificationManager.notify(
+            Constants.BEDTIME_REMINDER_NOTIFICATION_ID,
+            notificationBuilder.build()
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -112,12 +126,15 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
         .setContentTitle("It is time to sleep!")
         .setColorized(true)
         .setColor(context.resources.getColor(R.color.dark_blue, null))
-        .setContentIntent(getMainActivityPendingIntent(context))
 
-    private fun getMainActivityPendingIntent(context: Context) = PendingIntent.getActivity(
-        context,
-        0,
-        Intent(context, MainActivity::class.java),
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
+
+    private fun getMainActivityPendingIntent(context: Context, action: String? = null) =
+        PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, MainActivity::class.java).apply {
+                this.action = action
+            },
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
 }

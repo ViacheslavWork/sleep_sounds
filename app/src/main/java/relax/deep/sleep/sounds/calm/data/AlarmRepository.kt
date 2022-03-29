@@ -4,13 +4,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import relax.deep.sleep.sounds.calm.data.database.alarms.AlarmsDao
 import relax.deep.sleep.sounds.calm.data.database.entity.AlarmEntity
+import relax.deep.sleep.sounds.calm.data.database.entity.toAlarm
+import relax.deep.sleep.sounds.calm.model.Alarm
 
 class AlarmRepository(private val alarmsDao: AlarmsDao) {
-    suspend fun getAlarm(id: Int): AlarmEntity? = withContext(Dispatchers.IO) {
-        return@withContext alarmsDao.getAlarm(id)
+    suspend fun getAlarm(id: Int): Alarm? = withContext(Dispatchers.IO) {
+        return@withContext alarmsDao.getAlarm(id)?.toAlarm()
     }
 
-    suspend fun saveAlarm(alarmEntity: AlarmEntity) = withContext(Dispatchers.IO) {
-        alarmsDao.insert(alarmEntity = alarmEntity)
+    suspend fun saveAlarm(alarm: Alarm) = withContext(Dispatchers.IO) {
+        alarmsDao.insert(alarmEntity = AlarmEntity.fromAlarm(alarm))
     }
 }

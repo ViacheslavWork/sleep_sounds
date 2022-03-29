@@ -1,6 +1,5 @@
 package relax.deep.sleep.sounds.calm.ui.mixes
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -11,10 +10,8 @@ import kotlinx.coroutines.launch
 import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.model.Mix
 import relax.deep.sleep.sounds.calm.model.MixCategory
-import relax.deep.sleep.sounds.calm.utils.Constants
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import java.io.File
-import java.net.URI
 
 private const val TAG = "MixesViewModel"
 
@@ -41,7 +38,7 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
     }
 
     private fun loadAllMixes() {
-        mixes = repository.getMixes()
+        mixes = repository.getMixesLD()
     }
 
     suspend fun getMix(mixId: Long): Mix {

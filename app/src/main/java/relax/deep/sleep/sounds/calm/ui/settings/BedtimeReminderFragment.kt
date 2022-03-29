@@ -14,16 +14,21 @@ import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.data.database.entity.AlarmEntity
 import relax.deep.sleep.sounds.calm.databinding.FragmentBedtimeReminderBinding
+import relax.deep.sleep.sounds.calm.model.Alarm
 import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.Constants.CUSTOM_ALARM_ID
+import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
 import relax.deep.sleep.sounds.calm.utils.ToastHelper
 
 class BedtimeReminderFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
+    private val everyDayAlarmManager: EveryDayAlarmManager by inject()
     private var _binding: FragmentBedtimeReminderBinding? = null
     private val binding get() = _binding!!
 
@@ -48,7 +53,7 @@ class BedtimeReminderFragment : Fragment() {
 
     private fun setDataFromAlarm() {
         lifecycleScope.launch {
-            val alarm = settingsViewModel.getAlarm(1)
+            val alarm = settingsViewModel.getAlarm(CUSTOM_ALARM_ID)
             alarm?.let {
                 withContext(Dispatchers.Main) {
                     alarmTime = LocalTime.of(alarm.hour, alarm.minute)
@@ -77,7 +82,8 @@ class BedtimeReminderFragment : Fragment() {
             if (!isChecked) {
                 lifecycleScope.launch {
                     val alarmEntity =
-                        settingsViewModel.getAlarm(1)?.apply { cancelAlarm(requireContext()) }
+                        settingsViewModel.getAlarm(CUSTOM_ALARM_ID)
+                            ?.apply { cancelAlarm(requireContext()) }
                     alarmEntity?.let { settingsViewModel.setAlarm(alarmEntity) }
                 }
                 binding.okBtn.isEnabled = false
@@ -99,6 +105,7 @@ class BedtimeReminderFragment : Fragment() {
             getButtons().forEach { if (it.isSelected) isDaySelected = true }
             if (isDaySelected) {
                 scheduleAlarm(alarmTime)
+                everyDayAlarmManager.cancelEveryDayAlarm()
                 ToastHelper.showCustomToast(requireActivity())
             }
             requireActivity().onBackPressed()
@@ -181,13 +188,13 @@ class BedtimeReminderFragment : Fragment() {
     }
 
     private fun scheduleAlarm(time: LocalTime) {
-        val alarmId: Int = 1
-        val alarm = AlarmEntity(
-            alarmId = alarmId,
+        val alarm = Alarm(
+            alarmId = CUSTOM_ALARM_ID,
             hour = time.hour,
             minute = time.minute,
             title = "It is time to sleep",
             started = true,
+            isCustom = true,
             monday = binding.mondayBtn.btn.isSelected,
             tuesday = binding.tuesdayBtn.btn.isSelected,
             wednesday = binding.wednesdayBtn.btn.isSelected,

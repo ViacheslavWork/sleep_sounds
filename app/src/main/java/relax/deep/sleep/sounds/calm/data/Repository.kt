@@ -65,7 +65,7 @@ class Repository(
     }
 
 
-    fun getMixes(): LiveData<List<Mix>> {
+    fun getMixesLD(): LiveData<List<Mix>> {
         GlobalScope.launch(Dispatchers.IO) {
 //            mixesDao.deleteAll()
             if (mixesDao.getAll().isEmpty()) {
@@ -76,6 +76,15 @@ class Repository(
         return Transformations.map(mixesDao.getAllLD()) {
             return@map it.map { mixEntity -> mixEntity.toMix() }
         }
+    }
+
+    suspend fun getMixes(): List<Mix> = withContext(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
+            if (mixesDao.getAll().isEmpty()) {
+                mixesDao.insertAll(mixProvider.getMixes().map { mix -> MixEntity.fromMix(mix) })
+            }
+        }
+        return@withContext mixesDao.getAll().map { it.toMix() }
     }
 
     fun getMixes(category: MixCategory): List<Mix> {

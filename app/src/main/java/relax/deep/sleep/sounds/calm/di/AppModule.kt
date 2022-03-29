@@ -11,6 +11,7 @@ import relax.deep.sleep.sounds.calm.ui.player.PlayerViewModel
 import relax.deep.sleep.sounds.calm.ui.settings.SettingsViewModel
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsViewModel
 import relax.deep.sleep.sounds.calm.ui.timer.TimerViewModel
+import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
 
 val appModule = module {
     viewModel { SoundsViewModel(repository = get()) }
@@ -25,5 +26,6 @@ val appModule = module {
             androidContext().resources.getString(R.string.rewarded_id)
         )
     }
+    single { EveryDayAlarmManager(context = get(), alarmRepository = get()) }
 //    viewModel { GoPremiumViewModel() }
 }

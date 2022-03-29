@@ -94,6 +94,8 @@
     <string name="time_format_short">%02d:%02d</string>
     <string name="set_successfully">Set successfully</string>
     <string name="playing">Playing</string>
+    <string name="custom_alarm_notification_title">It is time to sleep</string>
+    <string name="default_alarm_notification_title">Listen to our new mix</string>
 
     <string name="app_id">ca-app-pub-9075995454638935~7323183568</string>
     <string name="rewarded_id">ca-app-pub-9075995454638935/8444693543</string>

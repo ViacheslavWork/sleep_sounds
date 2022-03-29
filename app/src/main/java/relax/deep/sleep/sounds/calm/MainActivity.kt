@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -20,22 +21,24 @@ import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.android.ext.android.inject
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
+import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.databinding.ActivityMainBinding
 import relax.deep.sleep.sounds.calm.service.PlayerService
 import relax.deep.sleep.sounds.calm.subscription.Subscribable
 import relax.deep.sleep.sounds.calm.subscription.Subscription
 import relax.deep.sleep.sounds.calm.subscription.SubscriptionPrice
+import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_MONTH
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_YEAR
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
-import relax.deep.sleep.sounds.calm.utils.ToastHelper.showToast
 
 
 private const val TAG = "MainActivity"
@@ -44,12 +47,14 @@ class MainActivity : AppCompatActivity(), Subscribable {
     companion object {
         const val ACTION_SHOW_SOUNDS = "ACTION_SHOW_SOUNDS"
         const val ACTION_SHOW_MIX = "ACTION_SHOW_MIX"
+        const val ACTION_SHOW_PLAYER = "ACTION_SHOW_PLAYER"
         const val FINISH = "finish_key_extra"
 
         private const val LICENCE_KEY = R.string.licence_key
         private const val SUBSCRIPTION_ID_TEST = R.string.purchase_id_test
     }
 
+    private val repository: Repository by inject()
     private var isActivityLetShowTimeFragment = true
 
     private var bp: BillingProcessor? = null
@@ -143,6 +148,25 @@ class MainActivity : AppCompatActivity(), Subscribable {
             ACTION_SHOW_SOUNDS -> {
                 val bottomNavigationView: BottomNavigationView = findViewById(R.id.nav_view);
                 bottomNavigationView.selectedItemId = R.id.navigation_sounds
+            }
+            ACTION_SHOW_PLAYER -> {
+                lifecycleScope.launch {
+                    val randomMix = async {
+                        repository.getMixes()
+                            .filter { !it.isPremium }
+                            .shuffled()[0]
+                    }
+                    showLog("navigate: ", TAG)
+                    withContext(Dispatchers.Main) {
+                        navController.navigate(
+                            R.id.action_global_to_playerFragment,
+                            bundleOf(
+                                PlayerFragment.mixIdKey to randomMix.await().id,
+                                PlayerFragment.isStartPlayingArg to true
+                            )
+                        )
+                    }
+                }
             }
             else -> {
                 navController.navigate(R.id.action_global_to_greetingFragment)
@@ -260,7 +284,7 @@ class MainActivity : AppCompatActivity(), Subscribable {
 //                showToast(this@MainActivity, "Subscriptions update error.")
             }
         })
-        PremiumPreferences.setStoredPremiumStatus(this,hasSubscription())
+        PremiumPreferences.setStoredPremiumStatus(this, hasSubscription())
         //for test
 //        PremiumPreferences.setStoredPremiumStatus(this, false)
 
