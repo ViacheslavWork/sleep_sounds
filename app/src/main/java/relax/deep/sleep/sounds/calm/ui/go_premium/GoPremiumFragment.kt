@@ -60,7 +60,7 @@ class GoPremiumFragment : Fragment() {
     }
 
     private fun setEnablingToSubscriptionButtons() {
-        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+        if (PremiumPreferences.userHasPremiumStatus(requireContext())) {
             binding.yearBtn.isEnabled = false
             binding.monthBtn.isEnabled = false
         } else {

@@ -75,7 +75,7 @@ class PagerFragment : Fragment() {
                 is MixesEvent.OnMixClick -> {
                     lastClickedMix = it.mix
                     if (!it.mix.isPremium
-                        || PremiumPreferences.hasPremiumStatus(requireContext())
+                        || PremiumPreferences.userHasPremiumStatus(requireContext())
                     ) {
                         findNavController().navigate(
                             R.id.action_navigation_mixes_to_playerFragment,

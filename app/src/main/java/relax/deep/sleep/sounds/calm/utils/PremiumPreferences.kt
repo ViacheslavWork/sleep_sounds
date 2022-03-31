@@ -5,7 +5,7 @@ import androidx.preference.PreferenceManager
 
 object PremiumPreferences {
     private const val PREF_IS_PREMIUM = "is_premium"
-    fun hasPremiumStatus(context: Context): Boolean {
+    fun userHasPremiumStatus(context: Context): Boolean {
         return PreferenceManager.getDefaultSharedPreferences(context)
             .getBoolean(PREF_IS_PREMIUM, false)
     }

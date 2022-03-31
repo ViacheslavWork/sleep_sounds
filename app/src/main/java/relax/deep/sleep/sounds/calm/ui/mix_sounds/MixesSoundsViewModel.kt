@@ -1,26 +1,29 @@
 package relax.deep.sleep.sounds.calm.ui.mix_sounds
 
-import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import relax.deep.sleep.sounds.calm.BuildConfig
+import kotlinx.coroutines.withContext
 import relax.deep.sleep.sounds.calm.data.Repository
 import relax.deep.sleep.sounds.calm.model.Sound
-import relax.deep.sleep.sounds.calm.model.SoundCategory
 import relax.deep.sleep.sounds.calm.service.PlayerService
 import relax.deep.sleep.sounds.calm.ui.sounds.Section
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsEvent
 import relax.deep.sleep.sounds.calm.utils.Constants
-import kotlin.collections.set
+import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 
 private const val TAG = "MixesSoundsViewModel"
 
 class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
+    private val mapSoundIdToSound = mutableMapOf<Long, Sound>()
+
     private val _sections = MutableLiveData<List<Section>>()
     val sections: LiveData<List<Section>> = _sections
 
     private var _selectedSounds = MutableLiveData<List<Sound>>(listOf())
     val selectedSounds: LiveData<List<Sound>> = _selectedSounds
+
+    private val _sounds = MutableLiveData<List<Sound>>()
+    val sounds: LiveData<List<Sound>> = _sounds
 
     private val selectedSoundsObserver: Observer<Set<Sound>?> = Observer {
         if (PlayerService.launcher == Constants.MIX_LAUNCHER) {
@@ -33,6 +36,21 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         PlayerService.currentSoundsLD.observeForever(selectedSoundsObserver)
     }
 
+    suspend fun loadSounds(): MutableList<Sound> {
+        return withContext(viewModelScope.coroutineContext) {
+            val sounds = repository.getSounds().toMutableList()
+            val soundsInService = PlayerService.currentSounds
+            sounds.map { it.id }.forEachIndexed { index, soundId ->
+                if (soundsInService.keys.contains(soundId)) {
+                    sounds[index] = soundsInService[soundId]!!
+                }
+            }
+            mapSoundIdToSound.putAll(sounds.associateBy { it.id })
+            _sounds.postValue(sounds.toList())
+            sounds
+        }
+    }
+/*
     fun loadSounds() {
         viewModelScope.launch {
             val sounds = repository.getSounds().toMutableList()
@@ -52,6 +70,7 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             _sections.postValue(mapSoundCategoryToSection.values.toList())
         }
     }
+*/
 
     fun saveChangesInMix(mixId: Long) {
         viewModelScope.launch {
@@ -73,9 +92,19 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
             }
             is SoundsEvent.OnRemoveClick -> {
                 removeFromSelected(event.sound)
+                updateSoundInList(event.sound)
             }
             is SoundsEvent.OnSeekBarChanged -> showLog(event.sound.volume.toString())
+            is SoundsEvent.OnAdditionalSoundClick -> {
+                updateSoundInList(event.sound)
+            }
         }
+    }
+
+    private fun updateSoundInList(sound: Sound) {
+        showLog("updateSoundInList: $sound", TAG)
+        mapSoundIdToSound[sound.id] = sound
+        _sounds.value = (mapSoundIdToSound.values.toList())
     }
 
     /* fun updateSections() {
@@ -116,11 +145,5 @@ class MixesSoundsViewModel(private val repository: Repository) : ViewModel() {
         showLog("onCleared")
         PlayerService.currentSoundsLD.removeObserver(selectedSoundsObserver)
         super.onCleared()
-    }
-
-    private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
-        }
     }
 }

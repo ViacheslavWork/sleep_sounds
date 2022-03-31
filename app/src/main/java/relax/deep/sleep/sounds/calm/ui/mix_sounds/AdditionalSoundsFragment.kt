@@ -16,16 +16,18 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentAdditionalSoundsBinding
 import relax.deep.sleep.sounds.calm.model.Sound
 import relax.deep.sleep.sounds.calm.service.PlayerService
 import relax.deep.sleep.sounds.calm.ui.dialogs.UnlockForFreeDialog
-import relax.deep.sleep.sounds.calm.ui.sounds.SectionAdapter
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsEvent
 import relax.deep.sleep.sounds.calm.ui.sounds.SoundsFragment
 import relax.deep.sleep.sounds.calm.utils.Constants
@@ -44,12 +46,13 @@ class AdditionalSoundsFragment : Fragment() {
     private val additionalSoundsViewModel: MixesSoundsViewModel by sharedViewModel()
 
     private lateinit var sectionRecyclerView: RecyclerView
-    private lateinit var sectionAdapter: SectionAdapter
+    private var soundsAdapter: GroupSoundsAdapter? = null
+    private val soundsEvent: MutableLiveData<SoundsEvent> = MutableLiveData()
 
     private lateinit var selectedSoundsRecyclerView: RecyclerView
     private lateinit var selectedSoundsAdapter: SelectedSoundsAdapter
 
-    private lateinit var lastOnClick: SoundsEvent.OnSoundClick
+    private var lastOnClick: SoundsEvent? = null
 
     private var _binding: FragmentAdditionalSoundsBinding? = null
     private val binding get() = _binding!!
@@ -75,12 +78,13 @@ class AdditionalSoundsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        additionalSoundsViewModel.loadSounds()
+        mixId = arguments?.getLong(mixIdKey)
+//        additionalSoundsViewModel.loadSounds()
         setFragmentResultListener(SoundsFragment.playPremiumSoundRequest) { _, bundle ->
             val isPlay: Boolean = bundle.getBoolean(SoundsFragment.playAfterVideoKey)
             // Do something with the result
             if (isPlay) {
-                playStopSound(lastOnClick)
+                lastOnClick?.let { playStopSound(it) }
             }
         }
     }
@@ -110,7 +114,6 @@ class AdditionalSoundsFragment : Fragment() {
         observeSelection()
         observeSelectedEvents()
         observeSectionSoundsEvents()
-
     }
 
     override fun onResume() {
@@ -165,10 +168,15 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun setUpSectionAdapter() {
-        sectionAdapter = SectionAdapter(isSelectable = true, isSoundChangeable = false)
-        sectionAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        sectionRecyclerView.adapter = sectionAdapter
+        lifecycleScope.launch {
+            soundsAdapter = GroupSoundsAdapter(
+                sounds = additionalSoundsViewModel.loadSounds(),
+                event = soundsEvent
+            )
+            soundsAdapter?.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            sectionRecyclerView.adapter = soundsAdapter
+        }
     }
 
     private fun setUpSelectedSoundsRecyclerView() {
@@ -185,8 +193,15 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun observeSounds() {
-        additionalSoundsViewModel.sections.observe(viewLifecycleOwner) {
-            sectionAdapter.submitList(it.toMutableList())
+        /*additionalSoundsViewModel.sections.observe(viewLifecycleOwner) {
+            soundsAdapter.submitList(it.toMutableList())
+        }*/
+        additionalSoundsViewModel.sounds.observe(viewLifecycleOwner) {
+            showLog("observeSounds: $it", TAG)
+            soundsAdapter?.updateSounds(it)
+            lastOnClick?.let { event ->
+                soundsAdapter?.notifySoundChanged(event.sound)
+            }
         }
     }
 
@@ -204,6 +219,7 @@ class AdditionalSoundsFragment : Fragment() {
         selectedSoundsAdapter.event.observe(viewLifecycleOwner) {
             if (it is SoundsEvent.OnRemoveClick) {
                 playStopSound(it)
+                lastOnClick = it
             } else if (it is SoundsEvent.OnSeekBarChanged) {
                 showLog(it.sound.volume.toString())
                 playerService?.changeVolume(it.sound)
@@ -213,12 +229,13 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun observeSectionSoundsEvents() {
-        sectionAdapter.event.observe(viewLifecycleOwner) {
-            if (it is SoundsEvent.OnSoundClick) {
+        soundsEvent.observe(viewLifecycleOwner) {
+            if (it is SoundsEvent.OnAdditionalSoundClick) {
+                showLog("observeSectionSoundsEvents: ${it.sound}", TAG)
                 lastOnClick = it
                 if (!it.sound.isPremium
                     || it.sound.isPlaying
-                    || PremiumPreferences.hasPremiumStatus(requireContext())
+                    || PremiumPreferences.userHasPremiumStatus(requireContext())
                 ) {
                     playStopSound(it)
                 } else {
@@ -232,14 +249,18 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     private fun playStopSound(soundsEvent: SoundsEvent) {
+        soundsEvent.sound.apply {
+            isPlaying = !isPlaying
+            isPremium = false
+        }
         sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, soundsEvent.sound)
         additionalSoundsViewModel.handleEvent(soundsEvent)
-        selectSoundInSections(soundsEvent.sound.apply { isPlaying = !isPlaying })
+//        selectSoundInSections(soundsEvent.sound.apply { isPlaying = !isPlaying })
     }
 
     private fun selectSoundInSections(sound: Sound) {
-        val soundHolderData = sectionAdapter.getMapSoundIdToHolder()[sound.id]
-        soundHolderData?.adapter?.notifyItemChanged(soundHolderData.position, sound)
+//        val soundHolderData = soundsAdapter.getMapSoundIdToHolder()[sound.id]
+//        soundHolderData?.adapter?.notifyItemChanged(soundHolderData.position, sound)
     }
 
     //service

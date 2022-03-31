@@ -6,7 +6,7 @@ import relax.deep.sleep.sounds.calm.data.database.entity.SoundEntity
 
 @Database(
     entities = [SoundEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class SoundsDatabase : RoomDatabase() {

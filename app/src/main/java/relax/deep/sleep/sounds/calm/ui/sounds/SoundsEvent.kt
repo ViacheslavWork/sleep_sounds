@@ -4,6 +4,7 @@ import relax.deep.sleep.sounds.calm.model.Sound
 
 sealed class SoundsEvent(val sound: Sound) {
     class OnSoundClick(sound: Sound, val soundsHolder: SoundsHolder) : SoundsEvent(sound)
+    class OnAdditionalSoundClick(sound: Sound) : SoundsEvent(sound)
     class OnRemoveClick(sound: Sound) : SoundsEvent(sound)
     class OnSeekBarChanged(sound: Sound) : SoundsEvent(sound)
 

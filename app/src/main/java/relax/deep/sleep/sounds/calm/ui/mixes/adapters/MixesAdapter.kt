@@ -45,7 +45,7 @@ class MixesViewHolder(private val binding: ItemMixBinding) :
         binding.root.setOnClickListener { event.value = MixesEvent.OnMixClick(mix) }
         binding.crossIv.setOnClickListener { event.value = MixesEvent.OnDeleteMixClick(mix) }
         binding.mixItemTv.text = mix.title
-        if (mix.isPremium && !PremiumPreferences.hasPremiumStatus(binding.root.context)) {
+        if (mix.isPremium && !PremiumPreferences.userHasPremiumStatus(binding.root.context)) {
             binding.crownIv.visibility = View.VISIBLE
             binding.crossIv.visibility = View.GONE
         } else {

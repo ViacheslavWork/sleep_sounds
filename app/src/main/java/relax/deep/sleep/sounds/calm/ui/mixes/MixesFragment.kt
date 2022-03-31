@@ -98,7 +98,7 @@ class MixesFragment : Fragment() {
     }
 
     override fun onResume() {
-        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+        if (PremiumPreferences.userHasPremiumStatus(requireContext())) {
             binding.crownMixToolbarIv.visibility = View.GONE
         } else {
             binding.crownMixToolbarIv.visibility = View.VISIBLE

@@ -107,7 +107,7 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
         isSelectable: Boolean,
         isSoundChangeable: Boolean
     ) {
-        val hasPremiumStatus = PremiumPreferences.hasPremiumStatus(binding.root.context)
+        val hasPremiumStatus = PremiumPreferences.userHasPremiumStatus(binding.root.context)
         binding.mixItemTv.text = sound.title
         binding.seekBar.visibility = View.INVISIBLE
 

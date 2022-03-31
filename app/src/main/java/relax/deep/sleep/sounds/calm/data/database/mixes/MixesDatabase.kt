@@ -9,7 +9,7 @@ import relax.deep.sleep.sounds.calm.data.database.entity.UriConverters
 
 @Database(
     entities = [MixEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(SoundsEntitiesListConverter::class, UriConverters::class)

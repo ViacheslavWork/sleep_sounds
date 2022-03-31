@@ -93,7 +93,7 @@ class SoundsFragment : Fragment() {
 
     override fun onResume() {
         soundsViewModel.updateSections()
-        if (PremiumPreferences.hasPremiumStatus(requireContext())) {
+        if (PremiumPreferences.userHasPremiumStatus(requireContext())) {
             binding.crownSoundsToolbarIv.visibility = View.GONE
         } else {
             binding.crownSoundsToolbarIv.visibility = View.VISIBLE
@@ -324,7 +324,7 @@ class SoundsFragment : Fragment() {
                 lastOnClick = it
                 if (!it.sound.isPremium
                     || it.sound.isPlaying
-                    || PremiumPreferences.hasPremiumStatus(requireContext())
+                    || PremiumPreferences.userHasPremiumStatus(requireContext())
                 ) {
                     playStopSoundProgrammatically()
                 } else {
