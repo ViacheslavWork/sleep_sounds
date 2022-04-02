@@ -23,6 +23,4 @@ class App : Application() {
             everyDayAlarmManager.startStopEveryDayAlarmIfNeeded()
         }
     }
-
-
 }
