@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "493035799838",
+    "project_id": "relax-deep-sleep-sounds-calm",
+    "storage_bucket": "relax-deep-sleep-sounds-calm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:493035799838:android:cb7f543dd4f57b898c350f",
+        "android_client_info": {
+          "package_name": "relax.deep.sleep.sounds.calm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "493035799838-0omopqnjtbefmeuhsrb579u8ja2f9njd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTSxzAtRGbhHZ5KZrXK_JP4EE2g03spYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "493035799838-0omopqnjtbefmeuhsrb579u8ja2f9njd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
