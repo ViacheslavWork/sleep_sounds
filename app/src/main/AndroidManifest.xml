@@ -25,9 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/app_id"/>
+            android:value="@string/app_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_moon" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/dark_blue" />
 
         <service
             android:name="relax.deep.sleep.sounds.calm.service.PlayerService"
@@ -38,6 +46,14 @@
         <service
             android:name="relax.deep.sleep.sounds.calm.service.RescheduleAlarmsService"
             android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name="relax.deep.sleep.sounds.calm.service.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name="relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver"

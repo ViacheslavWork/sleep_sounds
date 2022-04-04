@@ -15,8 +15,8 @@ android {
         applicationId "relax.deep.sleep.sounds.calm"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +52,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-fido:18.1.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
+    implementation 'com.yandex.android:mobmetricalib:4.2.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

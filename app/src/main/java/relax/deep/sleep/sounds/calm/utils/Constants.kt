@@ -33,10 +33,11 @@ object Constants {
     const val EXTRA_MIX_ID = "EXTRA_MIX_ID"
 
 
-    const val NOTIFICATION_CHANNEL_ID = "timer_channel"
-    const val NOTIFICATION_CHANNEL_NAME = "timer"
+    const val NOTIFICATION_CHANNEL_ID = "player_channel"
+    const val NOTIFICATION_CHANNEL_NAME = "player"
     const val PLAYER_NOTIFICATION_ID = 1
     const val BEDTIME_REMINDER_NOTIFICATION_ID = 2
+    const val FIREBASE_NOTIFICATION_ID = 3
 
     const val NO_MIX_ID = -1L
 
