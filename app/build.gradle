@@ -3,14 +3,16 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
-    id("kotlin-parcelize")
+    id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "white.noise.sounds.baby.sleep"
+        applicationId "relax.deep.sleep.sounds.calm"
         minSdk 23
         targetSdk 32
         versionCode 1
@@ -98,4 +100,9 @@ dependencies {
 
     //ads
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
+
+    //Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.3.0')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
