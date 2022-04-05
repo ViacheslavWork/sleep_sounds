@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="relax.deep.sleep.sounds.calm">
+    package="calm.sleep.relaxing.sounds.noise">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
-        android:name="relax.deep.sleep.sounds.calm.App"
+        android:name="calm.sleep.relaxing.sounds.noise.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhiteNoise">
         <activity
-            android:name="relax.deep.sleep.sounds.calm.MainActivity"
+            android:name="calm.sleep.relaxing.sounds.noise.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -38,17 +38,17 @@
             android:resource="@color/dark_blue" />
 
         <service
-            android:name="relax.deep.sleep.sounds.calm.service.PlayerService"
+            android:name="calm.sleep.relaxing.sounds.noise.service.PlayerService"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name="relax.deep.sleep.sounds.calm.service.TimerService"
+            android:name="calm.sleep.relaxing.sounds.noise.service.TimerService"
             android:foregroundServiceType="dataSync" />
         <service
-            android:name="relax.deep.sleep.sounds.calm.service.RescheduleAlarmsService"
+            android:name="calm.sleep.relaxing.sounds.noise.service.RescheduleAlarmsService"
             android:foregroundServiceType="dataSync" />
 
         <service
-            android:name="relax.deep.sleep.sounds.calm.service.MyFirebaseMessagingService"
+            android:name="calm.sleep.relaxing.sounds.noise.service.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -56,7 +56,7 @@
         </service>
 
         <receiver
-            android:name="relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver"
+            android:name="calm.sleep.relaxing.sounds.noise.broadcast.AlarmBroadcastReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

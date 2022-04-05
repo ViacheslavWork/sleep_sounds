@@ -12,7 +12,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "relax.deep.sleep.sounds.calm"
+        applicationId "calm.sleep.relaxing.sounds.noise"
         minSdk 23
         targetSdk 32
         versionCode 2

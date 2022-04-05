@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "493035799838",
-    "project_id": "relax-deep-sleep-sounds-calm",
-    "storage_bucket": "relax-deep-sleep-sounds-calm.appspot.com"
+    "project_number": "802348681774",
+    "project_id": "prila-vyacheslava",
+    "storage_bucket": "prila-vyacheslava.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:493035799838:android:cb7f543dd4f57b898c350f",
+        "mobilesdk_app_id": "1:802348681774:android:8f634e68bd77c9ee2e2dbf",
         "android_client_info": {
-          "package_name": "relax.deep.sleep.sounds.calm"
+          "package_name": "calm.sleep.relaxing.sounds.noise"
         }
       },
       "oauth_client": [
         {
-          "client_id": "493035799838-0omopqnjtbefmeuhsrb579u8ja2f9njd.apps.googleusercontent.com",
+          "client_id": "802348681774-lhkjf68u58e6ean82oes8rsvgi8qops1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBTSxzAtRGbhHZ5KZrXK_JP4EE2g03spYM"
+          "current_key": "AIzaSyDUXvNsOdN9RyhdEZN0E6uuErYJTw0Y2QY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "493035799838-0omopqnjtbefmeuhsrb579u8ja2f9njd.apps.googleusercontent.com",
+              "client_id": "802348681774-lhkjf68u58e6ean82oes8rsvgi8qops1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
