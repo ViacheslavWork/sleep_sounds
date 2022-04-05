@@ -175,9 +175,12 @@ class GoPremiumFragment : Fragment() {
         }
     }
 
-
     private fun setUpListeners() {
-        binding.crossGoPremiumToolbarIv.setOnClickListener { requireActivity().onBackPressed() }
+        binding.crossGoPremiumToolbarIv.setOnClickListener {
+            findNavController().navigate(
+                GoPremiumFragmentDirections.actionGlobalToMixFragment()
+            )
+        }
         binding.detailsTv.setOnClickListener {
             findNavController().navigate(
                 GoPremiumFragmentDirections.actionGoPremiumFragmentToDetailsFragment()

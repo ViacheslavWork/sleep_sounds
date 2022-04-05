@@ -188,6 +188,9 @@
         <action
             android:id="@+id/action_greetingFragment_to_navigation_mixes"
             app:destination="@id/navigation_mixes" />
+        <action
+            android:id="@+id/action_greetingFragment_to_startOnBoardingFragment"
+            app:destination="@id/startOnBoardingFragment" />
     </fragment>
     <fragment
         android:id="@+id/sleepTimerFragment"
@@ -208,4 +211,60 @@
         android:id="@+id/luckyDialog"
         android:name="relax.deep.sleep.sounds.calm.ui.dialogs.LuckyDialog"
         android:label="LuckyDialog" />
+    <fragment
+        android:id="@+id/startOnBoardingFragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.StartOnBoardingFragment"
+        android:label="StartOnBoardingFragment" >
+        <action
+            android:id="@+id/action_startOnBoardingFragment_to_onBoarding1Fragment"
+            app:destination="@id/onBoarding1Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding1Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding1Fragment"
+        android:label="OnBoarding1Fragment" >
+        <action
+            android:id="@+id/action_onBoarding1Fragment_to_onBoarding2Fragment"
+            app:destination="@id/onBoarding2Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding2Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding2Fragment"
+        android:label="OnBoarding2Fragment" >
+        <action
+            android:id="@+id/action_onBoarding2Fragment_to_onBoarding3Fragment"
+            app:destination="@id/onBoarding3Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding3Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding3Fragment"
+        android:label="OnBoarding3Fragment" >
+        <action
+            android:id="@+id/action_onBoarding3Fragment_to_onBoarding4Fragment"
+            app:destination="@id/onBoarding4Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding4Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding4Fragment"
+        android:label="OnBoarding4Fragment" >
+        <action
+            android:id="@+id/action_onBoarding4Fragment_to_onBoarding5Fragment"
+            app:destination="@id/onBoarding5Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding5Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding5Fragment"
+        android:label="OnBoarding5Fragment" >
+        <action
+            android:id="@+id/action_onBoarding5Fragment_to_onBoarding7Fragment"
+            app:destination="@id/onBoarding7Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoarding7Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding7Fragment"
+        android:label="OnBoarding7Fragment" >
+        <action
+            android:id="@+id/action_onBoarding7Fragment_to_goPremiumFragment"
+            app:destination="@id/goPremiumFragment" />
+    </fragment>
 </navigation>

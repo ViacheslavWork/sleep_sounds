@@ -106,5 +106,18 @@
     <string name="interstitial_test_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="congratulations_you_are_lucky">Congratulations,\nyou are lucky!</string>
     <string name="no_need_to_watch_ads_now">No need to watch ads now</string>
+    <string name="welcome">Welcome!</string>
+    <string name="get_started">Get started</string>
+    <string name="next">Next</string>
+    <string name="onboarding_1_content">Relax and fall sleep faster with\n relaxing content selected just for you</string>
+    <string name="plan_your_sleep">Plan your sleep</string>
+    <string name="what_time_you_go_to_bed">What time you go to bed?</string>
+    <string name="when_you_wake_up">When you wake up?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="do_you_have_problems_sleeping">Do you have\n problems sleeping?</string>
+    <string name="what_are_you_needs">What are you needs?</string>
+    <string name="what_are_you_favorite_n_contents_for_sleep">What are you favorite\n contents for sleep?</string>
+    <string name="name_of_sounds">Name of sounds</string>
 
 </resources>

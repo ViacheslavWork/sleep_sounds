@@ -18,17 +18,25 @@
         <item name="android:textAppearance">@style/H2</item>
         <item name="android:textColor">@color/btn_enable_disable_color</item>
     </style>
+
     <style name="DarkBtnStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/selector_dark_btn</item>
         <item name="android:textAppearance">@style/H2</item>
         <item name="android:textColor">@color/btn_enable_disable_color</item>
     </style>
+
     <style name="WeekBtnStyle" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/selector_week_btn</item>
         <item name="android:textAppearance">@style/P1</item>
         <item name="android:textColor">@color/btn_enable_disable_color</item>
     </style>
 
+    <style name="OnBoardingBtnStyle" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/text2</item>
+        <item name="android:background">@drawable/selector_onboarding_item</item>
+    </style>
 
 
 </resources>

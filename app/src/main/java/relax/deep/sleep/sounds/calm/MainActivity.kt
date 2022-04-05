@@ -9,6 +9,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,7 +39,6 @@ import relax.deep.sleep.sounds.calm.subscription.SubscriptionPrice
 import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_MONTH
 import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_YEAR
-import relax.deep.sleep.sounds.calm.utils.LoggerToFile
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
 import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
@@ -112,6 +113,17 @@ class MainActivity : AppCompatActivity(), Subscribable {
             when (destination.id) {
                 R.id.playerFragment -> letActivityShowTimeFragment(true)
                 else -> letActivityShowTimeFragment(false)
+            }
+            when (destination.id) {
+                R.id.onBoarding1Fragment,
+                R.id.onBoarding2Fragment,
+                R.id.onBoarding3Fragment,
+                R.id.onBoarding4Fragment,
+                R.id.onBoarding5Fragment,
+                R.id.onBoarding7Fragment -> findViewById<ConstraintLayout>(R.id.container).background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
+                R.id.startOnBoardingFragment -> findViewById<ConstraintLayout>(R.id.container).background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
             }
         }
 

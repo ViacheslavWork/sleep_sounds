@@ -16,6 +16,8 @@
     <color name="bottom_nav_color">#141414</color>
     <color name="bottom_nav_unselected">#626262</color>
     <color name="blue40">#665A92FF</color>
+    <color name="blue_text">#7A9AE4</color>
+    <color name="gray_text">#BDCCEB</color>
     <color name="blue_for_sound_slider">#1F5CFA</color>
     <color name="black40">#66000000</color>
     <color name="yellow">#FFC121</color>
