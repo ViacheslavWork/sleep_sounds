@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui
+package calm.sleep.relaxing.sounds.noise.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import relax.deep.sleep.sounds.calm.databinding.FragmentGreetingBinding
+import calm.sleep.relaxing.sounds.noise.databinding.FragmentGreetingBinding
 
 
 class GreetingFragment : Fragment() {

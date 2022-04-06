@@ -213,7 +213,7 @@
         android:label="LuckyDialog" />
     <fragment
         android:id="@+id/startOnBoardingFragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.StartOnBoardingFragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.StartOnBoardingFragment"
         android:label="StartOnBoardingFragment" >
         <action
             android:id="@+id/action_startOnBoardingFragment_to_onBoarding1Fragment"
@@ -221,7 +221,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding1Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding1Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.OnBoarding1Fragment"
         android:label="OnBoarding1Fragment" >
         <action
             android:id="@+id/action_onBoarding1Fragment_to_onBoarding2Fragment"
@@ -229,7 +229,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding2Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding2Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.OnBoarding2Fragment"
         android:label="OnBoarding2Fragment" >
         <action
             android:id="@+id/action_onBoarding2Fragment_to_onBoarding3Fragment"
@@ -237,7 +237,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding3Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding3Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.OnBoarding3Fragment"
         android:label="OnBoarding3Fragment" >
         <action
             android:id="@+id/action_onBoarding3Fragment_to_onBoarding4Fragment"
@@ -245,7 +245,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding4Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding4Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.OnBoarding4Fragment"
         android:label="OnBoarding4Fragment" >
         <action
             android:id="@+id/action_onBoarding4Fragment_to_onBoarding5Fragment"
@@ -253,7 +253,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding5Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_5.OnBoarding5Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_5.OnBoarding5Fragment"
         android:label="OnBoarding5Fragment" >
         <action
             android:id="@+id/action_onBoarding5Fragment_to_onBoarding7Fragment"
@@ -261,7 +261,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding7Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_7.OnBoarding7Fragment"
+        android:name="calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_7.OnBoarding7Fragment"
         android:label="OnBoarding7Fragment" >
         <action
             android:id="@+id/action_onBoarding7Fragment_to_goPremiumFragment"

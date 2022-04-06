@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_7
+package calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_7
 
 import androidx.annotation.DrawableRes
 

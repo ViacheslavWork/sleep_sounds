@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.databinding.ItemOnboardingNeedsBtnBinding
-import relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_5.OnBoardingNeedsItem
-import relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_5.OnBoardingNeedsItemsEvent
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.databinding.ItemOnboardingNeedsBtnBinding
+import calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_5.OnBoardingNeedsItem
+import calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_5.OnBoardingNeedsItemsEvent
 
 
 class OnBoardingNeedsAdapter(

@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.onboarding
+package calm.sleep.relaxing.sounds.noise.ui.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.databinding.FragmentOnboarding2Binding
-import relax.deep.sleep.sounds.calm.utils.Constants
-import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
-import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
-import relax.deep.sleep.sounds.calm.utils.ToastHelper
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.databinding.FragmentOnboarding2Binding
+import calm.sleep.relaxing.sounds.noise.utils.Constants
+import calm.sleep.relaxing.sounds.noise.utils.EveryDayAlarmManager
+import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
+import calm.sleep.relaxing.sounds.noise.utils.ToastHelper
 
 private const val TAG = "OnBoarding2Fragment"
 

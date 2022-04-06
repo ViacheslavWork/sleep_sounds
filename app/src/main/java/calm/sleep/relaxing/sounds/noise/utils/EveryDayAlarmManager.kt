@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.utils
+package calm.sleep.relaxing.sounds.noise.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -8,11 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver
-import relax.deep.sleep.sounds.calm.data.AlarmRepository
-import relax.deep.sleep.sounds.calm.model.Alarm
-import relax.deep.sleep.sounds.calm.utils.Constants.CUSTOM_ALARM_ID
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.broadcast.AlarmBroadcastReceiver
+import calm.sleep.relaxing.sounds.noise.data.AlarmRepository
+import calm.sleep.relaxing.sounds.noise.model.Alarm
+import calm.sleep.relaxing.sounds.noise.utils.Constants.CUSTOM_ALARM_ID
 
 class EveryDayAlarmManager(val context: Context, val alarmRepository: AlarmRepository) {
     private val ioScope = CoroutineScope(Dispatchers.IO)

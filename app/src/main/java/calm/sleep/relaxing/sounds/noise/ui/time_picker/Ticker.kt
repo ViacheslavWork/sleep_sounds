@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.time_picker
+package calm.sleep.relaxing.sounds.noise.ui.time_picker
 
 import android.content.Context
 import android.util.AttributeSet
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ticker.core.adapter.TickerTimeAdapter
 import com.example.ticker.core.adapter.ZoomCenterItemLayoutManager
 import com.example.ticker.databinding.LayoutTickerBinding
-import relax.deep.sleep.sounds.calm.R
+import calm.sleep.relaxing.sounds.noise.R
 import kotlin.math.max
 
 class Ticker @JvmOverloads constructor(

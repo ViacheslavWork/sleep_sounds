@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_7
+package calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_7
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.databinding.ItemOnboardingBtnBinding
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.databinding.ItemOnboardingBtnBinding
 
 class OnBoarding7Adapter(
     val event: MutableLiveData<OnBoarding7Event> = MutableLiveData(),

@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_7
+package calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_7
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.databinding.FragmentOnboarding7Binding
-import relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_5.OnBoardingNeedsItemsEvent
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.databinding.FragmentOnboarding7Binding
+import calm.sleep.relaxing.sounds.noise.ui.onboarding.onboarding_5.OnBoardingNeedsItemsEvent
 
 class OnBoarding7Fragment : Fragment() {
     private var _binding: FragmentOnboarding7Binding? = null

@@ -55,12 +55,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plan_your_sleep_tv" />
 
-
-
-    <relax.deep.sleep.sounds.calm.ui.time_picker.Ticker
+    <calm.sleep.relaxing.sounds.noise.ui.time_picker.Ticker
         android:id="@+id/time_picker"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
+        android:layout_marginVertical="10dp"
+        app:layout_constrainedHeight="true"
         app:hoursFormat="hours24"
         app:layout_constraintBottom_toTopOf="@id/next_btn"
         app:layout_constraintEnd_toEndOf="parent"

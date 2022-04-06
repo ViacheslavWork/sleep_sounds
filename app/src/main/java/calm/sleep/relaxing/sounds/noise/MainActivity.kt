@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm
+package calm.sleep.relaxing.sounds.noise
 
 import android.app.ActivityManager
 import android.content.Context
@@ -30,17 +30,17 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
-import relax.deep.sleep.sounds.calm.data.Repository
-import relax.deep.sleep.sounds.calm.databinding.ActivityMainBinding
-import relax.deep.sleep.sounds.calm.service.PlayerService
-import relax.deep.sleep.sounds.calm.subscription.Subscribable
-import relax.deep.sleep.sounds.calm.subscription.Subscription
-import relax.deep.sleep.sounds.calm.subscription.SubscriptionPrice
-import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
-import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_MONTH
-import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_YEAR
-import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
-import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
+import calm.sleep.relaxing.sounds.noise.data.Repository
+import calm.sleep.relaxing.sounds.noise.databinding.ActivityMainBinding
+import calm.sleep.relaxing.sounds.noise.service.PlayerService
+import calm.sleep.relaxing.sounds.noise.subscription.Subscribable
+import calm.sleep.relaxing.sounds.noise.subscription.Subscription
+import calm.sleep.relaxing.sounds.noise.subscription.SubscriptionPrice
+import calm.sleep.relaxing.sounds.noise.ui.player.PlayerFragment
+import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_MONTH
+import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_YEAR
+import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
+import calm.sleep.relaxing.sounds.noise.utils.PremiumPreferences
 
 
 private const val TAG = "MainActivity"

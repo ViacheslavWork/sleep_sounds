@@ -1,4 +1,4 @@
-package relax.deep.sleep.sounds.calm.ui.settings
+package calm.sleep.relaxing.sounds.noise.ui.settings
 
 import android.content.Context
 import android.os.Bundle
@@ -17,13 +17,13 @@ import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
-import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.databinding.FragmentBedtimeReminderBinding
-import relax.deep.sleep.sounds.calm.model.Alarm
-import relax.deep.sleep.sounds.calm.utils.Constants
-import relax.deep.sleep.sounds.calm.utils.Constants.CUSTOM_ALARM_ID
-import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
-import relax.deep.sleep.sounds.calm.utils.ToastHelper
+import calm.sleep.relaxing.sounds.noise.R
+import calm.sleep.relaxing.sounds.noise.databinding.FragmentBedtimeReminderBinding
+import calm.sleep.relaxing.sounds.noise.model.Alarm
+import calm.sleep.relaxing.sounds.noise.utils.Constants
+import calm.sleep.relaxing.sounds.noise.utils.Constants.CUSTOM_ALARM_ID
+import calm.sleep.relaxing.sounds.noise.utils.EveryDayAlarmManager
+import calm.sleep.relaxing.sounds.noise.utils.ToastHelper
 
 class BedtimeReminderFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
