@@ -37,6 +37,11 @@
         <item name="android:textAppearance">@style/text2</item>
         <item name="android:background">@drawable/selector_onboarding_item</item>
     </style>
-
+    <style name="MyDatePicker" >
+        <!-- Text color -->
+        <item name="android:textColorPrimary">@color/white</item>
+        <!-- Divider color -->
+        <item name="colorControlNormal">@color/white</item>
+    </style>
 
 </resources>

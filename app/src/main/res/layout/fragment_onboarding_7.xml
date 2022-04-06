@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/gradient_liner_bg"
     android:background="@android:color/transparent"
+    tools:background="@drawable/gradient_liner_bg"
     tools:context=".ui.settings.SettingsFragment">
 
     <androidx.constraintlayout.utils.widget.ImageFilterButton
         android:id="@+id/back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:minWidth="@dimen/onboarding_image_btn_min_width"
         android:minHeight="@dimen/onboarding_image_btn_min_height"
-        android:background="@android:color/transparent"
         android:src="@drawable/icon_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,9 +23,9 @@
         android:id="@+id/skip_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         android:minWidth="@dimen/onboarding_image_btn_min_width"
         android:minHeight="@dimen/onboarding_image_btn_min_height"
-        android:background="@android:color/transparent"
         android:src="@drawable/skip_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,57 +42,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_btn" />
 
-    <androidx.core.widget.NestedScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="5dp"
         android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toTopOf="@id/next_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_tv">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_tv" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="10dp">
-
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="nature_sounds_btn,animal_sounds_btn,rain_sounds_btn,relax_sounds_btn,all_sounds_btn"
-                app:flow_verticalGap="10dp"
-                app:flow_verticalStyle="spread"
-                app:flow_wrapMode="chain"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <include
-                android:id="@+id/nature_sounds_btn"
-                layout="@layout/item_onboarding_btn" />
-
-            <include
-                android:id="@+id/animal_sounds_btn"
-                layout="@layout/item_onboarding_btn" />
-
-            <include
-                android:id="@+id/rain_sounds_btn"
-                layout="@layout/item_onboarding_btn" />
-
-            <include
-                android:id="@+id/relax_sounds_btn"
-                layout="@layout/item_onboarding_btn" />
-
-            <include
-                android:id="@+id/all_sounds_btn"
-                layout="@layout/item_onboarding_btn" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
-
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/next_btn_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="next_btn,bottom_gradient_v"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
@@ -100,6 +66,16 @@
         android:layout_marginHorizontal="@dimen/onboarding_button_horizontal_margin"
         android:layout_marginVertical="40dp"
         android:text="@string/next"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/bottom_gradient_v"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/gradient_liner_bg6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

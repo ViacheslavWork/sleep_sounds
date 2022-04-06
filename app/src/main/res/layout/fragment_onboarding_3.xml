@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@id/back_btn" />
 
     <TextView
-        android:id="@+id/what_time_tv"
+        android:id="@+id/when_you_wake_up_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -56,13 +56,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/plan_your_sleep_tv" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_drums_picker2"
-        app:layout_constraintBottom_toTopOf="@+id/next_btn"
-        app:layout_constraintTop_toBottomOf="@+id/what_time_tv" />
+    <relax.deep.sleep.sounds.calm.ui.time_picker.Ticker
+        android:id="@+id/time_picker"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:hoursFormat="hours24"
+        app:layout_constraintBottom_toTopOf="@id/next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/when_you_wake_up_tv"
+        app:minutesInterval="1"
+        app:shouldAmSelected="false" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"

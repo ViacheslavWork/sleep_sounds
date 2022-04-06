@@ -6,6 +6,7 @@
     android:background="@drawable/selector_onboarding_item"
     android:clickable="true"
     android:focusable="true"
+    android:layout_margin="5dp"
     android:padding="15dp">
 
     <TextView
@@ -20,9 +21,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
+        app:tint="@color/blue_icon_onboarding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

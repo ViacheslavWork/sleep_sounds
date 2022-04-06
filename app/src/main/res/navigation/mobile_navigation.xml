@@ -253,7 +253,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding5Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding5Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_5.OnBoarding5Fragment"
         android:label="OnBoarding5Fragment" >
         <action
             android:id="@+id/action_onBoarding5Fragment_to_onBoarding7Fragment"
@@ -261,7 +261,7 @@
     </fragment>
     <fragment
         android:id="@+id/onBoarding7Fragment"
-        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.OnBoarding7Fragment"
+        android:name="relax.deep.sleep.sounds.calm.ui.onboarding.onboarding_7.OnBoarding7Fragment"
         android:label="OnBoarding7Fragment" >
         <action
             android:id="@+id/action_onBoarding7Fragment_to_goPremiumFragment"

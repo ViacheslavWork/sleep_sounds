@@ -120,4 +120,19 @@
     <string name="what_are_you_favorite_n_contents_for_sleep">What are you favorite\n contents for sleep?</string>
     <string name="name_of_sounds">Name of sounds</string>
 
+    <string name="fall_asleep_faster">Fall asleep faster</string>
+    <string name="sleep_all_night">Sleep all night</string>
+    <string name="relax_unwind">Relax &amp; Unwind</string>
+    <string name="manage_tinnitus">Manage Tinnitus</string>
+    <string name="to_help_children_sleep">To help children sleep</string>
+    <string name="coping_with_stress">Coping with stress</string>
+    <string name="make_the_morning_better">Make the morning better</string>
+    <string name="concentrate">Concentrate</string>
+
+    <string name="nature_sounds">Nature sounds</string>
+    <string name="animal_sounds">Animal sounds</string>
+    <string name="rain_sounds">Rain sounds</string>
+    <string name="relax_sounds">Relax sounds</string>
+    <string name="all_sounds">All sounds</string>
+
 </resources>
