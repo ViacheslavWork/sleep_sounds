@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentOnboarding0StartBinding
 
 class StartOnBoardingFragment : Fragment() {
@@ -26,6 +27,12 @@ class StartOnBoardingFragment : Fragment() {
                 StartOnBoardingFragmentDirections.actionStartOnBoardingFragmentToOnBoarding1Fragment()
             )
         }
+        val imageView = binding.rippleIv.startAnimation(
+            AnimationUtils.loadAnimation(
+                context,
+                R.anim.btn_animation
+            )
+        )
     }
 
     override fun onDestroyView() {

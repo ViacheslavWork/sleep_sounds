@@ -96,7 +96,7 @@ class SettingsFragment : Fragment() {
                                 alarm.schedule(requireContext())
                                 everyDayAlarmManager.cancelEveryDayAlarm()
                                 settingsViewModel.setAlarm(alarm)
-                                ToastHelper.showCustomToast(requireActivity())
+                                ToastHelper.showSetSuccessfullyToast(requireActivity())
                             }
                         }
                     }

@@ -160,7 +160,9 @@
         <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icon_universe.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/icon_waterfall.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/night_beach.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/onboarding_btn_ripple_around.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/rain_on_umbrella.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/drawable/selector_onboarding_item.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/button_play_pause_mix_player.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/button_player.xml" value="0.4466666666666667" />
@@ -175,7 +177,8 @@
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_go_premium.xml" value="0.1598731884057971" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_greeting.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_mixes.xml" value="0.2800829875518672" />
-        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_1.xml" value="0.1" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_0_start.xml" value="0.14666666666666667" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_1.xml" value="0.13333333333333333" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_2.xml" value="0.16666666666666666" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_3.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_onboarding_4.xml" value="0.1" />

@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.broadcast.AlarmBroadcastReceiver
 import relax.deep.sleep.sounds.calm.data.AlarmRepository
-import relax.deep.sleep.sounds.calm.data.database.entity.AlarmEntity
 import relax.deep.sleep.sounds.calm.model.Alarm
 import relax.deep.sleep.sounds.calm.utils.Constants.CUSTOM_ALARM_ID
 
@@ -44,6 +43,31 @@ class EveryDayAlarmManager(val context: Context, val alarmRepository: AlarmRepos
             saturday = true,
             sunday = true
         )
+        alarm.schedule(context)
+    }
+
+    fun scheduleCustomEveryDayAlarm(
+        hour: Int,
+        minute: Int,
+        alarmId: Int,
+        notificationTitle: String
+    ) {
+        val alarm = Alarm(
+            alarmId = alarmId,
+            hour = hour,
+            minute = minute,
+            title = notificationTitle,
+            started = true,
+            isCustom = false,
+            monday = true,
+            tuesday = true,
+            wednesday = true,
+            thursday = true,
+            friday = true,
+            saturday = true,
+            sunday = true
+        )
+        ioScope.launch { alarmRepository.saveAlarm(alarm) }
         alarm.schedule(context)
     }
 

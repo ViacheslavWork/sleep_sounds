@@ -29,6 +29,11 @@ class OnBoarding4Fragment : Fragment() {
                 OnBoarding4FragmentDirections.actionOnBoarding4FragmentToOnBoarding5Fragment()
             )
         }
+        binding.noBtn.setOnClickListener {
+            findNavController().navigate(
+                OnBoarding4FragmentDirections.actionOnBoarding4FragmentToOnBoarding5Fragment()
+            )
+        }
         binding.backBtn.setOnClickListener { requireActivity().onBackPressed() }
         binding.skipBtn.setOnClickListener {
             findNavController().navigate(

@@ -18,7 +18,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalTime
 import relax.deep.sleep.sounds.calm.R
-import relax.deep.sleep.sounds.calm.data.database.entity.AlarmEntity
 import relax.deep.sleep.sounds.calm.databinding.FragmentBedtimeReminderBinding
 import relax.deep.sleep.sounds.calm.model.Alarm
 import relax.deep.sleep.sounds.calm.utils.Constants
@@ -106,7 +105,7 @@ class BedtimeReminderFragment : Fragment() {
             if (isDaySelected) {
                 scheduleAlarm(alarmTime)
                 everyDayAlarmManager.cancelEveryDayAlarm()
-                ToastHelper.showCustomToast(requireActivity())
+                ToastHelper.showSetSuccessfullyToast(requireActivity())
             }
             requireActivity().onBackPressed()
         }

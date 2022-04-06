@@ -21,6 +21,11 @@ class OnBoarding3Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpListeners()
+        setUpInitialTime()
+    }
+
+    private fun setUpInitialTime() {
+        binding.timePicker.setInitialSelectedTime("08:25 Pm")
     }
 
     private fun setUpListeners() {

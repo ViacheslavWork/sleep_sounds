@@ -1,20 +1,25 @@
 package relax.deep.sleep.sounds.calm.ui.onboarding
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import org.koin.android.ext.android.inject
 import relax.deep.sleep.sounds.calm.R
 import relax.deep.sleep.sounds.calm.databinding.FragmentOnboarding2Binding
+import relax.deep.sleep.sounds.calm.utils.Constants
+import relax.deep.sleep.sounds.calm.utils.EveryDayAlarmManager
 import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
+import relax.deep.sleep.sounds.calm.utils.ToastHelper
+
+private const val TAG = "OnBoarding2Fragment"
 
 class OnBoarding2Fragment : Fragment() {
     private var _binding: FragmentOnboarding2Binding? = null
     private val binding get() = _binding!!
+    private val alarmManager: EveryDayAlarmManager by inject()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +36,21 @@ class OnBoarding2Fragment : Fragment() {
 
     private fun setUpListeners() {
         binding.nextBtn.setOnClickListener {
+            val selectedTime = binding.timePicker.getCurrentlySelectedTime()
+                .filter { !it.isWhitespace() }
+                .split(":")
+                .map { it.toInt() }
+            val hour = selectedTime[0]
+            val minute = selectedTime[1]
+            alarmManager.scheduleCustomEveryDayAlarm(
+                hour,
+                minute,
+                Constants.CUSTOM_ALARM_ID,
+                requireContext().resources.getString(R.string.custom_alarm_notification_title)
+            )
+
+            ToastHelper.showSetSuccessfullyToast(requireActivity())
+
             findNavController().navigate(
                 OnBoarding2FragmentDirections.actionOnBoarding2FragmentToOnBoarding3Fragment()
             )

@@ -10,12 +10,51 @@
     tools:context=".ui.settings.SettingsFragment">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/stars_bg_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_bg_stars"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/picture_1_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/onboarding_picture_3"
+        android:layout_marginTop="50dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/picture_2_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:src="@drawable/onboarding_picture_2"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/picture_1_iv" />
+    <ImageView
+        android:id="@+id/picture_3_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/onboarding_picture_1"
+        android:layout_marginTop="100dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/picture_1_iv" />
+
 
     <TextView
         android:id="@+id/textView"
@@ -23,13 +62,14 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="25dp"
         android:textAlignment="center"
+        android:layout_marginBottom="20dp"
         android:textColor="@color/gray_text"
         android:text="@string/onboarding_1_content"
         android:textAppearance="@style/text1"
         app:layout_constraintBottom_toTopOf="@+id/next_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/next_btn"
