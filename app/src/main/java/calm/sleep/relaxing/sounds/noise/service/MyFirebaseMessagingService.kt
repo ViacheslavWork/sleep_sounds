@@ -64,6 +64,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationBuilder
             .setContentTitle(title)
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+//            .setContentText(message)
 
         if (imageUrl != null) {
             setLargeIconToNotification(imageUrl, notificationBuilder, notificationManager)

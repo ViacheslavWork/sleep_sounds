@@ -37,14 +37,18 @@
                 android:textAppearance="@style/H2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageView
+            <androidx.constraintlayout.utils.widget.ImageFilterButton
                 android:id="@+id/cross_go_premium_toolbar_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="20dp"
+                android:minHeight="@dimen/onboarding_image_btn_min_height"
                 android:layout_marginHorizontal="@dimen/margin_toolbar_end"
                 android:src="@drawable/ic_icon_cross"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="grey">#80F3F7FF</color>
+    <color name="time_unit_selected_color">#FFFFFF</color>
+    <color name="time_unit_unselected_color">#80F3F7FF</color>
+    <string name="am">Am</string>
+    <string name="pm">Pm</string>
+    <style name="Bold18Sp8DpPaddedTextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+    <declare-styleable name="Ticker">
+        <attr format="enum" name="hoursFormat">
+            <enum name="hours12" value="12"/>
+            <enum name="hours24" value="24"/>
+        </attr>
+        <attr format="integer" name="minutesInterval"/>
+        <attr format="boolean" name="shouldAmSelected"/>
+    </declare-styleable>
+</resources>

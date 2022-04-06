@@ -1,4 +1,4 @@
-package calm.sleep.relaxing.sounds.noise.ui
+package relax.deep.sleep.sounds.calm.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import calm.sleep.relaxing.sounds.noise.R
-import calm.sleep.relaxing.sounds.noise.databinding.FragmentGreetingBinding
+import relax.deep.sleep.sounds.calm.databinding.FragmentGreetingBinding
 
 
 class GreetingFragment : Fragment() {
@@ -37,12 +36,14 @@ class GreetingFragment : Fragment() {
                 .scaleY(1.3f)
             lifecycleScope.launch(Dispatchers.Default) {
                 delay(3500)
-                withContext(Dispatchers.Main){
-                    findNavController().navigate(R.id.action_global_to_mixFragment)
+                withContext(Dispatchers.Main) {
+//                    findNavController().navigate(R.id.action_global_to_mixFragment)
+                    findNavController().navigate(GreetingFragmentDirections.actionGreetingFragmentToStartOnBoardingFragment())
                 }
             }
         }
     }
+
     override fun onDestroyView() {
         activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         super.onDestroyView()

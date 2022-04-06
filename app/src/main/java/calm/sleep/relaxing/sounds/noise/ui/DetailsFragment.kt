@@ -1,11 +1,12 @@
-package calm.sleep.relaxing.sounds.noise.ui
+package relax.deep.sleep.sounds.calm.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import calm.sleep.relaxing.sounds.noise.databinding.FragmentDetailsBinding
+import relax.deep.sleep.sounds.calm.databinding.FragmentDetailsBinding
+import relax.deep.sleep.sounds.calm.databinding.FragmentOnboarding1Binding
 
 
 class DetailsFragment : Fragment() {

@@ -106,5 +106,33 @@
     <string name="interstitial_test_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="congratulations_you_are_lucky">Congratulations,\nyou are lucky!</string>
     <string name="no_need_to_watch_ads_now">No need to watch ads now</string>
+    <string name="welcome">Welcome!</string>
+    <string name="get_started">Get started</string>
+    <string name="next">Next</string>
+    <string name="onboarding_1_content">Relax and fall sleep faster with relaxing content selected just for you</string>
+    <string name="plan_your_sleep">Plan your sleep</string>
+    <string name="what_time_you_go_to_bed">What time you go to bed?</string>
+    <string name="when_you_wake_up">When you wake up?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="do_you_have_problems_sleeping">Do you have\n problems sleeping?</string>
+    <string name="what_are_you_needs">What are you needs?</string>
+    <string name="what_are_you_favorite_n_contents_for_sleep">What are you favorite\n contents for sleep?</string>
+    <string name="name_of_sounds">Name of sounds</string>
+
+    <string name="fall_asleep_faster">Fall asleep faster</string>
+    <string name="sleep_all_night">Sleep all night</string>
+    <string name="relax_unwind">Relax &amp; Unwind</string>
+    <string name="manage_tinnitus">Manage Tinnitus</string>
+    <string name="to_help_children_sleep">To help children sleep</string>
+    <string name="coping_with_stress">Coping with stress</string>
+    <string name="make_the_morning_better">Make the morning better</string>
+    <string name="concentrate">Concentrate</string>
+
+    <string name="nature_sounds">Nature sounds</string>
+    <string name="animal_sounds">Animal sounds</string>
+    <string name="rain_sounds">Rain sounds</string>
+    <string name="relax_sounds">Relax sounds</string>
+    <string name="all_sounds">All sounds</string>
 
 </resources>

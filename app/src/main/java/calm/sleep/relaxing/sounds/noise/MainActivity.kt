@@ -1,4 +1,4 @@
-package calm.sleep.relaxing.sounds.noise
+package relax.deep.sleep.sounds.calm
 
 import android.app.ActivityManager
 import android.content.Context
@@ -9,6 +9,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,17 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import calm.sleep.relaxing.sounds.noise.data.Repository
-import calm.sleep.relaxing.sounds.noise.databinding.ActivityMainBinding
-import calm.sleep.relaxing.sounds.noise.service.PlayerService
-import calm.sleep.relaxing.sounds.noise.subscription.Subscribable
-import calm.sleep.relaxing.sounds.noise.subscription.Subscription
-import calm.sleep.relaxing.sounds.noise.subscription.SubscriptionPrice
-import calm.sleep.relaxing.sounds.noise.ui.player.PlayerFragment
-import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_MONTH
-import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_YEAR
-import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
-import calm.sleep.relaxing.sounds.noise.utils.PremiumPreferences
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
@@ -39,8 +30,19 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
+import relax.deep.sleep.sounds.calm.data.Repository
+import relax.deep.sleep.sounds.calm.databinding.ActivityMainBinding
+import relax.deep.sleep.sounds.calm.service.PlayerService
+import relax.deep.sleep.sounds.calm.subscription.Subscribable
+import relax.deep.sleep.sounds.calm.subscription.Subscription
+import relax.deep.sleep.sounds.calm.subscription.SubscriptionPrice
+import relax.deep.sleep.sounds.calm.ui.player.PlayerFragment
+import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_MONTH
+import relax.deep.sleep.sounds.calm.utils.Constants.SUBSCRIPTION_ID_YEAR
+import relax.deep.sleep.sounds.calm.utils.MyLog.showLog
+import relax.deep.sleep.sounds.calm.utils.PremiumPreferences
 
-//calm.sleep.relaxing.sounds.noise
+
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity(), Subscribable {
@@ -111,6 +113,17 @@ class MainActivity : AppCompatActivity(), Subscribable {
             when (destination.id) {
                 R.id.playerFragment -> letActivityShowTimeFragment(true)
                 else -> letActivityShowTimeFragment(false)
+            }
+            when (destination.id) {
+                R.id.onBoarding1Fragment,
+                R.id.onBoarding2Fragment,
+                R.id.onBoarding3Fragment,
+                R.id.onBoarding4Fragment,
+                R.id.onBoarding5Fragment,
+                R.id.onBoarding7Fragment -> findViewById<ConstraintLayout>(R.id.container).background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.gradient_liner_bg, null)
+                R.id.startOnBoardingFragment -> findViewById<ConstraintLayout>(R.id.container).background =
+                    ResourcesCompat.getDrawable(resources, R.drawable.bg_greeting_fragment, null)
             }
         }
 

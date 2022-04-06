@@ -29,8 +29,8 @@ class App : Application() {
             androidLogger(Level.ERROR)
             androidContext(this@App)
             modules(listOf(appModule, dataModule, serviceModule, roomModule))
-            everyDayAlarmManager.startStopEveryDayAlarmIfNeeded()
         }
+        everyDayAlarmManager.startStopEveryDayAlarmIfNeeded()
     }
 
     private fun showFirebaseToken() {
