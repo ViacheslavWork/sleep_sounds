@@ -116,7 +116,12 @@ class AdditionalSoundsFragment : Fragment() {
     }
 
     override fun onResume() {
-        startAdAnimation()
+        if (PremiumPreferences.userHasPremiumStatus(requireContext())) {
+            binding.crownToolbarIv.visibility = View.GONE
+        } else {
+            binding.crownToolbarIv.visibility = View.VISIBLE
+            startAdAnimation()
+        }
         super.onResume()
     }
 

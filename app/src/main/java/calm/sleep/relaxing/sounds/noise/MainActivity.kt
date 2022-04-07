@@ -295,7 +295,7 @@ class MainActivity : AppCompatActivity(), Subscribable {
         })
         PremiumPreferences.setStoredPremiumStatus(this, hasSubscription())
         //for test
-//        PremiumPreferences.setStoredPremiumStatus(this, false)
+//        PremiumPreferences.setStoredPremiumStatus(this, true)
 
         isPremium = hasSubscription()
         _isPremiumLd.postValue(hasSubscription())
