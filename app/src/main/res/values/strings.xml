@@ -97,13 +97,13 @@
     <string name="custom_alarm_notification_title">It is time to sleep</string>
     <string name="default_alarm_notification_title">Listen to our new mix</string>
 
-    <string name="app_id">ca-app-pub-9075995454638935~7323183568</string>
-    <string name="rewarded_id">ca-app-pub-9075995454638935/8444693543</string>
-    <string name="licence_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArrlHwJoQMDMK/p7Kur87+RSeWlzFdWlyryQny4yw48CnjCQR9y7GcqaDCE2yV5PO9E9wRlUhLylht3f4Ij7wR7GOzEUFzdLI0+jrcWsOawwGzt79FFV6T4jkFe+Y7x95TrmGM2m6cjzc4UugKIcUfr+pVnHoU2tN8TtuFBU/mfhQeK4vvyCsqY/JKksJfwpNVRJ0jEi37AgJyM8j4gKGesvqW8F7sRCOd36WqcrtaodEipL5CDtJWIxn9t58rivZ4HLBFaQHe5o2525cJX8sIMf1FpfX/RQCUJecxrq2pcQNx8xfDA4fb09jvm3uVHVBuO6oxU2Dhq3xa4o5TZSeVwIDAQAB</string>
+    <string name="app_id">ca-app-pub-9075995454638935~7111951062</string>
+    <string name="rewarded_id">ca-app-pub-9075995454638935/3172706052</string>
+    <string name="licence_key">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvBttn2BQpPtVTAM69jcj4n7xiMcZ1FBbeCvnaumaFiRCBKaRkyQT//PQxh1k3QxmS2oW6CG/937BF37sW0/cjJi6cbiEcawxeHGmC2l2MMJFPt6JQ9wGCgywo3t4i3N9vYIYno7yg9Y4d2EhEv8mSO8icIfbRRVQ0nHCzrZOkIzNRn1lGo8Jig1WE2SOo4po5/tgIht4s1p9+vttOdwTrA+n554fbuJ7CRV2pTYxOoXk9clMsnXSHdCSC81l9+t3oelrc+dpJDgg0TTJnMKhRHL3K0VJ1Y+sh6SkuCnDqbdZ7HCdckUa2s7y1lgSEubJ04Ix7oL3HwH2kHlcPMXsCQIDAQAB</string>
     <string name="purchase_id_test">android.test.purchased</string>
-
     <string name="app_test_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="interstitial_test_id">ca-app-pub-3940256099942544/1033173712</string>
+
     <string name="congratulations_you_are_lucky">Congratulations,\nyou are lucky!</string>
     <string name="no_need_to_watch_ads_now">No need to watch ads now</string>
     <string name="welcome">Welcome!</string>

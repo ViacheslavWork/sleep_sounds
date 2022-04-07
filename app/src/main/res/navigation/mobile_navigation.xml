@@ -217,7 +217,9 @@
         android:label="StartOnBoardingFragment" >
         <action
             android:id="@+id/action_startOnBoardingFragment_to_onBoarding1Fragment"
-            app:destination="@id/onBoarding1Fragment" />
+            app:destination="@id/onBoarding1Fragment"
+            app:enterAnim="@anim/slide_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/onBoarding1Fragment"
@@ -225,7 +227,9 @@
         android:label="OnBoarding1Fragment" >
         <action
             android:id="@+id/action_onBoarding1Fragment_to_onBoarding2Fragment"
-            app:destination="@id/onBoarding2Fragment" />
+            app:destination="@id/onBoarding2Fragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/onBoarding2Fragment"
@@ -233,7 +237,9 @@
         android:label="OnBoarding2Fragment" >
         <action
             android:id="@+id/action_onBoarding2Fragment_to_onBoarding3Fragment"
-            app:destination="@id/onBoarding3Fragment" />
+            app:destination="@id/onBoarding3Fragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/onBoarding3Fragment"
@@ -241,7 +247,9 @@
         android:label="OnBoarding3Fragment" >
         <action
             android:id="@+id/action_onBoarding3Fragment_to_onBoarding4Fragment"
-            app:destination="@id/onBoarding4Fragment" />
+            app:destination="@id/onBoarding4Fragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/onBoarding4Fragment"
@@ -249,7 +257,9 @@
         android:label="OnBoarding4Fragment" >
         <action
             android:id="@+id/action_onBoarding4Fragment_to_onBoarding5Fragment"
-            app:destination="@id/onBoarding5Fragment" />
+            app:destination="@id/onBoarding5Fragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/onBoarding5Fragment"
@@ -257,7 +267,9 @@
         android:label="OnBoarding5Fragment" >
         <action
             android:id="@+id/action_onBoarding5Fragment_to_onBoarding7Fragment"
-            app:destination="@id/onBoarding7Fragment" />
+            app:destination="@id/onBoarding7Fragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
     <fragment
         android:id="@+id/onBoarding7Fragment"
@@ -265,6 +277,8 @@
         android:label="OnBoarding7Fragment" >
         <action
             android:id="@+id/action_onBoarding7Fragment_to_goPremiumFragment"
-            app:destination="@id/goPremiumFragment" />
+            app:destination="@id/goPremiumFragment"
+            app:enterAnim="@anim/slide_right"
+            app:popEnterAnim="@anim/slide_left"/>
     </fragment>
 </navigation>

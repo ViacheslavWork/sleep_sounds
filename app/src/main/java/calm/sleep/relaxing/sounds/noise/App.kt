@@ -64,7 +64,6 @@ class App : Application() {
         // Implement logic to detect whether the app is opening for the first time.
         // For example, you can check for files (settings, databases, and so on),
         // which the app creates on its first launch.
-        FirstRunPreferences.setIsNotFirstRun(applicationContext)
         return FirstRunPreferences.isFirstRun(applicationContext)
     }
 }
