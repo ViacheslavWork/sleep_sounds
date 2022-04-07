@@ -61,7 +61,6 @@ class MixesViewModel(private val repository: Repository) : ViewModel() {
             }
 
             is MixesEvent.OnMixSave -> {
-                Log.i(TAG, "handleEvent: ${event.mix}")
                 viewModelScope.launch { repository.saveMix(event.mix) }
             }
         }

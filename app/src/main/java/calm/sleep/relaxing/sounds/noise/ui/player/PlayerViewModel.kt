@@ -19,10 +19,4 @@ class PlayerViewModel(private val repository: Repository) : ViewModel() {
     fun getMix(mixId: Long): LiveData<Mix?> {
         return repository.getMixLD(mixId)
     }
-
-  /*  private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
-        }
-    }*/
 }

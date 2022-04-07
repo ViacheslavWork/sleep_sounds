@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +18,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import calm.sleep.relaxing.sounds.noise.BuildConfig
 import calm.sleep.relaxing.sounds.noise.R
 import calm.sleep.relaxing.sounds.noise.databinding.FragmentSoundsBinding
 import calm.sleep.relaxing.sounds.noise.model.Sound
@@ -33,6 +30,7 @@ import calm.sleep.relaxing.sounds.noise.utils.Constants.EXTRA_SOUND
 import calm.sleep.relaxing.sounds.noise.utils.Constants.LAUNCHER
 import calm.sleep.relaxing.sounds.noise.utils.Constants.SOUNDS_LAUNCHER
 import calm.sleep.relaxing.sounds.noise.utils.PremiumPreferences
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SoundsFragment : Fragment() {
     companion object {
@@ -348,17 +346,12 @@ class SoundsFragment : Fragment() {
                 isPremium = false
             }
         )
-        Log.i(
-            TAG,
-            "playStopSoundProgrammatically: ${lastOnClick.sound.title}${lastOnClick.sound.file}"
-        )
         playPauseSound(lastOnClick.sound)
         soundsViewModel.handleEvent(lastOnClick)
     }
 
     private fun playPauseSound(sound: Sound) {
         val launcher = PlayerService.launcher
-        Log.i(TAG, "launcher: $launcher")
         if (PlayerService.launcher != SOUNDS_LAUNCHER) {
             sendCommandToPlayerService(Constants.ACTION_STOP_ALL_SOUNDS, null)
             if (PlayerService.isPause.value == true) {
@@ -395,12 +388,6 @@ class SoundsFragment : Fragment() {
     private fun unbindService() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)
-        }
-    }
-
-    private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
         }
     }
 }

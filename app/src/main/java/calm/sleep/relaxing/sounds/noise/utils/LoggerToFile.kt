@@ -1,7 +1,7 @@
 package calm.sleep.relaxing.sounds.noise.utils
 
 import android.content.Context
-import calm.sleep.relaxing.sounds.noise.BuildConfig
+import androidx.databinding.library.BuildConfig
 import java.io.File
 
 object LoggerToFile {

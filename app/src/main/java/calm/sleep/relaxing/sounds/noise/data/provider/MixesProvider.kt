@@ -144,7 +144,6 @@ class MixesProvider(val context: Context) {
                 picturePath = resourceUri(R.drawable.train_jorney),
                 sounds = mutableListOf<Sound>().apply {
                     add(SoundsEnum.Train.getSound().apply { isPlaying = true })
-                    Log.i(TAG, "getMixes: Train: ${SoundsEnum.Train.getSound().file}")
                     add(SoundsEnum.RainOnRoof.getSound().apply { isPlaying = true }
                         .apply { volume = 5 })
                 }, category = MixCategory.Sleep, isPremium = false

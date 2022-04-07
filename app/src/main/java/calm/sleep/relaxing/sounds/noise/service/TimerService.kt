@@ -30,7 +30,6 @@ class TimerService : LifecycleService() {
     private lateinit var currentTimer: Job
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.i(TAG, "onStartCommand: ")
         intent?.let {
             if (it.action == Constants.ACTION_START_TIMER) {
                 if (::currentTimer.isInitialized) {

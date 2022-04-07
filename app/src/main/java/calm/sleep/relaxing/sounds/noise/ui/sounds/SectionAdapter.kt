@@ -1,6 +1,5 @@
 package calm.sleep.relaxing.sounds.noise.ui.sounds
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import calm.sleep.relaxing.sounds.noise.BuildConfig
 import calm.sleep.relaxing.sounds.noise.R
 import calm.sleep.relaxing.sounds.noise.databinding.ItemSoundsBinding
 import calm.sleep.relaxing.sounds.noise.databinding.SectionRowBinding
@@ -92,12 +90,6 @@ class SoundAdapter(
             isSoundChangeable
         )
     }
-
-    private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
-        }
-    }
 }
 
 class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -125,7 +117,6 @@ class SoundsHolder(private val binding: ItemSoundsBinding) : RecyclerView.ViewHo
                     R.drawable.gradient_liner_bg5_rounded_corners,
                     null
                 )
-                Log.i(TAG, "onBind: $sound")
             } else {
                 binding.seekBar.visibility = View.INVISIBLE
                 binding.root.background = ResourcesCompat.getDrawable(

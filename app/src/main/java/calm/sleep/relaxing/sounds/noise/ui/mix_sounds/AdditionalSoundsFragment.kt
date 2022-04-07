@@ -71,7 +71,6 @@ class AdditionalSoundsFragment : Fragment() {
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.d(TAG, "ServiceConnection: disconnected from service.")
             isServiceBound = false
         }
     }

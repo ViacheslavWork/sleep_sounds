@@ -39,7 +39,6 @@ class CustomMixDialog : DialogFragment() {
     var isServiceBound: Boolean = false
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, iBinder: IBinder) {
-            Log.d(TAG, "ServiceConnection: connected to service.")
             // We've bound to MyService, cast the IBinder and get MyBinder instance
             val binder = iBinder as PlayerService.MyBinder
             playerService = binder.service
@@ -47,7 +46,6 @@ class CustomMixDialog : DialogFragment() {
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.d(TAG, "ServiceConnection: disconnected from service.")
             isServiceBound = false
         }
     }
@@ -74,7 +72,6 @@ class CustomMixDialog : DialogFragment() {
     private fun observeSoundEvent() {
         adapter.event.observe(viewLifecycleOwner){
             if (it is SoundsEvent.OnSeekBarChanged) {
-                Log.i(TAG, "observeSoundEvent: sound = ${it.sound}")
                 playerService?.changeVolume(it.sound)
             }
         }

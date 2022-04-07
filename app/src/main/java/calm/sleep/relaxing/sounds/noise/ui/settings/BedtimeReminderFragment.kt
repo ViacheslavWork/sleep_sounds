@@ -136,7 +136,6 @@ class BedtimeReminderFragment : Fragment() {
         getButtons().map { it.isEnabled = isEnabled }
         binding.timeBlock.isClickable = isEnabled
         binding.timeBlock.isEnabled = isEnabled
-        Log.i("TAG", "setUpListeners: ${binding.saturdayBtn.btn.isEnabled}")
     }
 
     private fun setUpWeekButtonsListeners() {

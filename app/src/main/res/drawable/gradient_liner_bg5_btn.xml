@@ -9,5 +9,5 @@
         android:startColor="#ff2670FF"
         android:endColor="#00003499"
         />
-    <corners android:radius="5dp"/>
+    <corners android:radius="6dp"/>
 </shape>

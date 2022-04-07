@@ -16,8 +16,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import calm.sleep.relaxing.sounds.noise.BuildConfig
 import calm.sleep.relaxing.sounds.noise.R
 import calm.sleep.relaxing.sounds.noise.databinding.ButtonPlayerBinding
 import calm.sleep.relaxing.sounds.noise.databinding.FragmentPlayerBinding
@@ -26,6 +24,7 @@ import calm.sleep.relaxing.sounds.noise.service.PlayerService
 import calm.sleep.relaxing.sounds.noise.service.TimerService
 import calm.sleep.relaxing.sounds.noise.ui.mix_sounds.AdditionalSoundsFragment
 import calm.sleep.relaxing.sounds.noise.utils.Constants
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 private const val TAG = "PlayerFragment"
 
@@ -65,7 +64,6 @@ class PlayerFragment : Fragment() {
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, iBinder: IBinder) {
-            Log.d(TAG, "ServiceConnection: connected to service.")
             // We've bound to MyService, cast the IBinder and get MyBinder instance
             val binder = iBinder as PlayerService.MyBinder
             playerService = binder.service
@@ -73,7 +71,6 @@ class PlayerFragment : Fragment() {
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.d(TAG, "ServiceConnection: disconnected from service.")
             isServiceBound = false
         }
     }
@@ -108,7 +105,6 @@ class PlayerFragment : Fragment() {
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_PAUSE_ALL_SOUNDS, null)
         }
         sounds.forEach {
-            Log.i(TAG, "playStopMix: ${it.title}, ${it.file}")
             sendCommandToPlayerService(Constants.ACTION_PLAY_OR_STOP_SOUND, it)
         }
     }
@@ -214,7 +210,6 @@ class PlayerFragment : Fragment() {
 
     //service
     private fun sendCommandToPlayerService(action: String, sound: Sound?) {
-        Log.i(TAG, "sendCommandToPlayerService: ")
         Intent(requireContext(), PlayerService::class.java).also {
             it.putExtra(Constants.LAUNCHER, Constants.MIX_LAUNCHER)
             it.putExtra(Constants.EXTRA_SOUND, sound)
@@ -233,12 +228,6 @@ class PlayerFragment : Fragment() {
     private fun unbindService() {
         Intent(requireContext(), PlayerService::class.java).also {
             requireActivity().unbindService(serviceConnection)
-        }
-    }
-
-    private fun showLog(message: String) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, message)
         }
     }
 

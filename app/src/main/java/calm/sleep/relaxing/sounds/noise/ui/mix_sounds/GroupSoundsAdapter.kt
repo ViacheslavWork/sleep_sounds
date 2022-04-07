@@ -159,7 +159,6 @@ class SoundsHolder(private val binding: ItemSoundsBinding) :
                     R.drawable.gradient_liner_bg5_rounded_corners,
                     null
                 )
-                Log.i(TAG, "onBind: $sound")
             } else {
                 binding.seekBar.visibility = View.INVISIBLE
                 binding.root.background = ResourcesCompat.getDrawable(

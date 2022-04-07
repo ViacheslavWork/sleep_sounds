@@ -22,7 +22,6 @@ class TickerAdapter : ListAdapter<Picture, TickerHolder>(FeatureDiffCallback()) 
 
 
     override fun onBindViewHolder(holder: TickerHolder, position: Int) {
-        Log.i(TAG, "onBindViewHolder: ")
         holder.onBind(getItem(position))
     }
 }

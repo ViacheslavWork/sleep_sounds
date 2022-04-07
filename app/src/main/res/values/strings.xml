@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Deep Sleep</string>
+    <string name="app_name">Sleep Sounds</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -134,5 +134,4 @@
     <string name="rain_sounds">Rain sounds</string>
     <string name="relax_sounds">Relax sounds</string>
     <string name="all_sounds">All sounds</string>
-
 </resources>

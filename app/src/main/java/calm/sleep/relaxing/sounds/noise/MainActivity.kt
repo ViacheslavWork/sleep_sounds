@@ -4,7 +4,6 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +17,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import calm.sleep.relaxing.sounds.noise.data.Repository
+import calm.sleep.relaxing.sounds.noise.databinding.ActivityMainBinding
+import calm.sleep.relaxing.sounds.noise.service.PlayerService
+import calm.sleep.relaxing.sounds.noise.subscription.Subscribable
+import calm.sleep.relaxing.sounds.noise.subscription.Subscription
+import calm.sleep.relaxing.sounds.noise.subscription.SubscriptionPrice
+import calm.sleep.relaxing.sounds.noise.ui.player.PlayerFragment
+import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_MONTH
+import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_YEAR
+import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
+import calm.sleep.relaxing.sounds.noise.utils.PremiumPreferences
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
@@ -30,17 +40,6 @@ import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.threeten.bp.Duration
 import org.threeten.bp.LocalTime
-import calm.sleep.relaxing.sounds.noise.data.Repository
-import calm.sleep.relaxing.sounds.noise.databinding.ActivityMainBinding
-import calm.sleep.relaxing.sounds.noise.service.PlayerService
-import calm.sleep.relaxing.sounds.noise.subscription.Subscribable
-import calm.sleep.relaxing.sounds.noise.subscription.Subscription
-import calm.sleep.relaxing.sounds.noise.subscription.SubscriptionPrice
-import calm.sleep.relaxing.sounds.noise.ui.player.PlayerFragment
-import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_MONTH
-import calm.sleep.relaxing.sounds.noise.utils.Constants.SUBSCRIPTION_ID_YEAR
-import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
-import calm.sleep.relaxing.sounds.noise.utils.PremiumPreferences
 
 
 private const val TAG = "MainActivity"
@@ -199,11 +198,8 @@ class MainActivity : AppCompatActivity(), Subscribable {
     private fun setTouchListener(navController: NavController) {
         tickerFlow(Duration.ofSeconds(1))
             .onEach {
-//                Log.i(TAG, "time: $it")
-//                Log.i(TAG, "is service running: ${isMyServiceRunning(PlayerService::class.java)}")
                 _mutableTime.postValue(it)
                 if (it == LocalTime.of(0, 0, 10)) {
-                    Log.i(TAG, "10 seconds have passed")
                     if (PlayerService.isPlayable.value == true
                         && PlayerService.isPause.value != true
                         && isActivityLetShowTimeFragment
