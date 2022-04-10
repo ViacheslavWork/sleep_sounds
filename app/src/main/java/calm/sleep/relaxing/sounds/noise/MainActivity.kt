@@ -33,6 +33,7 @@ import com.anjlab.android.iab.v3.PurchaseInfo
 import com.anjlab.android.iab.v3.SkuDetails
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.installations.FirebaseInstallations
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -126,8 +127,21 @@ class MainActivity : AppCompatActivity(), Subscribable {
             }
         }
 
+        getFirebaseToken()
+
         navView.setupWithNavController(navController)
         navigate(intent, navController)
+    }
+
+    private fun getFirebaseToken() {
+        FirebaseInstallations.getInstance().getToken(/* forceRefresh */ true)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    showLog( "Installation auth token: " + task.result?.token)
+                } else {
+                    showLog("Installations", "Unable to get Installation auth token")
+                }
+            }
     }
 
     override fun onDestroy() {

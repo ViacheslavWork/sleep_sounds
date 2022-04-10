@@ -48,4 +48,6 @@ object Constants {
     const val CUSTOM_ALARM_ID = 1
     const val EVERY_DAY_ALARM_ID = 2
     val EVERY_DAY_REMINDER_TIME: LocalTime = LocalTime.of(22,0)
+
+    const val IS_ON_BOARDING_KEY = "is_onboarding"
 }

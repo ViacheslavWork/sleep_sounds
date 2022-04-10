@@ -52,7 +52,7 @@ class App : Application() {
 
     private fun activateAppMetrica() {
         val appMetricaConfig: YandexMetricaConfig =
-            YandexMetricaConfig.newConfigBuilder("f81065f2-ec5d-481d-b1b3-78dca27c1c6e")
+            YandexMetricaConfig.newConfigBuilder(getString(R.string.ya_app_metrick_API_key))
                 .handleFirstActivationAsUpdate(isFirstActivationAsUpdate())
                 .withLocationTracking(true)
                 .withStatisticsSending(true)
