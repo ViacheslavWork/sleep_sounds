@@ -18,12 +18,14 @@ import calm.sleep.relaxing.sounds.noise.di.serviceModule
 import calm.sleep.relaxing.sounds.noise.utils.EveryDayAlarmManager
 import calm.sleep.relaxing.sounds.noise.utils.FirstRunPreferences
 import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
+import com.onesignal.OneSignal
 
 class App : Application() {
     private val everyDayAlarmManager: EveryDayAlarmManager by inject()
     override fun onCreate() {
         super.onCreate()
         activateAppMetrica()
+        initOneSignal()
 //        showFirebaseToken()
         startKoin {
             androidLogger(Level.ERROR)
@@ -31,6 +33,14 @@ class App : Application() {
             modules(listOf(appModule, dataModule, serviceModule, roomModule))
         }
         everyDayAlarmManager.startStopEveryDayAlarmIfNeeded()
+    }
+    private fun initOneSignal() {
+        // TODO Logging set to help debug issues, remove before releasing your app.
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+
+        // OneSignal Initialization
+        OneSignal.initWithContext(this)
+        OneSignal.setAppId(getString(R.string.one_signal_app_id))
     }
 
     private fun showFirebaseToken() {

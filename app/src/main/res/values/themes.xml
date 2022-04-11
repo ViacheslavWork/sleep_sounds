@@ -25,14 +25,14 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
-<!--    <style name="Widget.WhiteNoise.TimePicker.Clock" parent="Widget.MaterialComponents.TimePicker.Clock">
-        <item name="clockFaceBackgroundColor">@color/blue_for_sound_slider</item>
-        <item name="clockHandColor">@android:color/white</item>
-        <item name="clockNumberTextColor">@color/white</item>
-        <item name="colorSecondary">@color/blue40</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="colorOnSurface">@color/white</item>
-    </style>-->
+    <!--    <style name="Widget.WhiteNoise.TimePicker.Clock" parent="Widget.MaterialComponents.TimePicker.Clock">
+            <item name="clockFaceBackgroundColor">@color/blue_for_sound_slider</item>
+            <item name="clockHandColor">@android:color/white</item>
+            <item name="clockNumberTextColor">@color/white</item>
+            <item name="colorSecondary">@color/blue40</item>
+            <item name="colorOnPrimary">@color/black</item>
+            <item name="colorOnSurface">@color/white</item>
+        </style>-->
 
     <style name="ShapeAppearance.WhiteNoise.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>

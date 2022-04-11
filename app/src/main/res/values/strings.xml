@@ -6,6 +6,7 @@
     <string name="app_test_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="interstitial_test_id">ca-app-pub-3940256099942544/1033173712</string>
     <string name="ya_app_metrick_API_key">12e467f5-310f-490d-b3f5-1925f0a263a2</string>
+    <string name="one_signal_app_id">12e467f5-310f-490d-b3f5-1925f0a263a2</string>
 
     <string name="app_name">Sleep Sounds</string>
     <string name="title_home">Home</string>

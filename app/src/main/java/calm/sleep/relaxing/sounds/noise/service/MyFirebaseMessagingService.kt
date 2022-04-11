@@ -28,7 +28,7 @@ private const val TAG = "MyFirebaseMessagingServ"
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
-        if (remoteMessage.data.isNotEmpty()) {
+        /*if (remoteMessage.data.isNotEmpty()) {
             showLog("onMessageReceived: data isn't empty", TAG)
             val title = remoteMessage.data["title"]
             val body = remoteMessage.data["body"]
@@ -39,7 +39,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val body = remoteMessage.notification!!.body
             val image = remoteMessage.notification!!.imageUrl
             showNotification(applicationContext, title, body, imageUrl = image)
-        }
+        }*/
     }
 
 

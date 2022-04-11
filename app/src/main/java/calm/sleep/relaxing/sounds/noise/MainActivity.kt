@@ -19,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import calm.sleep.relaxing.sounds.noise.data.Repository
 import calm.sleep.relaxing.sounds.noise.databinding.ActivityMainBinding
+import calm.sleep.relaxing.sounds.noise.di.appModule
 import calm.sleep.relaxing.sounds.noise.service.PlayerService
 import calm.sleep.relaxing.sounds.noise.subscription.Subscribable
 import calm.sleep.relaxing.sounds.noise.subscription.Subscription

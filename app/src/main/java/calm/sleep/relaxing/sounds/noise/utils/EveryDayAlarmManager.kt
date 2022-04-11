@@ -69,6 +69,7 @@ class EveryDayAlarmManager(val context: Context, val alarmRepository: AlarmRepos
         )
         ioScope.launch { alarmRepository.saveAlarm(alarm) }
         alarm.schedule(context)
+        startStopEveryDayAlarmIfNeeded()
     }
 
     fun cancelEveryDayAlarm() {
