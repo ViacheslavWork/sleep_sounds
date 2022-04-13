@@ -3,8 +3,6 @@ package calm.sleep.relaxing.sounds.noise.utils
 import org.threeten.bp.LocalTime
 
 object Constants {
-    const val CURRENT_VERSION = "1.1"
-
     const val PREFERENCE_ALARM_IS_SET =
         "white.noise.sounds.baby.sleep.utils.PREFERENCE_ALARM_IS_SET"
 

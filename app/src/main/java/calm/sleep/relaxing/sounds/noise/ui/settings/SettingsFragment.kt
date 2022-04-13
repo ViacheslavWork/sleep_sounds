@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import calm.sleep.relaxing.sounds.noise.BuildConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -44,7 +45,7 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.versionTv.text =
-            String.format(resources.getString(R.string.version), Constants.CURRENT_VERSION)
+            String.format(resources.getString(R.string.version), BuildConfig.VERSION_NAME)
         setSwitchAccessibility()
         setListeners()
         setSwitchStatus()

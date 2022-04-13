@@ -131,12 +131,13 @@
 
     <ImageButton
         android:id="@+id/player_cross_ib"
-        android:layout_width="wrap_content"
-        android:layout_height="22dp"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
         android:layout_margin="14dp"
+        app:layout_constraintDimensionRatio="1:1"
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
-        android:scaleType="fitCenter"
+        android:scaleType="center"
         android:src="@drawable/ic_icon_cross"
         app:layout_constraintBottom_toBottomOf="@id/player_view"
         app:layout_constraintEnd_toEndOf="@id/player_view"
