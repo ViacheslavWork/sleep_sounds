@@ -21,8 +21,12 @@ import calm.sleep.relaxing.sounds.noise.databinding.FragmentSettingsBinding
 import calm.sleep.relaxing.sounds.noise.utils.Constants
 import calm.sleep.relaxing.sounds.noise.utils.Constants.CUSTOM_ALARM_ID
 import calm.sleep.relaxing.sounds.noise.utils.EveryDayAlarmManager
+import calm.sleep.relaxing.sounds.noise.utils.MyLog.showLog
 import calm.sleep.relaxing.sounds.noise.utils.ToastHelper
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.model.ReviewErrorCode
 
+private const val TAG = "SettingsFragment"
 class SettingsFragment : Fragment() {
     private val settingsViewModel: SettingsViewModel by sharedViewModel()
     private val everyDayAlarmManager: EveryDayAlarmManager by inject()
@@ -70,9 +74,26 @@ class SettingsFragment : Fragment() {
             )
         }
         binding.feedbackTv.setOnClickListener {
-            findNavController().navigate(
+            /*findNavController().navigate(
                 SettingsFragmentDirections.actionNavigationSettingsToRatingDialog()
-            )
+            )*/
+            val manager = ReviewManagerFactory.create(requireContext())
+            val request = manager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // We got the ReviewInfo object
+                    val reviewInfo = task.result
+                    val flow = manager.launchReviewFlow(requireActivity(), reviewInfo)
+                    flow.addOnCompleteListener { _ ->
+                        showLog("setListeners: ", TAG)
+                        // The flow has finished. The API does not indicate whether the user
+                        // reviewed or not, or even whether the review dialog was shown. Thus, no
+                        // matter the result, we continue our app flow.
+                    }
+                } else {
+                    showLog("setListeners: ${task.exception}", TAG)
+                }
+            }
         }
         binding.privacyPolicyTv.setOnClickListener {
             findNavController().navigate(

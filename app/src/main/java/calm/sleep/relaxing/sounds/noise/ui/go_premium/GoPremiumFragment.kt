@@ -76,17 +76,14 @@ class GoPremiumFragment : Fragment() {
                 val monthPrice = it[Subscription.MONTH]
                 binding.infoTv.text = String.format(
                     resources.getString(R.string.go_premium_info),
-                    yearPrice?.currency,
                     yearPrice?.price,
-                    monthPrice?.currency,
                     monthPrice?.price
                 )
                 binding.monthBtn.text = String.format(
-                    resources.getString(R.string.per_month), monthPrice?.currency, monthPrice?.price
+                    resources.getString(R.string.per_month), monthPrice?.price
                 )
                 val yearBtnText = String.format(
                     resources.getString(R.string.try_for_free_7_days),
-                    yearPrice?.currency,
                     yearPrice?.price,
                 )
                 val cs = SpannableStringBuilder(yearBtnText)

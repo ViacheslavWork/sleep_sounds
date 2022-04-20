@@ -273,11 +273,9 @@ class MainActivity : AppCompatActivity(), Subscribable {
     override fun subscribe(subscription: Subscription) {
         when (subscription) {
             Subscription.MONTH -> {
-//                showToast(this, "Month subscription")
                 bp?.subscribe(this, SUBSCRIPTION_ID_MONTH)
             }
             Subscription.YEAR -> {
-//                showToast(this, "Year subscription")
                 bp?.subscribe(this, SUBSCRIPTION_ID_YEAR)
             }
         }
@@ -319,6 +317,8 @@ class MainActivity : AppCompatActivity(), Subscribable {
     private fun getSubscriptionsPrice() {
         var monthPrice = SubscriptionPrice("-", "-")
         var yearPrice = SubscriptionPrice("-", "-")
+        val mapSubscriptionToPrice = mutableMapOf<Subscription, SubscriptionPrice>()
+        updateSubscriptions(mapSubscriptionToPrice, monthPrice, yearPrice)
 
         bp?.getSubscriptionListingDetailsAsync(SUBSCRIPTION_ID_MONTH,
             object : BillingProcessor.ISkuDetailsResponseListener {
@@ -326,6 +326,8 @@ class MainActivity : AppCompatActivity(), Subscribable {
                     try {
                         val product = products?.get(0)
                         monthPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                        updateSubscriptions(mapSubscriptionToPrice, monthPrice, yearPrice)
+                        showLog("onSkuDetailsResponse: month price $monthPrice", TAG)
                     } catch (e: IndexOutOfBoundsException) {
                         showLog("onSkuDetailsResponse: empty products", TAG)
                     }
@@ -341,6 +343,8 @@ class MainActivity : AppCompatActivity(), Subscribable {
                     try {
                         val product = products?.get(0)
                         yearPrice = SubscriptionPrice(product?.currency!!, product.priceText)
+                        updateSubscriptions(mapSubscriptionToPrice, monthPrice, yearPrice)
+                        showLog("onSkuDetailsResponse: year price $yearPrice", TAG)
                     } catch (e: IndexOutOfBoundsException) {
                         showLog("onSkuDetailsResponse: empty products", TAG)
                     }
@@ -350,7 +354,13 @@ class MainActivity : AppCompatActivity(), Subscribable {
 //                    showToast(this@MainActivity, "Can't download actual price")
                 }
             })
-        val mapSubscriptionToPrice = mutableMapOf<Subscription, SubscriptionPrice>()
+    }
+
+    private fun updateSubscriptions(
+        mapSubscriptionToPrice: MutableMap<Subscription, SubscriptionPrice>,
+        monthPrice: SubscriptionPrice,
+        yearPrice: SubscriptionPrice
+    ) {
         mapSubscriptionToPrice[Subscription.MONTH] = monthPrice
         mapSubscriptionToPrice[Subscription.YEAR] = yearPrice
         _mutableSubscriptionToPriceLD.postValue(mapSubscriptionToPrice.toMap())

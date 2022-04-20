@@ -27,7 +27,7 @@ private const val TAG = "GreetingFragment"
 class GreetingFragment : Fragment() {
     private var _binding: FragmentGreetingBinding? = null
     private val binding get() = _binding!!
-    private var isOnBoarding = false
+    private var isOnBoarding = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

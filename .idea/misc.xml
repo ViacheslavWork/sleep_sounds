@@ -194,7 +194,7 @@
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_set_timer.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_settings.xml" value="0.14666666666666667" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_sleep_timer.xml" value="0.1721014492753623" />
-        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_sounds.xml" value="0.16666666666666666" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/fragment_sounds.xml" value="0.22" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/image_custom_mix.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_custom_dialog.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_go_premium.xml" value="0.1796875" />
@@ -203,7 +203,7 @@
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_onboarding_btn.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_onboarding_needs_btn.xml" value="0.1" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_sounds.xml" value="0.25" />
-        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_timer.xml" value="0.1796875" />
+        <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_timer.xml" value="0.6" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/item_week_day.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/layout_default_ticker_time.xml" value="0.1796875" />
         <entry key="..\:/android_projects/white_noise/app/src/main/res/layout/layout_ticker.xml" value="0.1796875" />
