@@ -1,12 +1,11 @@
 package calm.sleep.relaxing.sounds.noise.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import calm.sleep.relaxing.sounds.noise.databinding.FragmentDetailsBinding
-import calm.sleep.relaxing.sounds.noise.databinding.FragmentOnboarding1Binding
 
 
 class DetailsFragment : Fragment() {
@@ -24,6 +23,7 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.backDetailsToolbarIv.setOnClickListener { requireActivity().onBackPressed() }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
