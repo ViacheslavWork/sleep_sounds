@@ -117,6 +117,12 @@
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/section_raw.xml" value="0.30344202898550726" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/layout/section_row.xml" value="0.16271442986881937" />
         <entry key="..\:/AndroidProjects/white_noise/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/drawable-v24/selector_dark_btn.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/drawable/gradient_liner_bg3_rounded_corners.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1235" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/drawable/ic_star_yellow.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/drawable/selector_dark_btn.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/white_noise_finish/app/src/main/res/layout/fragment_go_premium.xml" value="0.1276595744680851" />
         <entry key="..\:/Users/Viacheslav/.gradle/caches/transforms-3/f493b9d7c1c420a92be8a4df6608c5ec/transformed/Ticker-1.0.0/res/drawable/ic_time_separating_colons.xml" value="0.1" />
         <entry key="..\:/Users/Viacheslav/.gradle/caches/transforms-3/f493b9d7c1c420a92be8a4df6608c5ec/transformed/Ticker-1.0.0/res/layout/layout_default_ticker_time.xml" value="0.1796875" />
         <entry key="..\:/Users/Viacheslav/.gradle/caches/transforms-3/f493b9d7c1c420a92be8a4df6608c5ec/transformed/Ticker-1.0.0/res/layout/layout_ticker.xml" value="0.16666666666666666" />
